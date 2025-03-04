@@ -47,6 +47,7 @@ defmodule TemporahWeb do
       import Plug.Conn
 
       unquote(verified_routes())
+      import Inertia.Controller
     end
   end
 
@@ -77,6 +78,7 @@ defmodule TemporahWeb do
 
       # Include general helpers for rendering HTML
       unquote(html_helpers())
+      import Inertia.HTML
     end
   end
 

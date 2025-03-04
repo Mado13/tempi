@@ -1,13 +1,14 @@
 defmodule TemporahWeb.Router do
   use TemporahWeb, :router
 
-  pipeline :browser do
+  pipeline :inertia do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, html: {TemporahWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Inertia.Plug
   end
 
   pipeline :api do
@@ -15,23 +16,9 @@ defmodule TemporahWeb.Router do
   end
 
   scope "/", TemporahWeb do
-    pipe_through :browser
+    pipe_through :inertia
 
     get "/", PageController, :home
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", TemporahWeb do
-  #   pipe_through :api
-  # end
-
-  # Enable Swoosh mailbox preview in development
-  if Application.compile_env(:temporah, :dev_routes) do
-
-    scope "/dev" do
-      pipe_through :browser
-
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
-    end
+    get "/inertia", PageController, :inertia
   end
 end

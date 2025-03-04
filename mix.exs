@@ -8,6 +8,7 @@ defmodule Temporah.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      consolidate_protocols: Mix.env() != :dev,
       aliases: aliases(),
       deps: deps()
     ]
@@ -32,6 +33,10 @@ defmodule Temporah.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bun, "~> 1.4"},
+      {:inertia, "~> 2.3.0"},
+      {:exinertia, "~> 0.8"},
+      {:igniter, "~> 0.5", only: [:dev, :test]},
       {:phoenix, "~> 1.7.20"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
@@ -39,16 +44,7 @@ defmodule Temporah.MixProject do
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.0.0"},
-      {:floki, ">= 0.30.0", only: :test},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
-      {:heroicons,
-       github: "tailwindlabs/heroicons",
-       tag: "v2.1.1",
-       sparse: "optimized",
-       app: false,
-       compile: false,
-       depth: 1},
+      {:floki, "~> 0.37.0"},
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 1.0"},
@@ -72,11 +68,12 @@ defmodule Temporah.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind temporah", "esbuild temporah"],
+      "assets.setup": ["bun.install --if-missing", "bun install"],
+      "assets.build": ["bun install", "bun build", "bun css"],
       "assets.deploy": [
-        "tailwind temporah --minify",
-        "esbuild temporah --minify",
+        "bun install",
+        "bun build --minify",
+        "bun css --minify",
         "phx.digest"
       ]
     ]

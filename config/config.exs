@@ -7,6 +7,33 @@
 # General application configuration
 import Config
 
+config :inertia,
+  endpoint: TemporahWeb.Endpoint,
+  static_paths: ["/assets/app.js"],
+  default_version: "1",
+  camelize_props: true,
+  history: [encrypt: false],
+  ssr: false,
+  raise_on_ssr_failure: config_env() != :prod
+
+config :bun,
+  version: "1.2.1",
+  dev: [
+    args: ~w(x --bun vite),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{}
+  ],
+  install: [
+    args: ~w(i),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{}
+  ],
+  build: [
+    args: ~w(x --bun vite build),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{}
+  ]
+
 config :temporah,
   ecto_repos: [Temporah.Repo],
   generators: [timestamp_type: :utc_datetime]
@@ -30,28 +57,6 @@ config :temporah, TemporahWeb.Endpoint,
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
 config :temporah, Temporah.Mailer, adapter: Swoosh.Adapters.Local
-
-# Configure esbuild (the version is required)
-config :esbuild,
-  version: "0.17.11",
-  temporah: [
-    args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-  ]
-
-# Configure tailwind (the version is required)
-config :tailwind,
-  version: "3.4.3",
-  temporah: [
-    args: ~w(
-      --config=tailwind.config.js
-      --input=css/app.css
-      --output=../priv/static/assets/app.css
-    ),
-    cd: Path.expand("../assets", __DIR__)
-  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

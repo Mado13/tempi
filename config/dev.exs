@@ -25,8 +25,7 @@ config :temporah, TemporahWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "h90LeJQ4j0h3sY3tyZoZZgT7am3xmicP+nZSc/sMz8OwVGkoOyo8XH8GipZrrhLw",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:temporah, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:temporah, ~w(--watch)]}
+    bun: {Bun, :install_and_run, [:dev, ~w()]}
   ]
 
 # ## SSL Support

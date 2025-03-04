@@ -11,4 +11,5 @@ defmodule TemporahWeb.Layouts do
   use TemporahWeb, :html
 
   embed_templates "layouts/*"
+  def dev_env?, do: Application.get_env(:temporah, :env) == :dev
 end
