@@ -9,6 +9,7 @@ import { Page } from "@inertiajs/inertia";
 import { mount } from 'svelte'
 import type { SvelteComponent } from "svelte";
 import "phoenix_html"
+import { setupPWA } from './pwa-setup';
 
 // CSRF setup
 axios.defaults.xsrfHeaderName = "x-csrf-token";
@@ -26,4 +27,6 @@ createInertiaApp({
     mount(App, { target: el, props });
   },
 });
+
+setupPWA()
 
