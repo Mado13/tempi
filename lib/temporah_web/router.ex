@@ -15,10 +15,13 @@ defmodule TemporahWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api", TemporahWeb.Api do
+    pipe_through :api
+  end
+
   scope "/", TemporahWeb do
     pipe_through :inertia
 
     get "/", PageController, :home
-    get "/inertia", PageController, :inertia
   end
 end

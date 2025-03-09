@@ -3,7 +3,6 @@ import { defineConfig } from "vite";
 import type { Plugin, ConfigEnv } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { VitePWA } from "vite-plugin-pwa";
-import { Server } from "node:net";
 
 interface TopbarPlugin extends Plugin {
 	name: string;

@@ -17,8 +17,18 @@ defmodule TemporahWeb do
   those modules here.
   """
 
-  def static_paths,
-    do: ~w(assets fonts images favicon.ico robots.txt sw.js manifest.webmanifest workbox-*.js)
+  def static_paths do
+    # Base static paths
+    base_paths =
+      ~w(assets fonts images favicon.ico robots.txt sw.js manifest.webmanifest registerSW.js)
+
+    # Find workbox files dynamically
+    workbox_files =
+      File.ls!("priv/static")
+      |> Enum.filter(fn file -> String.match?(file, ~r/^workbox-.*\.js$/) end)
+
+    base_paths ++ workbox_files
+  end
 
   def router do
     quote do
