@@ -1,0 +1,26 @@
+{
+  "plugins": [
+    "prettier-plugin-svelte"
+  ],
+  "overrides": [
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte"
+      }
+    }
+  ],
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "endOfLine": "lf",
+  "svelteIndentScriptAndStyle": true,
+  "svelteBracketNewLine": false,
+  "svelteAllowShorthand": true,
+  "typescriptBracketSpacing": false,
+  "bracketSameLine": true,
+  "proseWrap": "preserve"
+}

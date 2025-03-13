@@ -1,9 +1,3 @@
-// If you want to use Phoenix channels, run `mix help phx.gen.channel`
-// to get started and then uncomment the line below.
-// import "./user_socket.js"
-
-import "@ionic/core/css/ionic.bundle.css";
-import "@ionic/core/dist/ionic/ionic.esm.js";
 import axios from "axios";
 import { createInertiaApp } from "@inertiajs/inertia-svelte";
 import { Page } from "@inertiajs/inertia";
@@ -11,30 +5,42 @@ import { mount } from "svelte";
 import type { SvelteComponent } from "svelte";
 import "phoenix_html";
 import { setupPWA } from "./pwa-setup";
-import { initialize } from "@ionic/core/components";
 
-// CSRF setup
 axios.defaults.xsrfHeaderName = "x-csrf-token";
 
+declare global {
+  interface Window {
+    isPWAInstalled: boolean;
+  }
+}
+
 createInertiaApp({
-	resolve: async (name: string): Promise<typeof SvelteComponent> => {
-		const pages = import.meta.glob("./pages/**/*.svelte");
-		const page = pages[`./pages/${name}.svelte`] as unknown as () => Promise<
-			typeof SvelteComponent
-		>;
-		if (!page) {
-			throw new Error(`Page ${name} not found.`);
-		}
-		return page();
-	},
-	setup({
-		el,
-		App,
-		props,
-	}: { el: Element; App: typeof SvelteComponent; props: Page }) {
-		mount(App, { target: el, props });
-	},
+  resolve: async (name: string): Promise<typeof SvelteComponent> => {
+    const pages = import.meta.glob("./pages/**/*.svelte");
+    const pageKey = `./pages/${name}.svelte`;
+    const page = pages[pageKey] as unknown as () => Promise<
+      typeof SvelteComponent
+    >;
+    if (!page) {
+      throw new Error(`Page ${name} not found`);
+    }
+    return page();
+  },
+  setup({
+    el,
+    App,
+    props,
+  }: {
+    el: Element;
+    App: typeof SvelteComponent;
+    props: Page;
+  }) {
+    const enhancedProps = {
+      ...props,
+      pwaInstalled: window.isPWAInstalled ?? false,
+    };
+    mount(App, { target: el, props: enhancedProps });
+  },
 });
 
 setupPWA();
-initialize();

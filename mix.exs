@@ -33,6 +33,7 @@ defmodule Temporah.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:bun, "~> 1.4"},
       {:inertia, "~> 2.3.0"},
       {:exinertia, "~> 0.8"},
