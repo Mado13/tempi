@@ -20,12 +20,16 @@ defmodule TemporahWeb do
   def static_paths do
     # Base static paths
     base_paths =
-      ~w(assets scripts fonts images favicon.ico robots.txt sw.js manifest.webmanifest registerSW.js)
+      ~w(assets fonts images favicon.ico robots.txt sw.js manifest.webmanifest registerSW.js)
 
     # Find workbox files dynamically
     workbox_files =
       File.ls!("priv/static")
-      |> Enum.filter(fn file -> String.match?(file, ~r/^workbox-.*\.js$/) end)
+      |> Enum.filter(fn file ->
+        String.match?(file, ~r/^workbox-.*\.js$/) ||
+          String.match?(file, ~r/^workbox-.*\.js\.map$/) ||
+          file == "sw.js.map"
+      end)
 
     base_paths ++ workbox_files
   end
