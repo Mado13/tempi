@@ -1,12 +1,13 @@
 import path from 'node:path'
 import { defineConfig } from 'vite'
-import type { Plugin, ConfigEnv, UserConfig } from 'vite'
+import type { Plugin } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { VitePWA } from 'vite-plugin-pwa'
 import { analyzer } from 'vite-bundle-analyzer'
 import viteCompression from 'vite-plugin-compression'
 import cssnano from 'cssnano'
 import cssnanoPresetAdvanced from 'cssnano-preset-advanced'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
 interface TopbarPlugin extends Plugin {
   name: string
@@ -45,7 +46,9 @@ export default defineConfig(({ command }) => {
     publicDir: 'static',
     plugins: [
       analyzer(), // Bundle size analysis
-      svelte({ preprocess: [] }),
+      svelte({
+        preprocess: [vitePreprocess({})],
+      }),
       createTopbarPlugin(),
       VitePWA({
         registerType: 'autoUpdate',
@@ -88,9 +91,7 @@ export default defineConfig(({ command }) => {
     ],
     css: {
       preprocessorOptions: {
-        scss: {
-          additionalData: `@import "./src/styles/global.scss";`,
-        },
+        scss: {},
       },
       postcss: {
         plugins: [
