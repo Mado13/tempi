@@ -20,7 +20,7 @@ defmodule TemporahWeb do
   def static_paths do
     # Base static paths
     base_paths =
-      ~w(assets fonts images favicon.ico robots.txt sw.js manifest.webmanifest registerSW.js)
+      ~w(assets scripts fonts images favicon.ico robots.txt sw.js manifest.webmanifest registerSW.js)
 
     # Find workbox files dynamically
     workbox_files =
