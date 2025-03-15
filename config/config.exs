@@ -19,7 +19,7 @@ config :inertia,
 config :bun,
   version: "1.2.1",
   dev: [
-    args: ~w(x --bun vite),
+    args: ~w(x --bun vite --host 0.0.0.0),
     cd: Path.expand("../assets", __DIR__),
     env: %{}
   ],
