@@ -22,7 +22,8 @@ defmodule TemporahWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :temporah,
-    gzip: false,
+    gzip: true,
+    britoli: true,
     only: TemporahWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
