@@ -27,13 +27,12 @@ defmodule TemporahWeb.UserAuth do
   """
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
-    user_return_to = get_session(conn, :user_return_to)
+    _user_return_to = get_session(conn, :user_return_to)
 
     conn
     |> renew_session()
     |> put_token_in_session(token)
     |> maybe_write_remember_me_cookie(token, params)
-    |> redirect(to: user_return_to || signed_in_path(conn))
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
@@ -92,7 +91,12 @@ defmodule TemporahWeb.UserAuth do
   """
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
-    user = user_token && Accounts.get_user_by_session_token(user_token)
+
+    user =
+      user_token &&
+        Accounts.get_user_by_session_token(user_token)
+        |> Temporah.Repo.preload([:account, :worker, :employer])
+
     assign(conn, :current_user, user)
   end
 
@@ -158,7 +162,7 @@ defmodule TemporahWeb.UserAuth do
       socket =
         socket
         |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
+        |> Phoenix.LiveView.redirect(to: ~p"/login")
 
       {:halt, socket}
     end
@@ -206,9 +210,8 @@ defmodule TemporahWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: ~p"/users/log_in")
+      |> redirect(to: ~p"/login")
       |> halt()
     end
   end
@@ -223,7 +226,11 @@ defmodule TemporahWeb.UserAuth do
     put_session(conn, :user_return_to, current_path(conn))
   end
 
-  defp maybe_store_return_to(conn), do: conn
+  defp maybe_store_return_to(conn) do
+    conn
+  end
 
-  defp signed_in_path(_conn), do: ~p"/"
+  defp signed_in_path(_conn) do
+    ~p"/"
+  end
 end

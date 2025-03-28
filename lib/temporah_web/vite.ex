@@ -1,4 +1,4 @@
-defmodule Vite do
+defmodule TemporahWeb.Vite do
   @moduledoc false
 
   # Provide "constants" as functions so that inner modules can refer to them.
@@ -12,7 +12,7 @@ defmodule Vite do
     Reads Vite manifest data either from a built digest (for prod) or directly from disk (for non-prod).
     """
     require Logger
-    alias Vite
+    alias TemporahWeb.Vite
 
     @spec read() :: map()
     def read do
@@ -74,7 +74,7 @@ defmodule Vite do
     @moduledoc """
     Retrieves Vite's generated file references.
     """
-    alias Vite.PhxManifestReader
+    alias TemporahWeb.Vite.PhxManifestReader
 
     @main_js_file "js/app.js"
 
