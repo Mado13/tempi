@@ -1,4 +1,4 @@
-defmodule Temporah.Accounts.UserNotifier do
+defmodule Temporah.Contexts.Accounts.UserNotifier do
   import Swoosh.Email
 
   alias Temporah.Mailer

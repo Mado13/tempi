@@ -17,7 +17,8 @@ defmodule Temporah.Application do
       # Start a worker by calling: Temporah.Worker.start_link(arg)
       # {Temporah.Worker, arg},
       # Start to serve requests, typically the last entry
-      TemporahWeb.Endpoint
+      TemporahWeb.Endpoint,
+      Temporah.Utils.Verification
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

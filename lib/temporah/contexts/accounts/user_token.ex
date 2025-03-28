@@ -1,10 +1,11 @@
-defmodule Temporah.Accounts.UserToken do
+defmodule Temporah.Contexts.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query
-  alias Temporah.Accounts.UserToken
+  alias Temporah.Contexts.Accounts.UserToken
 
   @hash_algorithm :sha256
   @rand_size 32
+  @foreign_key_type :binary_id
 
   # It is very important to keep the reset password token expiry short,
   # since someone with access to the email may take over the account.
@@ -17,7 +18,7 @@ defmodule Temporah.Accounts.UserToken do
     field :token, :binary
     field :context, :string
     field :sent_to, :string
-    belongs_to :user, Temporah.Accounts.User
+    belongs_to :user, Temporah.Contexts.Accounts.User
 
     timestamps(type: :utc_datetime, updated_at: false)
   end
@@ -126,8 +127,13 @@ defmodule Temporah.Accounts.UserToken do
     end
   end
 
-  defp days_for_context("confirm"), do: @confirm_validity_in_days
-  defp days_for_context("reset_password"), do: @reset_password_validity_in_days
+  defp days_for_context("confirm") do
+    @confirm_validity_in_days
+  end
+
+  defp days_for_context("reset_password") do
+    @reset_password_validity_in_days
+  end
 
   @doc """
   Checks if the token is valid and returns its underlying lookup query.
