@@ -1,0 +1,15 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "login_welcome_title": "שלום",
+  "login_submit_button": "התחבר",
+  "login_link_to_register": "צור חשבון",
+  "register_title": "צור חשבון",
+  "register_submit_button": "צור חשבון",
+  "verify_code_title": "אימות קוד",
+  "invalid_code": "",
+  "generic_error": "",
+  "choose_role_title": "למה הגעת לכאן היום?",
+  "choose_role_worker": "למצוא עבודה",
+  "choose_role_employer": "למצוא עובדים",
+  "choose_role_both": "גם וגם"
+}
