@@ -25,35 +25,44 @@ defmodule Temporah.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(:test) do
+    ["lib", "test/support"]
+  end
+
+  defp elixirc_paths(_) do
+    ["lib"]
+  end
 
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bandit, "~> 1.5"},
       {:bcrypt_elixir, "~> 3.0"},
       {:bun, "~> 1.4"},
-      {:inertia, "~> 2.3.0"},
-      {:exinertia, "~> 0.8"},
+      {:dns_cluster, "~> 0.1.1"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:ecto_sql, "~> 3.10"},
+      {:ex_phone_number, "~> 0.4.5"},
+      {:ex_twilio, "~> 0.10.0"},
+      {:finch, "~> 0.13"},
+      {:floki, "~> 0.37.0"},
+      {:gettext, "~> 0.26"},
       {:igniter, "~> 0.5", only: [:dev, :test]},
+      {:inertia, "~> 2.3.0"},
+      {:jason, "~> 1.2"},
       {:phoenix, "~> 1.7.20"},
       {:phoenix_ecto, "~> 4.5"},
-      {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.0.0"},
-      {:floki, "~> 0.37.0"},
+      {:redix, "~> 1.5.2"},
+      {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.5"},
-      {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 1.0"},
-      {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.26"},
-      {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:telemetry_poller, "~> 1.0"}
     ]
   end
 
