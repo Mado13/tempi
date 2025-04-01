@@ -1,0 +1,6 @@
+msgid ""
+msgstr ""
+"Language: he\n"
+
+msgid "verification_code_invalid"
+msgstr "This is the string dude!"

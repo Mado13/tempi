@@ -10,6 +10,9 @@ msgid ""
 msgstr ""
 "Language: en\n"
 
+msgid "verification_code_invalid"
+msgstr "This is the string dude!"
+
 ## From Ecto.Changeset.cast/4
 msgid "can't be blank"
 msgstr ""
