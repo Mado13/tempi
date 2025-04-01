@@ -1,3 +1,4 @@
+import { paraglideVitePlugin } from '@inlang/paraglide-js'
 import path from 'node:path'
 import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
@@ -45,9 +46,18 @@ export default defineConfig(({ command }) => {
     base: '/',
     publicDir: 'static',
     plugins: [
-      analyzer(), // Bundle size analysis
+      paraglideVitePlugin({
+        project: './project.inlang',
+        outdir: './paraglide',
+      } as const),
+      analyzer(),
       svelte({
-        preprocess: [vitePreprocess({})],
+        compilerOptions: { hmr: true, dev: true, modernAst: true },
+        preprocess: [
+          vitePreprocess({
+            script: true,
+          }),
+        ],
       }),
       createTopbarPlugin(),
       VitePWA({
@@ -60,6 +70,20 @@ export default defineConfig(({ command }) => {
           theme_color: '#ffffff',
           background_color: '#ffffff',
           start_url: '/',
+          icons: [
+            {
+              src: '/icons/icon2.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any maskable',
+            },
+            {
+              src: '/icons/icon1.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable',
+            },
+          ],
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg}'],

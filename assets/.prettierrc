@@ -8,19 +8,25 @@
       "options": {
         "parser": "svelte"
       }
+    },
+    {
+      "files": "*.scss",
+      "options": {
+        "parser": "scss",
+        "printWidth": 80
+      }
     }
   ],
-  "printWidth": 100,
+  "printWidth": 120,
   "semi": false,
   "singleQuote": true,
   "trailingComma": "all",
   "arrowParens": "avoid",
   "bracketSpacing": true,
   "endOfLine": "lf",
-  "svelteIndentScriptAndStyle": true,
-  "svelteBracketNewLine": false,
+  "svelteSortOrder": "options-scripts-markup-styles",
+  "svelteStrictMode": true,
+  "svelteIndentScriptAndStyle": false,
   "svelteAllowShorthand": true,
-  "typescriptBracketSpacing": false,
-  "bracketSameLine": true,
   "proseWrap": "preserve"
 }

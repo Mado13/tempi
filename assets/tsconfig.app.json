@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -19,7 +24,14 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     /* Svelte Support */
-    "types": ["svelte"]
+    "types": [
+      "svelte"
+    ]
   },
-  "include": ["js", "js/types", "**/*.svelte"]
+  "include": [
+    "src/**/*",
+    "**/*.svelte",
+    "js",
+    "js/types",
+  ]
 }
