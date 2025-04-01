@@ -9,6 +9,7 @@ defmodule TemporahWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
+    plug TemporahWeb.SetLocale
     plug :put_root_layout, html: {TemporahWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
@@ -34,39 +35,46 @@ defmodule TemporahWeb.Router do
   ## Authentication routes
 
   scope "/", TemporahWeb do
-    pipe_through [:inertia, :require_pwa, :redirect_if_user_is_authenticated]
+    pipe_through [:inertia, :redirect_if_user_is_authenticated]
 
-    get "/users/register", UserRegistrationController, :new
-    post "/users/register", UserRegistrationController, :create
-    get "/users/log_in", UserSessionController, :new
-    post "/users/log_in", UserSessionController, :create
-    get "/users/reset_password", UserResetPasswordController, :new
-    post "/users/reset_password", UserResetPasswordController, :create
-    get "/users/reset_password/:token", UserResetPasswordController, :edit
-    put "/users/reset_password/:token", UserResetPasswordController, :update
+    # Register
+    get "/register", AuthController, :register_form
+    get "/register/verify", AuthController, :register_verify_form
+    post "/register/request", AuthController, :request_register_code
+    post "/register/verify", AuthController, :verify_register_code
+
+    # Login
+    get "/login", AuthController, :login_form
+    get "/login/verify", AuthController, :login_verify_form
+    post "/login/request", AuthController, :request_login_code
+    post "/login/verify", AuthController, :verify_login_code
   end
 
-  scope "/employee", TemporahWeb do
-    pipe_through [:inertia, :require_pwa, :require_authenticated_user, :require_employee_role]
+  scope "/worker", TemporahWeb do
+    pipe_through [:inertia, :require_authenticated_user, :require_worker_role]
 
-    get "/dashboard", EmployeeDashboardController, :index
+    get "/dashboard", WorkerDashboardController, :index
+    get "/agenda", Worker.AgendaController, :index
   end
 
   scope "/employer", TemporahWeb do
-    pipe_through [:inertia, :require_pwa, :require_authenticated_user, :require_employer_role]
+    pipe_through [:inertia, :require_authenticated_user, :require_employer_role]
 
     get "/dashboard", EmployerDashboardController, :index
   end
 
   # Common authenticated routes
   scope "/", TemporahWeb do
-    pipe_through [:inertia, :require_pwa, :require_authenticated_user]
+    pipe_through [:inertia, :require_authenticated_user, :redirect_root_based_on_role]
+
+    get "/choose-role", AuthController, :role_form
+    post "/choose-role", AuthController, :set_role
 
     get "/", PageController, :home
   end
 
   scope "/", TemporahWeb do
-    pipe_through [:inertia, :require_pwa, :require_authenticated_user]
+    pipe_through [:inertia, :require_authenticated_user]
 
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
@@ -75,11 +83,5 @@ defmodule TemporahWeb.Router do
 
   scope "/", TemporahWeb do
     pipe_through [:inertia]
-
-    delete "/users/log_out", UserSessionController, :delete
-    get "/users/confirm", UserConfirmationController, :new
-    post "/users/confirm", UserConfirmationController, :create
-    get "/users/confirm/:token", UserConfirmationController, :edit
-    post "/users/confirm/:token", UserConfirmationController, :update
   end
 end
