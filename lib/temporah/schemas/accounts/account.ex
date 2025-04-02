@@ -1,14 +1,14 @@
-defmodule Temporah.Contexts.Accounts.Account do
+defmodule Temporah.Schemas.Accounts.Account do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @derive {Jason.Encoder, only: [:id, :type, :worker_profile, :employer_profile]}
   schema "accounts" do
     field :type, :string
-    belongs_to :user, Temporah.Contexts.Accounts.User, type: :binary_id
-    # Still has_one due to unique constraint
-    has_one :worker_profile, Temporah.Contexts.Profiles.WorkerProfile
-    has_one :employer_profile, Temporah.Contexts.Profiles.EmployerProfile
+    belongs_to :user, Temporah.Schemas.Accounts.User, type: :binary_id
+    has_one :worker_profile, Temporah.Schemas.Profiles.WorkerProfile
+    has_one :employer_profile, Temporah.Schemas.Profiles.EmployerProfile
     timestamps()
   end
 

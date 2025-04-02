@@ -1,4 +1,4 @@
-defmodule Temporah.Contexts.Accounts.User do
+defmodule Temporah.Schemas.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,12 +6,12 @@ defmodule Temporah.Contexts.Accounts.User do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-
+  @derive {Jason.Encoder, only: [:id, :phone_number, :confirmed_at, :account, :worker, :employer]}
   schema "users" do
     field :phone_number, :string
     field :confirmed_at, :utc_datetime
 
-    has_one :account, Temporah.Contexts.Accounts.Account
+    has_one :account, Temporah.Schemas.Accounts.Account
 
     has_one :worker, through: [:account, :worker_profile]
     has_one :employer, through: [:account, :employer_profile]

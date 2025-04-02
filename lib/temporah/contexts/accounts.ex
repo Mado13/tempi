@@ -1,12 +1,12 @@
 # lib/temporah/accounts.ex
-defmodule Temporah.Accounts do
+defmodule Temporah.Contexts.Accounts do
   @moduledoc """
   The Accounts context.
   """
 
   import Ecto.Query, warn: false
-  alias Temporah.Contexts.Accounts.{User, UserToken, UserNotifier, Account}
-  alias Temporah.Contexts.Profiles.{WorkerProfile, EmployerProfile}
+  alias Temporah.Schemas.Accounts.{User, UserToken, UserNotifier, Account}
+  alias Temporah.Schemas.Profiles.{WorkerProfile, EmployerProfile}
   alias Temporah.Utils.PhoneUtils
   alias Temporah.Repo
   alias Ecto.Multi
@@ -17,6 +17,7 @@ defmodule Temporah.Accounts do
     case PhoneUtils.normalize(phone_number) do
       {:ok, normalized_number} ->
         Repo.get_by(User, phone_number: normalized_number)
+        |> Repo.preload(:account)
 
       {:error, _reason} ->
         nil
@@ -106,8 +107,6 @@ defmodule Temporah.Accounts do
     Repo.delete_all(UserToken.by_token_and_context_query(token, "session"))
     :ok
   end
-
-  ## Confirmation (Phone-based, keeping this for now)
 
   def deliver_user_confirmation_instructions(%User{} = user, confirmation_url_fun)
       when is_function(confirmation_url_fun, 1) do

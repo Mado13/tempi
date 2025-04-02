@@ -1,7 +1,7 @@
-defmodule Temporah.Contexts.Accounts.UserToken do
+defmodule Temporah.Schemas.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query
-  alias Temporah.Contexts.Accounts.UserToken
+  alias Temporah.Schemas.Accounts.UserToken
 
   @hash_algorithm :sha256
   @rand_size 32
@@ -18,7 +18,7 @@ defmodule Temporah.Contexts.Accounts.UserToken do
     field :token, :binary
     field :context, :string
     field :sent_to, :string
-    belongs_to :user, Temporah.Contexts.Accounts.User
+    belongs_to :user, Temporah.Schemas.Accounts.User
 
     timestamps(type: :utc_datetime, updated_at: false)
   end
