@@ -21,7 +21,7 @@ defmodule TempiWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :tmepi,
+    from: :tempi,
     gzip: true,
     britoli: true,
     only: TempiWeb.static_paths()
