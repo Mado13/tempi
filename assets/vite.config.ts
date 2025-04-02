@@ -63,8 +63,8 @@ export default defineConfig(({ command }) => {
       VitePWA({
         registerType: 'autoUpdate',
         manifest: {
-          name: 'Temporah',
-          short_name: 'Temporah',
+          name: 'Tempi',
+          short_name: 'Tempi',
           display: 'standalone',
           orientation: 'portrait',
           theme_color: '#ffffff',
