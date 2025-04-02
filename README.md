@@ -1,4 +1,4 @@
-# Temporah
+# Tempi
 
 To start your Phoenix server:
 

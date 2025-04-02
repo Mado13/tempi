@@ -8,7 +8,7 @@
 import Config
 
 config :inertia,
-  endpoint: TemporahWeb.Endpoint,
+  endpoint: TempiWeb.Endpoint,
   static_paths: ["/assets/app.js"],
   default_version: "1",
   camelize_props: true,
@@ -34,19 +34,19 @@ config :bun,
     env: %{}
   ]
 
-config :temporah,
-  ecto_repos: [Temporah.Repo],
+config :tempi,
+  ecto_repos: [Tempi.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :temporah, TemporahWeb.Endpoint,
+config :tempi, TempiWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: TemporahWeb.ErrorHTML, json: TemporahWeb.ErrorJSON],
+    formats: [html: TempiWeb.ErrorHTML, json: TempiWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Temporah.PubSub,
+  pubsub_server: Tempi.PubSub,
   live_view: [signing_salt: "bWy/uoTg"]
 
 # Configures the mailer
@@ -56,7 +56,7 @@ config :temporah, TemporahWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :temporah, Temporah.Mailer, adapter: Swoosh.Adapters.Local
+config :tempi, Tempi.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -66,8 +66,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :ex_twilio, account_sid:   {:system, "TWILIO_ACCOUNT_SID"},
-                   auth_token:    {:system, "TWILIO_AUTH_TOKEN"}
+config :ex_twilio,
+  account_sid: {:system, "TWILIO_ACCOUNT_SID"},
+  auth_token: {:system, "TWILIO_AUTH_TOKEN"}
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

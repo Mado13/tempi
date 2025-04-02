@@ -1,4 +1,4 @@
-defmodule Temporah.Repo.Migrations.CreateUsersAuthTables do
+defmodule Tempi.Repo.Migrations.CreateUsersAuthTables do
   use Ecto.Migration
 
   def change do

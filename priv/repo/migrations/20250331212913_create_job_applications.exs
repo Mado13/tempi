@@ -1,4 +1,4 @@
-defmodule Temporah.Repo.Migrations.CreateJobApplications do
+defmodule Tempi.Repo.Migrations.CreateJobApplications do
   use Ecto.Migration
 
   def change do

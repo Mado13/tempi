@@ -1,11 +1,11 @@
 import Config
 
 # Configure your database
-config :temporah, Temporah.Repo,
+config :tempi, Tempi.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "temporah_dev",
+  database: "tempi_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -17,7 +17,7 @@ config :temporah, Temporah.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 # Binding to loopback ipv4 address prevents access from other machines.
-config :temporah, TemporahWeb.Endpoint,
+config :tempi, TempiWeb.Endpoint,
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
@@ -52,17 +52,17 @@ config :temporah, TemporahWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :temporah, TemporahWeb.Endpoint,
+config :tempi, TempiWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/temporah_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/tempi_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :temporah, dev_routes: true
+config :tempi, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
