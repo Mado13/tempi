@@ -62,7 +62,8 @@ defmodule Tempi.MixProject do
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.5"},
       {:telemetry_metrics, "~> 1.0"},
-      {:telemetry_poller, "~> 1.0"}
+      {:telemetry_poller, "~> 1.0"},
+      {:telemetry_ui, "~> 4.0"}
     ]
   end
 
