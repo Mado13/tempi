@@ -9,29 +9,9 @@ import viteCompression from 'vite-plugin-compression'
 import cssnano from 'cssnano'
 import cssnanoPresetAdvanced from 'cssnano-preset-advanced'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
-
-interface TopbarPlugin extends Plugin {
-  name: string
-  transform(code: string, id: string): { code: string; map: null } | undefined
-}
-
-const createTopbarPlugin = (): TopbarPlugin => ({
-  name: 'topbar-module',
-  transform(code, id) {
-    if (id.endsWith('vendor/topbar.js')) {
-      return {
-        code: `
-          let topbar;
-          (function(window, document) {
-            ${code}
-          })(window, document);
-          export default window.topbar;
-        `,
-        map: null,
-      }
-    }
-  },
-})
+import Icons from 'unplugin-icons/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 
 export default defineConfig(({ command }) => {
   const isDev = command !== 'build'
@@ -46,6 +26,16 @@ export default defineConfig(({ command }) => {
     base: '/',
     publicDir: 'static',
     plugins: [
+      Icons({ compiler: 'svelte' }),
+      AutoImport({
+        resolvers: [
+          IconsResolver({
+            prefix: 'Icon',
+            extension: 'svelte',
+          }),
+        ],
+        dts: 'src/auto-imports.d.ts',
+      }),
       paraglideVitePlugin({
         project: './project.inlang',
         outdir: './paraglide',
@@ -59,7 +49,6 @@ export default defineConfig(({ command }) => {
           }),
         ],
       }),
-      createTopbarPlugin(),
       VitePWA({
         registerType: 'autoUpdate',
         manifest: {
