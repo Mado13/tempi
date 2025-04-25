@@ -1,4 +1,5 @@
 defmodule TempiWeb.RolePlugs do
+  alias TempiWeb.UserRole
   import Plug.Conn
   import Phoenix.Controller
 
@@ -31,8 +32,8 @@ defmodule TempiWeb.RolePlugs do
   def redirect_root_based_on_role(conn, _opts) do
     if conn.request_path == "/" do
       if conn.assigns[:current_user] do
-        active_role = get_session(conn, :active_role)
-        redirect_path = redirect_path_for_role(active_role)
+        active_role = UserRole.get_active_role(conn)
+        redirect_path = UserRole.get_redirect_path(active_role)
 
         conn
         |> redirect(to: redirect_path)
