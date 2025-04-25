@@ -3,9 +3,11 @@ defmodule TempiWeb.AuthController do
 
   import Tempi.Utils.I18n
 
+  alias Tempi.Repo
   alias Tempi.Contexts.Accounts
   alias Tempi.Utils.Verification
-  alias Tempi.UserAuth
+  alias TempiWeb.UserAuth
+  alias TempiWeb.UserRole
 
   def register_form(conn, _params), do: conn |> render_inertia("Auth/Register")
   def login_form(conn, _params), do: conn |> render_inertia("Auth/Login")
@@ -18,6 +20,25 @@ defmodule TempiWeb.AuthController do
 
   def login_verify_form(conn, _params), do: verify_form(conn, "/login/verify")
   def register_verify_form(conn, _params), do: verify_form(conn, "/register/verify")
+
+  def toggle_role(conn, _params) do
+    user = conn.assigns.current_user
+
+    case UserRole.toggle_role(conn, user) do
+      {:ok, conn} ->
+        active_role = UserRole.get_active_role(conn)
+        redirect_path = UserRole.get_redirect_path(active_role)
+
+        conn
+        |> redirect(to: redirect_path)
+
+      {:error, _message} ->
+        IO.inspect(label: "bitch")
+
+        conn
+        |> redirect(to: "/")
+    end
+  end
 
   def verify_login_code(conn, %{"phone_number" => phone_number, "code" => code}) do
     case Accounts.get_user_by_phone_number(phone_number) do
@@ -76,7 +97,7 @@ defmodule TempiWeb.AuthController do
     case Accounts.create_account_for_user(user, %{type: role}) do
       {:ok, %{account: _account, profiles: _profiles}} ->
         conn
-        |> put_session(:active_role, role)
+        |> UserRole.set_active_role(role)
         |> redirect(to: TempiWeb.UserAuth.signed_in_path(conn))
 
       {:error, _changeset} ->
@@ -133,10 +154,13 @@ defmodule TempiWeb.AuthController do
   end
 
   defp complete_auth(conn, user) do
+    user = Repo.preload(user, :account)
+    active_role = UserRole.determine_active_role(user)
+
     conn
     |> UserAuth.log_in_user(user, %{remember: true})
     |> delete_session(:phone_number)
-    |> put_session(:active_role, user.account.type)
+    |> UserRole.set_active_role(active_role)
     |> redirect(to: TempiWeb.UserAuth.signed_in_path(conn))
   end
 end

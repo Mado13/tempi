@@ -7,6 +7,7 @@ defmodule TempiWeb.UserAuth do
   import TempiWeb.RolePlugs
 
   alias Tempi.Contexts.Accounts
+  alias TempiWeb.UserRole
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -183,10 +184,11 @@ defmodule TempiWeb.UserAuth do
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
     if conn.assigns[:current_user] do
-      active_role = get_session(conn, :active_role)
+      active_role = UserRole.get_active_role(conn)
+      redirect_path = UserRole.get_redirect_path(active_role)
 
       conn
-      |> redirect(to: redirect_path_for_role(active_role))
+      |> redirect(to: redirect_path)
       |> halt()
     else
       conn
@@ -201,8 +203,11 @@ defmodule TempiWeb.UserAuth do
   """
   def require_authenticated_user(conn, _opts) do
     if user = conn.assigns[:current_user] do
+      active_role = UserRole.get_active_role(conn)
+
       conn
       |> assign(:user, user)
+      |> assign_prop(:active_role, active_role)
       |> assign_prop(:user, user)
     else
       conn
@@ -213,8 +218,8 @@ defmodule TempiWeb.UserAuth do
   end
 
   def signed_in_path(conn) do
-    active_role = get_session(conn, :active_role)
-    redirect_path_for_role(active_role)
+    active_role = UserRole.get_active_role(conn)
+    UserRole.get_redirect_path(active_role)
   end
 
   defp put_token_in_session(conn, token) do
