@@ -54,41 +54,32 @@ defmodule Tempi.Utils.Verification do
   end
 
   def handle_call({:verify_code, phone_number, submitted_code}, _from, state) do
+    current_time = :os.system_time(:second)
+
     result =
       case :ets.lookup(:verification_codes, phone_number) do
         [] ->
-          # Return a map with a translation key instead of hardcoded message
           {:error, %{"code" => t("errors", "verification_code_invalid")}}
 
+        [{^phone_number, data}] when current_time > data.expiry ->
+          :ets.delete(:verification_codes, phone_number)
+          {:error, %{"code" => "verification_code_expired"}}
+
         [{^phone_number, data}] ->
-          current_time = :os.system_time(:second)
-          # Check if expired
-          if current_time > data.expiry do
-            :ets.delete(:verification_codes, phone_number)
-            {:error, %{"code" => "verification_code_expired"}}
-          else
-            # Increment attempts counter
-            updated_data = %{data | attempts: data.attempts + 1}
-            :ets.insert(:verification_codes, {phone_number, updated_data})
+          updated_data = %{data | attempts: data.attempts + 1}
+          :ets.insert(:verification_codes, {phone_number, updated_data})
 
-            cond do
-              # Code matches
-              data.code == submitted_code ->
-                # Successful verification - delete the code
-                :ets.delete(:verification_codes, phone_number)
-                # Success message with key too
-                {:ok, "verification_success"}
+          cond do
+            data.code == submitted_code ->
+              :ets.delete(:verification_codes, phone_number)
+              {:ok, "verification_success"}
 
-              # Too many attempts
-              updated_data.attempts >= 5 ->
-                # Too many attempts, delete the code
-                :ets.delete(:verification_codes, phone_number)
-                {:error, %{"code" => "verification_code_abused"}}
+            updated_data.attempts >= 5 ->
+              :ets.delete(:verification_codes, phone_number)
+              {:error, %{"code" => "verification_code_abused"}}
 
-              # Code doesn't match
-              true ->
-                {:error, %{"code" => "verification_code_invalid"}}
-            end
+            true ->
+              {:error, %{"code" => t("errors", "verification_code_invalid")}}
           end
       end
 
