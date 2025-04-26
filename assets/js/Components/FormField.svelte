@@ -1,35 +1,27 @@
 <!-- FormField.svelte -->
 
 <script lang="ts">
-import type { InertiaForm } from '@inertiajs/svelte'
-import type { Writable } from 'svelte/store'
 import { handleInputValidation } from '../helpers/input_validation'
+import type { TempiForm } from './Form.svelte'
 
 let { field, form, label } = $props<{
   field: string
-  form: Writable<InertiaForm<Record<string, any>>>
+  form: TempiForm
   label: string
 }>()
 
 function inputType(value: any): string {
-  if (typeof value === 'boolean') return 'checkbox'
-  if (typeof value === 'number') return 'number'
-  if (typeof value === 'string') return 'text'
-  if (value instanceof Date) return 'date'
-  return 'text'
-}
-
-function updateField(e: Event) {
-  const target = e.target as HTMLInputElement
-  form.update((f: InertiaForm<Record<string, any>>) => {
-    if (type === 'checkbox') {
-      f[field] = target.checked
-    } else {
-      f[field] = target.value
-    }
-    return f
-  })
-  $form.clearErrors(field)
+  switch (typeof value) {
+    case 'boolean':
+      return 'checkbox'
+    case 'number':
+      return 'number'
+    case 'string':
+      return 'text'
+    default:
+      if (value instanceof Date) return 'date'
+      return 'text'
+  }
 }
 
 const type = inputType($form.data()[field])
@@ -42,21 +34,18 @@ const type = inputType($form.data()[field])
       type="checkbox"
       id={field}
       name={field}
-      checked={$form[field]}
+      bind:checked={$form[field]}
       class:error={$form.errors[field]}
       oninvalid={e => handleInputValidation(e, $form)}
-      onchange={updateField}
     />
   {:else}
     <input
       {type}
       id={field}
       name={field}
-      value={$form.data[field]}
+      bind:value={$form[field]}
       class:error={$form.errors[field]}
       oninvalid={e => handleInputValidation(e, $form)}
-      oninput={updateField}
-      required
     />
   {/if}
 

@@ -6,12 +6,17 @@ import type { Writable } from 'svelte/store'
 import FormField from './FormField.svelte'
 import Button from './ui/Button.svelte'
 
-export type Form = InertiaForm<Record<string, any>>
+export type TempiForm = Writable<InertiaForm<Record<string, any>>>
 
-let { form, onsubmit, className, labels } = $props<{
-  form: Writable<Form>
-  onsubmit: (e: SubmitEvent) => void
+interface FormConfig {
   labels: Record<string, string>
+  requiredFields: string[]
+}
+
+let { form, formConfig, onsubmit, className } = $props<{
+  form: TempiForm
+  formConfig: FormConfig
+  onsubmit: (e: SubmitEvent) => void
   className: string
 }>()
 
@@ -20,7 +25,7 @@ const fields = Object.keys($form.data())
 
 <form class={className} {onsubmit}>
   {#each fields as field}
-    <FormField {field} {form} label={labels[field]} />
+    <FormField {field} form={formConfig.form} label={formConfig.labels[field]} />
   {/each}
   <Button type="submit">Submit</Button>
 </form>
