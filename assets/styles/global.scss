@@ -1,21 +1,21 @@
 // Font declarations
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/poppins-regular.woff2') format('woff2');
+  src: url('/fonts/poppins-regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/poppins-medium.woff2') format('woff2');
+  src: url('/fonts/poppins-medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/poppins-semibold.woff2') format('woff2');
+  src: url('/fonts/poppins-semibold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -120,7 +120,6 @@ body {
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   scroll-padding-bottom: calc($navbar-height + env(safe-area-inset-bottom, 0));

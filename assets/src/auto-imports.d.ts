@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const IconPhCalendarDots: typeof import('~icons/ph/calendar-dots.svelte')['default']
   const IconPhCaretLeft: typeof import('~icons/ph/caret-left.svelte')['default']
   const IconPhCaretRight: typeof import('~icons/ph/caret-right.svelte')['default']
   const IconTablerHexagonPlusFilled: typeof import('~icons/tabler/hexagon-plus-filled.svelte')['default']
