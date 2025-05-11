@@ -1,17 +1,15 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js'
 import path from 'node:path'
 import { defineConfig } from 'vite'
-import type { Plugin } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { VitePWA } from 'vite-plugin-pwa'
 import { analyzer } from 'vite-bundle-analyzer'
 import viteCompression from 'vite-plugin-compression'
-import cssnano from 'cssnano'
-import cssnanoPresetAdvanced from 'cssnano-preset-advanced'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import Icons from 'unplugin-icons/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
+import { preprocessMeltUI, sequence } from '@melt-ui/pp'
 
 export default defineConfig(({ command }) => {
   const isDev = command !== 'build'
@@ -44,9 +42,12 @@ export default defineConfig(({ command }) => {
       svelte({
         compilerOptions: { hmr: true, dev: true, modernAst: true },
         preprocess: [
-          vitePreprocess({
-            script: true,
-          }),
+          sequence([
+            vitePreprocess({
+              script: true,
+            }),
+            preprocessMeltUI(),
+          ]),
         ],
       }),
       VitePWA({
@@ -102,21 +103,11 @@ export default defineConfig(({ command }) => {
       viteCompression({ algorithm: 'gzip', threshold: 1024 }), // Min size for compression
       viteCompression({ algorithm: 'brotliCompress', threshold: 1024 }),
     ],
-    css: {
-      preprocessorOptions: {
-        scss: {},
-      },
-      postcss: {
-        plugins: [
-          cssnano({
-            preset: cssnanoPresetAdvanced(),
-          }),
-        ],
-      },
-    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './js'),
+        $paraglide: path.resolve(__dirname, './paraglide'),
+        $components: path.resolve(__dirname, './js/Components/'),
       },
     },
     build: {

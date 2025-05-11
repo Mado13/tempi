@@ -1,6 +1,7 @@
 {
   "plugins": [
-    "prettier-plugin-svelte"
+    "prettier-plugin-svelte",
+    "@trivago/prettier-plugin-sort-imports"
   ],
   "overrides": [
     {
@@ -17,6 +18,16 @@
       }
     }
   ],
+  "importOrder": [
+    "^@?\\w",
+    "^@/",
+    "^\\$components",
+    "^\\$paraglide",
+    "^\\$utils",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
   "printWidth": 120,
   "semi": false,
   "singleQuote": true,

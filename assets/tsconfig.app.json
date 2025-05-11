@@ -28,6 +28,18 @@
       "svelte",
       "unplugin-icons/types/svelte"
     ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./js/*"
+      ],
+      "$paraglide/*": [
+        "./paraglide/*"
+      ],
+      "$components/*": [
+        "./js/Components/*"
+      ]
+    }
   },
   "include": [
     "src/**/*",
