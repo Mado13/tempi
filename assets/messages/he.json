@@ -3,13 +3,30 @@
   "login_welcome_title": "שלום",
   "login_submit_button": "התחבר",
   "login_link_to_register": "צור חשבון",
+  "login_phone_required": "אנא הכנס מספר טלפון כדי להמשיך",
+  "login_phone_format": "אנא הכנס מספר טלפון בפורמט ישראלי 05XXXXXXXX",
   "register_title": "צור חשבון",
   "register_submit_button": "צור חשבון",
   "verify_code_title": "אימות קוד",
-  "invalid_code": "",
-  "generic_error": "",
   "choose_role_title": "למה הגעת לכאן היום?",
   "choose_role_worker": "למצוא עבודה",
   "choose_role_employer": "למצוא עובדים",
-  "choose_role_both": "גם וגם"
+  "choose_role_both": "גם וגם",
+  "bottom_navigation_profile_button": "פרופיל",
+  "bottom_nvigation_agenda_button": "יומן",
+  "bottom_navigation_jobs_button": "עבודות",
+  "bottom_navigation_team_button": "צוות",
+  "add_job_page_title": "צור עבודה חדשה",
+  "add_job_job_title": "שם",
+  "add_job_job_location": "מיקום",
+  "add_job_submit_button": "צור עבודה",
+  "add_job_start_date_before_today": "בלאט",
+  "add_job_start_date_required": "אנא הכנס תאריך התחלה",
+  "add_job_location_required": "אנא הכנס מיקום",
+  "add_job_title_required": "אנא הכנס שם לפרוייקט",
+  "add_job": {
+    "start_date": {
+      "is_before_today": "blat"
+    }
+  }
 }
