@@ -20,11 +20,16 @@ defmodule Tempi.Repo.Migrations.CreateJobs do
           references(:employer_profiles, type: :binary_id, on_delete: :nothing),
           null: false
 
+      add :address_id,
+          references(:addresses, type: :binary_id, on_delete: :nothing),
+          null: false
+
       timestamps(type: :utc_datetime)
     end
 
     create index(:jobs, [:employer_profile_id])
     create index(:jobs, [:status])
     create index(:jobs, [:start_date, :end_date])
+    create index(:jobs, [:address_id])
   end
 end

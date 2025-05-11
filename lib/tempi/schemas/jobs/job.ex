@@ -4,18 +4,19 @@ defmodule Tempi.Schemas.Jobs.Job do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  @derive {Jason.Encoder, only: [:id, :title, :description, :location, :start_date, :end_date, :pay_rate, :status]}
+  @derive {Jason.Encoder, only: [:id, :title, :description, :start_date, :end_date, :pay_rate, :status, :address_id]}
 
   schema "jobs" do
     field :title, :string
     field :description, :string
-    field :location, :string
     field :start_date, :utc_datetime
     field :end_date, :utc_datetime
     field :pay_rate, :decimal
     field :status, Ecto.Enum, values: [:open, :filled, :completed, :canceled], default: :open
 
     belongs_to :employer_profile, Tempi.Schemas.Profiles.EmployerProfile
+    belongs_to :address, Tempi.Schemas.Locations.Address
+
     has_many :job_applications, Tempi.Schemas.Jobs.JobApplication
     has_many :worker_profiles, through: [:job_applications, :worker_profile]
 
@@ -27,10 +28,20 @@ defmodule Tempi.Schemas.Jobs.Job do
   """
   def changeset(job, attrs) do
     job
-    |> cast(attrs, [:title, :description, :location, :start_date, :end_date, :pay_rate, :status, :employer_profile_id])
-    |> validate_required([:title, :start_date, :end_date, :employer_profile_id])
+    |> cast(attrs, [
+      :title,
+      :description,
+      :start_date,
+      :end_date,
+      :pay_rate,
+      :status,
+      :employer_profile_id,
+      :address_id
+    ])
+    |> validate_required([:title, :start_date, :end_date, :employer_profile_id, :address_id])
     |> validate_datetime_range()
     |> foreign_key_constraint(:employer_profile_id)
+    |> foreign_key_constraint(:address_id)
   end
 
   # Validate that end_date is after start_date
