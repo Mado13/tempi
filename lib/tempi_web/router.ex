@@ -58,8 +58,7 @@ defmodule TempiWeb.Router do
     pipe_through [:inertia, :require_authenticated_user, :require_employer_role]
 
     get "/agenda", Employer.AgendaController, :index
-    get "/jobs", Employer.JobsController, :index
-    get "/add-job", Employer.JobsController, :add_job
+    resources "/jobs", Employer.JobsController, only: [:create, :new, :index]
   end
 
   scope "/", TempiWeb do

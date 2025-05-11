@@ -5,7 +5,7 @@ defmodule Tempi.MixProject do
     [
       app: :tempi,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.18.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
@@ -41,7 +41,7 @@ defmodule Tempi.MixProject do
       {:bandit, "~> 1.5"},
       {:bcrypt_elixir, "~> 3.0"},
       {:bun, "~> 1.4"},
-      {:dns_cluster, "~> 0.1.1"},
+      {:dns_cluster, "~> 0.2.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:ecto_sql, "~> 3.10"},
       {:ex_phone_number, "~> 0.4.5"},
@@ -50,20 +50,21 @@ defmodule Tempi.MixProject do
       {:floki, "~> 0.37.0"},
       {:gettext, "~> 0.26"},
       {:igniter, "~> 0.5", only: [:dev, :test]},
-      {:inertia, "~> 2.3.0"},
+      {:inertia, "~> 2.4.0"},
       {:jason, "~> 1.2"},
       {:phoenix, "~> 1.7.20"},
       {:phoenix_ecto, "~> 4.5"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:phoenix_live_view, "~> 1.0.0"},
       {:redix, "~> 1.5.2"},
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.5"},
+      {:timex, "~> 3.7"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:telemetry_ui, "~> 4.0"}
+      {:telemetry_ui, "~> 5.0"}
     ]
   end
 

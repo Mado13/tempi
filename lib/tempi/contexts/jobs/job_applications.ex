@@ -15,10 +15,12 @@ defmodule Tempi.Contexts.Jobs.JobApplications do
   end
 
   def update_job_application(job_application, attrs) do
-    Multi.new()
-    |> Multi.update(:job_application, JobApplication.changeset(job_application, attrs))
-    |> then(fn multi ->
-      if attrs[:status] == :completed && job_application.status != :completed do
+    multi =
+      Multi.new()
+      |> Multi.update(:job_application, JobApplication.changeset(job_application, attrs))
+
+    multi =
+      if attrs[:status] == :completed and job_application.status != :completed do
         Multi.run(multi, :job_agreement, fn _repo, %{job_application: updated_app} ->
           create_job_agreement(%{
             job_id: updated_app.job_id,
@@ -31,7 +33,7 @@ defmodule Tempi.Contexts.Jobs.JobApplications do
       else
         multi
       end
-    end)
-    |> Repo.transaction()
+
+    Repo.transaction(multi)
   end
 end
