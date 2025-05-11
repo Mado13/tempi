@@ -27,9 +27,6 @@ defmodule TempiWeb.Router do
 
   scope "/", TempiWeb do
     pipe_through [:inertia]
-
-    get "/splash", WelcomeController, :index
-    get "/install", PageController, :install
   end
 
   scope "/", TempiWeb do
@@ -51,7 +48,7 @@ defmodule TempiWeb.Router do
   scope "/worker", TempiWeb do
     pipe_through [:inertia, :require_authenticated_user, :require_worker_role]
 
-    get "/agenda", Worker.AgendaController, :index
+    # get "/agenda", Worker.AgendaController, :index
   end
 
   scope "/employer", TempiWeb do
@@ -69,6 +66,6 @@ defmodule TempiWeb.Router do
     get "/choose-role", AuthController, :role_form
     post "/choose-role", AuthController, :set_role
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
   end
 end
