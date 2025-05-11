@@ -3,4 +3,4 @@ msgstr ""
 "Language: he\n"
 
 msgid "verification_code_invalid"
-msgstr "This is the string dude!"
+msgstr "הקוד שהוזן שגוית אנא נסה שנית"
