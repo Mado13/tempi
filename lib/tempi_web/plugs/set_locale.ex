@@ -37,20 +37,17 @@ defmodule TempiWeb.SetLocale do
         accept_language
         |> String.split(",")
         |> Enum.map(&parse_language_option/1)
-        |> Enum.sort(fn {_, quality1}, {_, quality2} -> quality1 > quality2 end)
-        |> Enum.find_value(nil, fn {locale, _} ->
-          short_locale = String.slice(locale, 0, 2)
-
-          if short_locale in @supported_locales do
-            short_locale
-          else
-            nil
-          end
-        end)
+        |> Enum.sort(fn {_, q1}, {_, q2} -> q1 > q2 end)
+        |> Enum.find_value(nil, &preferred_supported_locale/1)
 
       _ ->
         nil
     end
+  end
+
+  defp preferred_supported_locale({locale, _}) do
+    short = String.slice(locale, 0, 2)
+    if short in @supported_locales, do: short, else: nil
   end
 
   defp parse_language_option(option) do
