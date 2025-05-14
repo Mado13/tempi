@@ -19,12 +19,11 @@ const {
 } = createCombobox({
   forceVisible: true,
   selected,
-  onSelectedChange: async newSelected => {
-    bindableSelected = newSelected.next
-    const details = await places.fetchPlaceDetails(newSelected.next.value)
+  onSelectedChange: async ({ next: { value: addressId } }) => {
+    const details = await places.fetchPlaceDetails(addressId)
     if (details) {
-      const displayString = [details.name, details.formattedAddress].filter(Boolean).join(', ')
-      inputValue.set(displayString)
+      bindableSelected = { ...details, addressId }
+      inputValue.set([details.name, details.formattedAddress].filter(Boolean).join(', '))
     }
   },
 })

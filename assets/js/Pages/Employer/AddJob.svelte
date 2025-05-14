@@ -6,7 +6,7 @@ import { CalendarDate } from '@internationalized/date'
 import { type DateRange } from '@melt-ui/svelte'
 import { watch } from 'runed'
 
-import { validateForm } from '@/helpers/validate-from'
+import { validateForm } from '@/helpers/validate-form'
 import { type JobFormData, jobFormSchema } from '@/scehmas/job.schema'
 
 import AddressInput from '$components/UI/AddressInput.svelte'
@@ -17,17 +17,17 @@ import { m } from '$paraglide/messages'
 let { selectedDate }: { selectedDate: CalendarDate } = $props()
 let selectedRange = $state<DateRange>({ start: selectedDate, end: undefined })
 let form = useForm<JobFormData>({
-  jobStart: '',
-  jobEnd: '',
+  startDate: '',
+  endDate: '',
   title: '',
-  location: '',
+  location: undefined,
 })
 
 watch(
   () => selectedRange,
   () => {
-    $form.jobStart = selectedRange.start!.toString()
-    $form.jobEnd = selectedRange.end!.toString()
+    $form.startDate = selectedRange.start!.toString()
+    $form.endDate = selectedRange.end!.toString()
   },
   {
     lazy: true,
@@ -49,15 +49,15 @@ $inspect($form)
 <h1>{m.add_job_page_title()}</h1>
 <form {onsubmit}>
   <label>
-    Title:
+    {m['add_job.job_title.value']()}
     <input type="text" bind:value={$form.title} class:error={$form.errors.title} />
     <div class="form-error">{$form.errors.title}</div>
   </label>
   <AddressInput bind:selected={$form.location} />
   <div class="form-error">{$form.errors.location}</div>
-  <DateRangeField bind:value={selectedRange} title={'Jobs Date:'} startName="jobStart" endName="jobEnds" />
-  <div class="form-error">{$form.errors.jobStart}</div>
-  <button type="submit">Submit</button>
+  <DateRangeField bind:value={selectedRange} title={m['add_job.date.title']()} startName="jobStart" endName="jobEnds" />
+  <div class="form-error">{$form.errors.startDate}</div>
+  <button type="submit">{m['add_job.submit_button']()}</button>
 </form>
 
 <style>
