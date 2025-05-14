@@ -4,12 +4,14 @@ defmodule Tempi.Schemas.Locations.Address do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
+  @derive {Jason.Encoder, except: [:__meta__, :jobs, :inserted_at, :updated_at]}
 
   schema "addresses" do
     field :place_id, :string
     field :street_number, :string
     field :street_name, :string
     field :city, :string
+    field :country, :string
     field :district, :string
     field :postal_code, :string
     field :formatted_address, :string
