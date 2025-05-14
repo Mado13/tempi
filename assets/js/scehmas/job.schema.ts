@@ -1,11 +1,14 @@
-import * as v from 'valibot'
 import { parseDate, today } from '@internationalized/date'
+import * as v from 'valibot'
+
 import { m } from '$paraglide/messages'
+
+import { formLocationSchema } from './api/google_maps'
 
 export const jobFormSchema = v.object({
   title: v.pipe(v.string(), v.nonEmpty(m.add_job_title_required())),
-  location: v.pipe(v.string(), v.nonEmpty(m.add_job_location_required())),
-  jobStart: v.pipe(
+  location: v.optional(formLocationSchema),
+  startDate: v.pipe(
     v.string(),
     v.nonEmpty(m.add_job_start_date_required()),
     v.custom<string>(input => {
@@ -13,7 +16,7 @@ export const jobFormSchema = v.object({
       return date.compare(today('UTC')) > 0
     }, m.add_job_start_date_before_today()),
   ),
-  jobEnd: v.string(),
+  endDate: v.string(),
 })
 
 export type JobFormData = v.InferInput<typeof jobFormSchema>

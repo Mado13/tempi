@@ -1,9 +1,6 @@
-type PlaceDetails = {
-  name?: string | null
-  formattedAddress?: string | null
-  addressComponents?: google.maps.places.AddressComponent[]
-  location?: google.maps.LatLng | null
-}
+import * as v from 'valibot'
+
+import { FormLocationInput, mapsApiSchema } from '@/scehmas/api/google_maps'
 
 export class GoogleMapsPlaces {
   private apiKey: string
@@ -55,16 +52,26 @@ export class GoogleMapsPlaces {
     }, {})
   }
 
-  async fetchPlaceDetails(placeId: string): Promise<PlaceDetails | undefined> {
+  async fetchPlaceDetails(placeId: string): Promise<FormLocationInput | undefined> {
     if (!this.maps) throw new Error('Google Maps not loaded')
     const place = new this.maps.places.Place({ id: placeId, requestedLanguage: 'he', requestedRegion: 'IL' })
     await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'] })
-    console.log({ place })
-    return {
+
+    const rawData = {
       name: place.displayName,
       formattedAddress: place.formattedAddress,
       addressComponents: place.addressComponents,
-      location: place.location,
+      location: {
+        lat: place.location?.lat(),
+        lng: place.location?.lng(),
+      },
+    }
+
+    try {
+      return v.parse(mapsApiSchema, rawData)
+    } catch (error) {
+      console.error('Validation failed:', error)
+      return undefined
     }
   }
 
