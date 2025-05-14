@@ -25,8 +25,25 @@
   "add_job_location_required": "אנא הכנס מיקום",
   "add_job_title_required": "אנא הכנס שם לפרוייקט",
   "add_job": {
-    "start_date": {
-      "is_before_today": "blat"
+    "page_title": "צור פרוייקט",
+    "job_title": {
+      "value": "שם הפרוייקט",
+      "missing": "אנא הכנס שם לפרוייקט"
+    },
+    "locaation": {
+      "value": "מיקום הפרוייקט",
+      "missing": "אנא הכנס מיקום"
+    },
+    "submit_button": "צור פרוייקט",
+    "date": {
+      "title": "תאריך הפרוייקט",
+      "start": {
+        "in_past": "הפרוייקט לא יכול להתחיל בעבר",
+        "missing": "אנא הכנס תאריך התחלה לפרוייקט"
+      },
+      "end": {
+        "missing": "אנא הכנס תאריך סיום לפרוייקט"
+      }
     }
   }
 }
