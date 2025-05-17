@@ -11,7 +11,6 @@ config :inertia,
   endpoint: TempiWeb.Endpoint,
   static_paths: ["/assets/app.js"],
   default_version: "1",
-  camelize_props: true,
   history: [encrypt: false],
   ssr: false,
   raise_on_ssr_failure: config_env() != :prod
