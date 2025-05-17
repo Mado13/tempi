@@ -1,4 +1,9 @@
-defmodule Tempi.Schemas.Locations.Address do
+defmodule Tempi.Locations.Address do
+  @moduledoc """
+  Schema and changeset for address records.
+
+  Handles address fields, geocoordinates, and basic validations.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -18,7 +23,7 @@ defmodule Tempi.Schemas.Locations.Address do
     field :latitude, :float
     field :longitude, :float
 
-    has_many :jobs, Tempi.Schemas.Jobs.Job
+    has_many :jobs, Tempi.Jobs.Job
 
     timestamps()
   end

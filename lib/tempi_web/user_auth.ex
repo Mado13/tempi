@@ -6,7 +6,7 @@ defmodule TempiWeb.UserAuth do
   import Inertia.Controller
   import TempiWeb.RolePlugs
 
-  alias Tempi.Contexts.Accounts
+  alias Tempi.Accounts
   alias TempiWeb.UserRole
 
   # Make the remember me cookie valid for 60 days.

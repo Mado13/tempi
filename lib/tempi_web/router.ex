@@ -1,9 +1,7 @@
 defmodule TempiWeb.Router do
   use TempiWeb, :router
 
-  import TempiWeb.UserAuth
-  import TempiWeb.RolePlugs
-  import TempiWeb.PwaPlugs
+  import TempiWeb.{UserAuth, RolePlugs, PwaPlugs}
 
   pipeline :inertia do
     plug :accepts, ["html"]
@@ -48,14 +46,14 @@ defmodule TempiWeb.Router do
   scope "/worker", TempiWeb do
     pipe_through [:inertia, :require_authenticated_user, :require_worker_role]
 
-    # get "/agenda", Worker.AgendaController, :index
+    get "/agenda", Worker.AgendaController, :index
   end
 
   scope "/employer", TempiWeb do
     pipe_through [:inertia, :require_authenticated_user, :require_employer_role]
 
     get "/agenda", Employer.AgendaController, :index
-    resources "/jobs", Employer.JobsController, only: [:create, :new, :index]
+    resources "/jobs", Employer.JobController, only: [:create, :new, :index]
   end
 
   scope "/", TempiWeb do
@@ -66,6 +64,6 @@ defmodule TempiWeb.Router do
     get "/choose-role", AuthController, :role_form
     post "/choose-role", AuthController, :set_role
 
-    # get "/", PageController, :home
+    get "/", PageController, :home
   end
 end

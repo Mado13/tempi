@@ -4,7 +4,7 @@ defmodule TempiWeb.AuthController do
   import Tempi.Utils.I18n
 
   alias Tempi.Repo
-  alias Tempi.Contexts.Accounts
+  alias Tempi.Accounts
   alias Tempi.Utils.Verification
   alias TempiWeb.UserAuth
   alias TempiWeb.UserRole

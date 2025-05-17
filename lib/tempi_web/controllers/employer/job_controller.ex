@@ -1,6 +1,6 @@
-defmodule TempiWeb.Employer.JobsController do
+defmodule TempiWeb.Employer.JobController do
   use TempiWeb, :controller
-  alias Tempi.Contexts.Jobs.Jobs
+  alias Tempi.Jobs
 
   def index(conn, _params) do
     jobs = Jobs.list_jobs()

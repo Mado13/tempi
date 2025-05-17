@@ -1,4 +1,4 @@
-defmodule Tempi.Schemas.Profiles.EmployerProfile do
+defmodule Tempi.Profiles.EmployerProfile do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,7 +7,7 @@ defmodule Tempi.Schemas.Profiles.EmployerProfile do
   @derive {Jason.Encoder, only: [:id, :account_id, :updated_at]}
   schema "employer_profiles" do
     field :company_name, :string
-    belongs_to :account, Tempi.Schemas.Accounts.Account
+    belongs_to :account, Tempi.Accounts.Account
     timestamps(updated_at: :updated_at, inserted_at: false)
   end
 

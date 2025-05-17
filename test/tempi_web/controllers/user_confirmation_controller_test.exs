@@ -1,7 +1,7 @@
 defmodule TempiWeb.UserConfirmationControllerTest do
   use TempiWeb.ConnCase, async: true
 
-  alias Tempi.Contexts.Accounts
+  alias Tempi.Accounts
   alias Tempi.Repo
   import Tempi.AccountsFixtures
 

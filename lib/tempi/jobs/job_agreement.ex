@@ -1,15 +1,18 @@
-defmodule Tempi.Schemas.Jobs.JobAgreement do
+defmodule Tempi.Jobs.JobAgreement do
+  @moduledoc "Represents a job agreement linking job, worker, employer, and application."
   use Ecto.Schema
   import Ecto.Changeset
+  alias Tempi.Jobs.{JobApplication, Job}
+  alias Tempi.Profiles.{WorkerProfile, EmployerProfile}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
   schema "job_agreements" do
-    belongs_to :job, Tempi.Schemas.Jobs.Job
-    belongs_to :worker_profile, Tempi.Schemas.Profiles.WorkerProfile
-    belongs_to :employer_profile, Tempi.Schemas.Profiles.EmployerProfile
-    belongs_to :job_application, Tempi.Schemas.Jobs.JobApplication
+    belongs_to :job, Job
+    belongs_to :worker_profile, WorkerProfile
+    belongs_to :employer_profile, EmployerProfile
+    belongs_to :job_application, JobApplication
 
     field :completed_at, :utc_datetime
 

@@ -1,4 +1,4 @@
-defmodule Tempi.Contexts.Locations.AddressBuilder do
+defmodule Tempi.Locations.AddressBuilder do
   @moduledoc """
   Builds address attributes from Google Places API components.
   """

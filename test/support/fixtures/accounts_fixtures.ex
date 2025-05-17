@@ -18,7 +18,7 @@ defmodule Tempi.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> Tempi.Contexts.Accounts.register_user()
+      |> Tempi.Accounts.register_user()
 
     user
   end

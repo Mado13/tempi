@@ -1,4 +1,4 @@
-defmodule Tempi.Schemas.Jobs.JobApplication do
+defmodule Tempi.Jobs.JobApplication do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -9,8 +9,8 @@ defmodule Tempi.Schemas.Jobs.JobApplication do
   schema "job_application" do
     field :status, Ecto.Enum, values: [:applied, :confirmed, :rejected, :completed, :canceled], default: :applied
 
-    belongs_to :job, Tempi.Schemas.Jobs.Job
-    belongs_to :worker_profile, Tempi.Schemas.Profiles.WorkerProfile
+    belongs_to :job, Tempi.Jobs.Job
+    belongs_to :worker_profile, Tempi.Profiles.WorkerProfile
 
     timestamps(type: :utc_datetime)
   end

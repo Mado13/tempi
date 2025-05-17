@@ -1,4 +1,9 @@
-defmodule Tempi.Schemas.Accounts.User do
+defmodule Tempi.Accounts.User do
+  @moduledoc """
+  User schema with phone-based authentication and account association.
+
+  Handles phone normalization, confirmation, and links to profiles.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -11,7 +16,7 @@ defmodule Tempi.Schemas.Accounts.User do
     field :phone_number, :string
     field :confirmed_at, :utc_datetime
 
-    has_one :account, Tempi.Schemas.Accounts.Account
+    has_one :account, Tempi.Accounts.Account
 
     has_one :worker, through: [:account, :worker_profile]
     has_one :employer, through: [:account, :employer_profile]

@@ -1,10 +1,8 @@
 defmodule Tempi.AccountsTest do
   use Tempi.DataCase
 
-  alias Tempi.Contexts.Accounts
-
   import Tempi.AccountsFixtures
-  alias Tempi.Contexts.Accounts.{User, UserToken}
+  alias Tempi.Accounts.{User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do

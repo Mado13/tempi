@@ -1,12 +1,12 @@
-defmodule Tempi.Contexts.Jobs.Jobs do
+defmodule Tempi.Jobs do
+  alias Ecto.Multi
+  alias Tempi.Repo
+
   import Ecto.Query
   import Tempi.Utils.DateHelpers, only: [parse_date!: 1]
 
-  alias Tempi.Schemas.Jobs.Job
-  alias Tempi.Schemas.Locations.Address
-  alias Tempi.Contexts.Locations.AddressBuilder
-  alias Ecto.Multi
-  alias Tempi.Repo
+  alias Tempi.Locations.{Address, AddressBuilder}
+  alias Tempi.Jobs.{Job, JobApplication, JobAgreement}
 
   @job_keys ~w(start_date end_date title name)
   @address_keys ~w(address_id formatted_address location address_components)
@@ -45,7 +45,9 @@ defmodule Tempi.Contexts.Jobs.Jobs do
     start_date = Timex.beginning_of_month(datetime)
     end_date = Timex.end_of_month(datetime)
 
-    from(j in Job, where: j.inserted_at >= ^start_date and j.inserted_at <= ^end_date)
+    Job
+    |> where([j], j.inserted_at >= ^start_date and j.inserted_at <= ^end_date)
+    |> preload(:address)
     |> Repo.all()
   end
 
@@ -62,5 +64,44 @@ defmodule Tempi.Contexts.Jobs.Jobs do
       |> Map.take(@address_keys)
 
     {job_attrs, address_attrs}
+  end
+
+  def get_job_application(id) do
+    Repo.get!(JobApplication, id) |> Repo.preload(:job)
+  end
+
+  def create_job_application(attrs) do
+    %JobApplication{}
+    |> JobApplication.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_job_application(job_application, attrs) do
+    multi =
+      Multi.new()
+      |> Multi.update(:job_application, JobApplication.changeset(job_application, attrs))
+
+    multi =
+      if attrs[:status] == :completed and job_application.status != :completed do
+        Multi.run(multi, :job_agreement, fn _repo, %{job_application: updated_app} ->
+          create_job_agreement(%{
+            job_id: updated_app.job_id,
+            worker_profile_id: updated_app.worker_profile_id,
+            employer_profile_id: updated_app.job.employer_profile_id,
+            job_application_id: updated_app.id,
+            completed_at: DateTime.utc_now()
+          })
+        end)
+      else
+        multi
+      end
+
+    Repo.transaction(multi)
+  end
+
+  def create_job_agreement(attrs) do
+    %JobAgreement{}
+    |> JobAgreement.changeset(attrs)
+    |> Repo.insert()
   end
 end

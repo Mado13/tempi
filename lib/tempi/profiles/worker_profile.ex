@@ -1,4 +1,4 @@
-defmodule Tempi.Schemas.Profiles.WorkerProfile do
+defmodule Tempi.Profiles.WorkerProfile do
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,4 +1,9 @@
-defmodule Tempi.Schemas.Accounts.Account do
+defmodule Tempi.Accounts.Account do
+  @moduledoc """
+  Ecto schema for user accounts, supporting worker and employer profiles.
+
+  Associates each account with a user and enforces type constraints.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,9 +11,9 @@ defmodule Tempi.Schemas.Accounts.Account do
   @derive {Jason.Encoder, only: [:id, :type, :worker_profile, :employer_profile]}
   schema "accounts" do
     field :type, :string
-    belongs_to :user, Tempi.Schemas.Accounts.User, type: :binary_id
-    has_one :worker_profile, Tempi.Schemas.Profiles.WorkerProfile
-    has_one :employer_profile, Tempi.Schemas.Profiles.EmployerProfile
+    belongs_to :user, Tempi.Accounts.User, type: :binary_id
+    has_one :worker_profile, Tempi.Profiles.WorkerProfile
+    has_one :employer_profile, Tempi.Profiles.EmployerProfile
     timestamps()
   end
 

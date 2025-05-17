@@ -1,7 +1,7 @@
-defmodule Tempi.Schemas.Accounts.UserToken do
+defmodule Tempi.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query
-  alias Tempi.Schemas.Accounts.UserToken
+  alias Tempi.Accounts.UserToken
 
   @hash_algorithm :sha256
   @rand_size 32
@@ -18,7 +18,7 @@ defmodule Tempi.Schemas.Accounts.UserToken do
     field :token, :binary
     field :context, :string
     field :sent_to, :string
-    belongs_to :user, Tempi.Schemas.Accounts.User
+    belongs_to :user, Tempi.Accounts.User
 
     timestamps(type: :utc_datetime, updated_at: false)
   end

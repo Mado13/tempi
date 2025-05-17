@@ -1,7 +1,7 @@
 defmodule TempiWeb.UserSettingsControllerTest do
   use TempiWeb.ConnCase, async: true
 
-  alias Tempi.Contexts.Accounts
+  alias Tempi.Accounts
   import Tempi.AccountsFixtures
 
   setup :register_and_log_in_user

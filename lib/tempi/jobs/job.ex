@@ -1,10 +1,11 @@
-defmodule Tempi.Schemas.Jobs.Job do
+defmodule Tempi.Jobs.Job do
+  @moduledoc "Job schema with details, status, employer, and address."
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  @derive {Jason.Encoder, only: [:id, :title, :description, :start_date, :end_date, :pay_rate, :status, :address_id]}
+  @derive {Jason.Encoder, only: [:id, :title, :description, :start_date, :end_date, :pay_rate, :status, :address]}
 
   schema "jobs" do
     field :title, :string
@@ -14,10 +15,10 @@ defmodule Tempi.Schemas.Jobs.Job do
     field :pay_rate, :decimal
     field :status, Ecto.Enum, values: [:open, :filled, :completed, :canceled], default: :open
 
-    belongs_to :employer_profile, Tempi.Schemas.Profiles.EmployerProfile
-    belongs_to :address, Tempi.Schemas.Locations.Address
+    belongs_to :employer_profile, Tempi.Profiles.EmployerProfile
+    belongs_to :address, Tempi.Locations.Address
 
-    has_many :job_applications, Tempi.Schemas.Jobs.JobApplication
+    has_many :job_applications, Tempi.Jobs.JobApplication
     has_many :worker_profiles, through: [:job_applications, :worker_profile]
 
     timestamps(type: :utc_datetime)

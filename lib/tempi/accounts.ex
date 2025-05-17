@@ -1,12 +1,11 @@
-# lib/tempi/accounts.ex
-defmodule Tempi.Contexts.Accounts do
+defmodule Tempi.Accounts do
   @moduledoc """
   The Accounts context.
   """
 
   import Ecto.Query, warn: false
-  alias Tempi.Schemas.Accounts.{User, UserToken, UserNotifier, Account}
-  alias Tempi.Schemas.Profiles.{WorkerProfile, EmployerProfile}
+  alias Tempi.Accounts.{User, UserToken, UserNotifier, Account}
+  alias Tempi.Profiles.{WorkerProfile, EmployerProfile}
   alias Tempi.Utils.PhoneUtils
   alias Tempi.Repo
   alias Ecto.Multi

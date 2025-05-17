@@ -2,7 +2,7 @@ defmodule TempiWeb.UserAuthTest do
   use TempiWeb.ConnCase, async: true
 
   alias Phoenix.LiveView
-  alias Tempi.Contexts.Accounts
+  alias Tempi.Accounts
   alias Tempi.UserAuth
   import Tempi.AccountsFixtures
 

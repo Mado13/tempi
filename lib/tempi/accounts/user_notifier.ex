@@ -1,4 +1,4 @@
-defmodule Tempi.Schemas.Accounts.UserNotifier do
+defmodule Tempi.Accounts.UserNotifier do
   import Swoosh.Email
 
   alias Tempi.Mailer
