@@ -16,14 +16,11 @@
   "bottom_nvigation_agenda_button": "יומן",
   "bottom_navigation_jobs_button": "עבודות",
   "bottom_navigation_team_button": "צוות",
-  "add_job_page_title": "צור עבודה חדשה",
-  "add_job_job_title": "שם",
-  "add_job_job_location": "מיקום",
-  "add_job_submit_button": "צור עבודה",
-  "add_job_start_date_before_today": "בלאט",
-  "add_job_start_date_required": "אנא הכנס תאריך התחלה",
-  "add_job_location_required": "אנא הכנס מיקום",
-  "add_job_title_required": "אנא הכנס שם לפרוייקט",
+  "agenda": {
+    "employer": {
+      "no_planned_jobs": "כרגע לא מתוכננות עבודות לתאריך הנקוב"
+    }
+  },
   "add_job": {
     "page_title": "צור פרוייקט",
     "job_title": {
