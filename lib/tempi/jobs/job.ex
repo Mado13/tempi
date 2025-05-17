@@ -5,7 +5,8 @@ defmodule Tempi.Jobs.Job do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  @derive {Jason.Encoder, only: [:id, :title, :description, :start_date, :end_date, :pay_rate, :status, :address]}
+  use Tempi.Encoders.CamelCaseJsonEncoder,
+    only: [:id, :title, :description, :start_date, :end_date, :pay_rate, :status, :address]
 
   schema "jobs" do
     field :title, :string

@@ -1,7 +1,6 @@
 defmodule TempiWeb.Employer.AgendaController do
   use TempiWeb, :controller
   alias Tempi.Jobs
-  alias Tempi.Utils.Camelize
 
   # Explicit pattern matching for params with month/year
   def index(conn, %{"month" => month, "year" => year}) do
@@ -26,7 +25,7 @@ defmodule TempiWeb.Employer.AgendaController do
   end
 
   defp render_agenda(conn, %DateTime{} = datetime) do
-    jobs = Jobs.list_jobs(datetime) |> Camelize.camelize()
+    jobs = Jobs.list_jobs(datetime)
 
     conn
     |> assign_prop(:jobs, jobs)
