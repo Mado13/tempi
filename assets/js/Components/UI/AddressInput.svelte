@@ -6,6 +6,8 @@ import { writable } from 'svelte/store'
 
 import { GoogleMapsPlaces } from '@/lib/google-maps-places'
 
+import { m } from '$paraglide/messages'
+
 let { selected: bindableSelected = $bindable() } = $props()
 const selected = writable(bindableSelected)
 
@@ -57,7 +59,7 @@ $effect(() => {
 <div>
   <!-- svelte-ignore a11y_label_has_associated_control -->
   <label use:melt={$label}>
-    <span>Choose your address:</span>
+    <span>{m['add_job.locaation.value']()}</span>
   </label>
 
   <div>

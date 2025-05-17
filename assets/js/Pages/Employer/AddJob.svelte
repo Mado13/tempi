@@ -46,7 +46,7 @@ const onsubmit = (e: SubmitEvent) => {
 $inspect($form)
 </script>
 
-<h1>{m.add_job_page_title()}</h1>
+<h1>{m['add_job.job_title.value']()}</h1>
 <form {onsubmit}>
   <label>
     {m['add_job.job_title.value']()}

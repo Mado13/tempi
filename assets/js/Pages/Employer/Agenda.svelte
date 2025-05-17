@@ -3,6 +3,9 @@
 <script lang="ts">
 import { router } from '@inertiajs/svelte'
 import { getLocalTimeZone, today } from '@internationalized/date'
+
+import { m } from '$paraglide/messages'
+
 import Calendar from '../../Components/Calendar.svelte'
 import Button from '../../Components/UI/Button.svelte'
 
@@ -37,7 +40,8 @@ async function addJob() {
 {#if jobs.length > 0}
   {#each jobs as job (job.id)}
     <div>{job.title}</div>
+    <div>{job.address.formattedAddress}</div>
   {/each}
 {:else}
-  <div>You dont have anything plan for this date...</div>
+  <div>{m['agenda.employer.no_planned_jobs']()}</div>
 {/if}
