@@ -1,15 +1,13 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js'
+import { preprocessMeltUI, sequence } from '@melt-ui/pp'
+import { svelte, vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import path from 'node:path'
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
-import { VitePWA } from 'vite-plugin-pwa'
-import { analyzer } from 'vite-bundle-analyzer'
-import viteCompression from 'vite-plugin-compression'
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
-import Icons from 'unplugin-icons/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
-import { preprocessMeltUI, sequence } from '@melt-ui/pp'
+import Icons from 'unplugin-icons/vite'
+import { defineConfig } from 'vite'
+import viteCompression from 'vite-plugin-compression'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(({ command }) => {
   const isDev = command !== 'build'
@@ -23,6 +21,7 @@ export default defineConfig(({ command }) => {
     server: { cors: true },
     base: '/',
     publicDir: 'static',
+
     plugins: [
       Icons({ compiler: 'svelte' }),
       AutoImport({
@@ -34,32 +33,37 @@ export default defineConfig(({ command }) => {
         ],
         dts: 'src/auto-imports.d.ts',
       }),
+
       paraglideVitePlugin({
         project: './project.inlang',
         outdir: './paraglide',
-      } as const),
-      analyzer(),
-      svelte({
-        compilerOptions: { hmr: true, dev: true, modernAst: true },
-        preprocess: [
-          sequence([
-            vitePreprocess({
-              script: true,
-            }),
-            preprocessMeltUI(),
-          ]),
-        ],
       }),
+
+      svelte({
+        compilerOptions: {
+          hmr: true,
+          modernAst: true,
+          dev: isDev,
+        },
+        preprocess: [sequence([vitePreprocess({ script: true }), preprocessMeltUI()])],
+      }),
+
       VitePWA({
         registerType: 'autoUpdate',
+        injectRegister: 'inline',
+        includeAssets: ['**/*'],
+        outDir: '../priv/static',
+        srcDir: 'js',
+        filename: 'sw.js',
+        strategies: 'generateSW',
         manifest: {
           name: 'Tempi',
           short_name: 'Tempi',
           display: 'standalone',
           orientation: 'portrait',
-          theme_color: '#ffffff',
-          background_color: '#ffffff',
           start_url: '/',
+          background_color: '#ffffff',
+          theme_color: '#ffffff',
           icons: [
             {
               src: '/icons/icon2.png',
@@ -76,33 +80,43 @@ export default defineConfig(({ command }) => {
           ],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-          navigateFallback: null,
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+          navigateFallback: '/',
           runtimeCaching: [
             {
-              urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
+              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|woff2)$/,
               handler: 'CacheFirst',
               options: {
-                cacheName: 'images-cache',
+                cacheName: 'assets-cache',
                 expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+                  maxEntries: 100,
+                  maxAgeSeconds: 60 * 60 * 24 * 30,
+                },
+              },
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
                 },
               },
             },
           ],
         },
-        devOptions: { enabled: true, type: 'module' },
-        outDir: '../priv/static',
-        srcDir: 'js',
-        injectRegister: 'inline',
-        strategies: 'generateSW',
-        includeAssets: ['**/*'],
-        filename: 'sw.js',
+        devOptions: {
+          enabled: isDev,
+          type: 'module',
+        },
       }),
-      viteCompression({ algorithm: 'gzip', threshold: 1024 }), // Min size for compression
-      viteCompression({ algorithm: 'brotliCompress', threshold: 1024 }),
+
+      viteCompression({ algorithm: 'gzip', threshold: 512 }),
+      viteCompression({ algorithm: 'brotliCompress', threshold: 512 }),
     ],
+
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './js'),
@@ -110,48 +124,52 @@ export default defineConfig(({ command }) => {
         $components: path.resolve(__dirname, './js/Components/'),
       },
     },
+
     build: {
-      target: 'esnext',
+      target: 'es2017',
       emptyOutDir: true,
       outDir: '../priv/static',
       sourcemap: isDev,
-      manifest: 'vite_manifest.json',
+      manifest: true,
+      cssMinify: true,
       minify: isDev ? false : 'terser',
       terserOptions: {
         compress: {
           drop_console: !isDev,
           drop_debugger: !isDev,
           passes: 3,
-          pure_funcs: ['console.info', 'console.debug', 'console.log'], // Even more aggressive
+          pure_funcs: ['console.info', 'console.debug', 'console.log'],
         },
-        mangle: { toplevel: true, properties: { regex: /^_/ } }, // Mangle private props
+        mangle: {
+          toplevel: true,
+          properties: {
+            regex: /^_/,
+          },
+        },
       },
-      cssMinify: true,
+
       rollupOptions: {
         input: { app: './js/app.js' },
         output: {
           entryFileNames: 'assets/[name].[hash].js',
-          chunkFileNames: ({ name }) => {
-            if (name.includes('node_modules')) return 'assets/vendor/[name].[hash].js'
-            if (name.includes('common')) return 'assets/common/[name].[hash].js'
-            return 'assets/chunks/[name].[hash].js'
-          },
+          chunkFileNames: 'assets/chunks/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash][extname]',
           manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('@inertiajs')) return 'vendor-inertia'
-              if (id.includes('bits-ui')) return 'vendor-bits-ui'
-              if (id.includes('svelte')) return 'vendor-svelte'
-              if (id.includes('lodash')) return 'vendor-lodash'
-              if (id.includes('axios')) return 'vendor-axios'
-              return 'vendor-common'
-            }
+            if (!id.includes('node_modules')) return
+
+            if (id.includes('@inertiajs')) return 'vendor-inertia'
+            if (id.includes('svelte')) return 'vendor-svelte'
+            if (id.includes('@melt-ui')) return 'vendor-melt'
+            if (id.includes('runed')) return 'vendor-runed'
+            if (id.includes('@inlang')) return 'vendor-i18n'
+
+            return 'vendor-common'
           },
         },
         treeshake: {
           moduleSideEffects: ['*.css'],
           tryCatchDeoptimization: false,
-          preset: 'smallest', // Most aggressive tree-shaking
+          preset: 'smallest',
         },
         external: ['/fonts/*', '/images/*'],
       },
