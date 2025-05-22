@@ -12,6 +12,7 @@ config :inertia,
   static_paths: ["/assets/app.js"],
   default_version: "1",
   history: [encrypt: false],
+  camelize_props: true,
   ssr: false,
   raise_on_ssr_failure: config_env() != :prod
 
