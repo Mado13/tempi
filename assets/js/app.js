@@ -9,6 +9,8 @@ import { Inertia } from "@inertiajs/inertia";
 import { mount, hydrate } from "svelte";
 import "phoenix_html";
 import { setupPWA } from "./pwa-setup";
+import { Index, IndexedDB } from '../node_modules/flexsearch/dist/flexsearch.bundle.module.min.js';
+
 
 // Initialize application state
 window.pwa = {};
@@ -48,11 +50,16 @@ const getCookieValue = (name) => {
 const initApp = () => {
   createInertiaApp({
     // Resolve page components
-    resolve: name => {
-      const pages = import.meta.glob('./Pages/**/*.svelte', { eager: true })
+    resolve: async name => {
+      const pages = import.meta.glob('./Pages/**/*.svelte')
+      const pageImporter = pages[`./Pages/${name}.svelte`]
+      if (!pageImporter) {
+        throw new Error(`Unknown page component: ${name}. Ensure it exists in ./Pages/ and the path is correct.`);
+      }
+      const componentModule = await pageImporter()
       let page = pages[`./Pages/${name}.svelte`]
       return { 
-        default: page.default, 
+        default: componentModule.default, 
         layout:  name.startsWith('Auth/') ? undefined : Layout }
 
     },
