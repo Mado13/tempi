@@ -3,28 +3,33 @@
 <script lang="ts">
 import { router } from '@inertiajs/svelte'
 import { getLocalTimeZone, today } from '@internationalized/date'
+import { watch } from 'runed'
+
+import Calendar from '$components/Calendar.svelte'
+import Button from '$components/UI/Button.svelte'
 
 import { m } from '$paraglide/messages'
-
-import Calendar from '../../Components/Calendar.svelte'
-import Button from '../../Components/UI/Button.svelte'
 
 let { jobs } = $props()
 
 let selectedDate = $state(today(getLocalTimeZone()))
 let displayedMonth = $state(today(getLocalTimeZone()))
-let month = $derived(displayedMonth.month)
-let year = $derived(displayedMonth.year)
 
-$effect(() => {
-  router.reload({
-    only: ['jobs'],
-    data: {
-      month,
-      year,
-    },
-  })
-})
+watch(
+  () => displayedMonth,
+  (curr, prev) => {
+    if (curr.month !== prev?.month) {
+      router.reload({
+        only: ['jobs'],
+        data: {
+          month: displayedMonth.month,
+          year: displayedMonth.year,
+        },
+      })
+    }
+  },
+  { lazy: true },
+)
 
 async function addJob() {
   router.push({
@@ -33,6 +38,8 @@ async function addJob() {
     props: curr => ({ selectedDate, ...curr }),
   })
 }
+
+$inspect(selectedDate)
 </script>
 
 <Calendar bind:value={selectedDate} bind:placeholder={displayedMonth} />

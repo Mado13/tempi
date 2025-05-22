@@ -7,7 +7,7 @@ import { type DateRange } from '@melt-ui/svelte'
 import { watch } from 'runed'
 
 import { validateForm } from '@/helpers/validate-form'
-import { type JobFormData, jobFormSchema } from '@/scehmas/job.schema'
+import { type JobFormData, jobFormSchema } from '@/scehmas/job_form.schema'
 
 import AddressInput from '$components/UI/AddressInput.svelte'
 import DateRangeField from '$components/UI/DateRangeField.svelte'
@@ -29,9 +29,7 @@ watch(
     $form.startDate = selectedRange.start!.toString()
     $form.endDate = selectedRange.end!.toString()
   },
-  {
-    lazy: true,
-  },
+  { lazy: true },
 )
 
 const onsubmit = (e: SubmitEvent) => {
@@ -43,16 +41,15 @@ const onsubmit = (e: SubmitEvent) => {
     $form.post('/employer/jobs')
   }
 }
-$inspect($form)
 </script>
 
 <h1>{m['add_job.job_title.value']()}</h1>
 <form {onsubmit}>
-  <label>
+  <label for="title">
     {m['add_job.job_title.value']()}
-    <input type="text" bind:value={$form.title} class:error={$form.errors.title} />
-    <div class="form-error">{$form.errors.title}</div>
   </label>
+  <input id="title" type="text" bind:value={$form.title} class:error={$form.errors.title} />
+  <div class="form-error">{$form.errors.title}</div>
   <AddressInput bind:selected={$form.location} />
   <div class="form-error">{$form.errors.location}</div>
   <DateRangeField bind:value={selectedRange} title={m['add_job.date.title']()} startName="jobStart" endName="jobEnds" />

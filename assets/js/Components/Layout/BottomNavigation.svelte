@@ -1,10 +1,11 @@
 <script lang="ts">
-import { router } from '@inertiajs/svelte'
-import { Button } from 'bits-ui'
 import PhBriefCase from '~icons/ph/briefcase'
 import PhCalendarDots from '~icons/ph/calendar-dots'
 import PhUserCircleGear from '~icons/ph/user-circle-gear'
 import PhUserFour from '~icons/ph/users-four'
+
+import { router } from '@inertiajs/svelte'
+
 import { m } from '$paraglide/messages'
 
 let activeTab = $state('agenda')
@@ -16,22 +17,22 @@ function fetchData(activeTab: string) {
 </script>
 
 <div class="bottom-navbar">
-  <Button.Root class={activeTab === 'profile' ? 'active' : ''} onclick={() => fetchData('profile')}>
+  <button class={activeTab === 'profile' ? 'active' : ''} onclick={() => fetchData('profile')}>
     <PhUserCircleGear />
     <span>{m.bottom_navigation_profile_button()}</span>
-  </Button.Root>
-  <Button.Root class={activeTab === 'agenda' ? 'active' : ''} onclick={() => fetchData('agenda')}>
+  </button>
+  <button class={activeTab === 'agenda' ? 'active' : ''} onclick={() => fetchData('agenda')}>
     <PhCalendarDots />
     <span>{m.bottom_nvigation_agenda_button()}</span>
-  </Button.Root>
-  <Button.Root class={activeTab === 'jobs' ? 'active' : ''} onclick={() => fetchData('jobs')}>
+  </button>
+  <button class={activeTab === 'jobs' ? 'active' : ''} onclick={() => fetchData('jobs')}>
     <PhBriefCase />
     <span>{m.bottom_navigation_jobs_button()}</span>
-  </Button.Root>
-  <Button.Root class={activeTab === 'team' ? 'active' : ''} onclick={() => fetchData('team')}>
+  </button>
+  <button class={activeTab === 'team' ? 'active' : ''} onclick={() => fetchData('team')}>
     <PhUserFour />
     <span>{m.bottom_navigation_team_button()}</span>
-  </Button.Root>
+  </button>
 </div>
 
 <style lang="scss">
@@ -51,31 +52,24 @@ function fetchData(activeTab: string) {
   margin: 0 auto;
   z-index: 100;
 
-  :global {
-    [data-button-root] {
-      -webkit-tap-highlight-color: transparent;
-      background: transparent;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0.5rem;
-      flex: 1;
-      cursor: pointer;
+  button {
+    -webkit-tap-highlight-color: transparent;
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    flex: 1;
+    cursor: pointer;
 
-      &.active {
-        color: red;
-      }
+    &.active {
+      color: red;
+    }
 
-      svg {
-        font-size: 1.5rem;
-        margin-bottom: 0.25rem;
-      }
-
-      span {
-        font-size: 0.75rem;
-      }
+    span {
+      font-size: 0.75rem;
     }
   }
 }
