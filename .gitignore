@@ -39,3 +39,7 @@ npm-debug.log
 .vite/
 
 .env
+
+# API test files
+*.http
+
