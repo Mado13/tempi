@@ -1,24 +1,15 @@
 <script lang="ts">
 import { router } from '@inertiajs/svelte'
-import { Label, Switch } from 'bits-ui'
+
 import BottomNavigation from './Components/Layout/BottomNavigation.svelte'
+
 let { children, activeRole } = $props()
-let myChecked = $state(activeRole === 'employer')
 </script>
 
 <div class="app-container">
   <div class="main-content">
     <div class="role-switch">
-      <Label.Root class="role-label" for="role">Worker</Label.Root>
-      <Switch.Root
-        bind:checked={myChecked}
-        id="role"
-        onclick={() => router.post('/toggle-role')}
-        aria-label="Toggle between Worker and Employer roles"
-      >
-        <Switch.Thumb />
-      </Switch.Root>
-      <Label.Root class="role-label" for="role">Employer</Label.Root>
+      <button onclick={() => router.post('/toggle-role')} type="button">Toggle Role</button>
     </div>
     <div class="content-wrapper">
       {@render children()}
@@ -57,20 +48,5 @@ let myChecked = $state(activeRole === 'employer')
   background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-}
-
-.role-label {
-  font-weight: 500;
-  color: #333;
-}
-
-@media (prefers-color-scheme: dark) {
-  .role-switch {
-    background-color: #222;
-  }
-
-  .role-label {
-    color: #eee;
-  }
 }
 </style>
