@@ -9,7 +9,7 @@ import Config
 
 config :inertia,
   endpoint: TempiWeb.Endpoint,
-  static_paths: ["/assets/app.js"],
+  static_paths: ["/frontend/app/app.js"],
   default_version: "1",
   history: [encrypt: false],
   camelize_props: true,
@@ -20,17 +20,17 @@ config :bun,
   version: "1.2.1",
   dev: [
     args: ~w(x --bun vite --host 0.0.0.0),
-    cd: Path.expand("../assets", __DIR__),
+    cd: Path.expand("../frontend", __DIR__),
     env: %{}
   ],
   install: [
     args: ~w(i),
-    cd: Path.expand("../assets", __DIR__),
+    cd: Path.expand("../frontend", __DIR__),
     env: %{}
   ],
   build: [
     args: ~w(x --bun vite build),
-    cd: Path.expand("../assets", __DIR__),
+    cd: Path.expand("../frontend", __DIR__),
     env: %{}
   ]
 
