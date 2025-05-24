@@ -21,6 +21,8 @@ defmodule TempiWeb.Router do
 
   scope "/api", TempiWeb.Api do
     pipe_through :api
+
+    resources "/isic_job_classifications", IsicController, only: [:index]
   end
 
   scope "/", TempiWeb do

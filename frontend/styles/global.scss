@@ -1,0 +1,196 @@
+// Font declarations
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Variables for reusability
+$primary-color: #ff3e00;
+$gradient-start: #f5f7fa;
+$gradient-end: #c3cfe2;
+
+// Breakpoints
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+
+// Spacing scale (using a more systematic approach)
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-md: 1rem; // 16px
+$spacing-lg: 1.5rem; // 24px
+$spacing-xl: 2rem; // 32px
+
+// UI elements sizing
+$touch-target-size: 2.75rem; // 44px at 16px root font size (accessibility standard)
+$navbar-height: 3.5rem; // 56px
+
+// Border properties
+$border-radius-sm: 0.25rem; // 4px
+$border-radius: 0.5rem; // 8px
+$border-radius-lg: 1rem; // 16px
+
+// Shadows
+$shadow-sm:
+  0 1px 3px rgba(0, 0, 0, 0.12),
+  0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-md:
+  0 4px 6px rgba(0, 0, 0, 0.1),
+  0 1px 3px rgba(0, 0, 0, 0.15);
+$shadow-lg:
+  0 10px 20px rgba(0, 0, 0, 0.1),
+  0 3px 6px rgba(0, 0, 0, 0.1);
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-base: 0.3s ease;
+
+// Z-index scale
+$z-index-navbar: 100;
+$z-index-modal: 200;
+
+// Reset and base styles
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  // Use a fluid typography scale that works well on various device sizes
+  font-size: clamp(14px, 1vw + 12px, 16px);
+  height: 100%;
+  width: 100%;
+  // Prevent overscroll on the body
+  overscroll-behavior: none;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family:
+    'Poppins',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    sans-serif;
+  background: linear-gradient(135deg, $gradient-start 0%, $gradient-end 100%);
+  color: #333;
+  line-height: 1.5;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// App container with
+#app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
+    env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+}
+
+.main-content {
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-padding-bottom: calc($navbar-height + env(safe-area-inset-bottom, 0));
+  position: relative;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: $breakpoint-sm;
+  margin: 0 auto;
+  padding: $spacing-md;
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: $shadow-sm;
+
+  @media (min-width: $breakpoint-sm) {
+    padding: $spacing-lg;
+    box-shadow: $shadow-md;
+  }
+}
+
+.content-wrapper {
+  padding-inline: $spacing-md;
+  padding-bottom: calc($navbar-height + env(safe-area-inset-bottom, 0));
+}
+
+.hide-on-mobile {
+  @media (max-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
+.hide-on-desktop {
+  @media (min-width: $breakpoint-md) {
+    display: none !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #222;
+    color: #eee;
+  }
+
+  body {
+    background: linear-gradient(135deg, #2b303b 0%, #16171d 100%);
+    color: #eee;
+  }
+}
