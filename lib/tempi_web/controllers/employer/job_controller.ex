@@ -7,12 +7,12 @@ defmodule TempiWeb.Employer.JobController do
 
     conn
     |> assign_prop(:jobs, jobs)
-    |> render_inertia("Employer/Agenda")
+    |> render_inertia("employer/Agenda")
   end
 
   def new(conn, _params) do
     conn
-    |> render_inertia("Employer/AddJob")
+    |> render_inertia("employer/AddJob")
   end
 
   def create(conn, params) do
@@ -27,7 +27,7 @@ defmodule TempiWeb.Employer.JobController do
       {:error, changeset} ->
         conn
         |> assign_errors(changeset)
-        |> render_inertia("Employer/AddJob")
+        |> render_inertia("employer/AddJob")
     end
   end
 end

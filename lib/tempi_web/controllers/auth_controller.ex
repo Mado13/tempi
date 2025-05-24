@@ -9,8 +9,8 @@ defmodule TempiWeb.AuthController do
   alias TempiWeb.UserAuth
   alias TempiWeb.UserRole
 
-  def register_form(conn, _params), do: conn |> render_inertia("Auth/Register")
-  def login_form(conn, _params), do: conn |> render_inertia("Auth/Login")
+  def register_form(conn, _params), do: conn |> render_inertia("auth/Register")
+  def login_form(conn, _params), do: conn |> render_inertia("auth/Login")
 
   def request_login_code(conn, %{"phone_number" => phone_number}),
     do: request_verification_code(conn, phone_number, ~p"/login/verify")
@@ -33,8 +33,6 @@ defmodule TempiWeb.AuthController do
         |> redirect(to: redirect_path)
 
       {:error, _message} ->
-        IO.inspect(label: "bitch")
-
         conn
         |> redirect(to: "/")
     end
@@ -83,7 +81,7 @@ defmodule TempiWeb.AuthController do
 
     case Accounts.get_account_for_user(user) do
       nil ->
-        conn |> render_inertia("Auth/ChooseRole")
+        conn |> render_inertia("auth/ChooseRole")
 
       _account ->
         conn
@@ -103,7 +101,7 @@ defmodule TempiWeb.AuthController do
       {:error, _changeset} ->
         conn
         |> assign_errors("account_creation_failed")
-        |> render_inertia("Auth/ChooseRole")
+        |> render_inertia("auth/ChooseRole")
     end
   end
 
@@ -131,7 +129,7 @@ defmodule TempiWeb.AuthController do
           {:error, _message, _error_code} ->
             conn
             |> assign_errors("Failed to send verification code. Please try again.")
-            |> render_inertia("Auth/Login")
+            |> render_inertia("auth/Login")
         end
     end
   end
@@ -142,7 +140,7 @@ defmodule TempiWeb.AuthController do
     conn
     |> assign_prop(:post_path, post_path)
     |> assign_prop(:phone_number, phone_number)
-    |> render_inertia("Auth/VerifyToken")
+    |> render_inertia("auth/VerifyToken")
   end
 
   defp render_verify_error(conn, phone_number, errors, post_path) do
@@ -150,7 +148,7 @@ defmodule TempiWeb.AuthController do
     |> assign_prop(:phone_number, phone_number)
     |> assign_prop(:post_path, post_path)
     |> assign_errors(errors)
-    |> render_inertia("Auth/VerifyToken")
+    |> render_inertia("auth/VerifyToken")
   end
 
   defp complete_auth(conn, user) do

@@ -3,6 +3,6 @@ defmodule TempiWeb.Worker.AgendaController do
   alias Tempi.Jobs
 
   def index(conn, _params) do
-    conn |> render_inertia("Worker/Agenda")
+    conn |> render_inertia("worker/Agenda")
   end
 end

@@ -11,7 +11,7 @@ defmodule TempiWeb.Employer.AgendaController do
       _error ->
         conn
         |> put_flash(:error, "Invalid date provided.")
-        |> render_inertia("Empployer/Agenda")
+        |> render_inertia("employer/Agenda")
     end
   end
 
@@ -29,6 +29,6 @@ defmodule TempiWeb.Employer.AgendaController do
 
     conn
     |> assign_prop(:jobs, jobs)
-    |> render_inertia("Employer/Agenda")
+    |> render_inertia("employer/Agenda")
   end
 end

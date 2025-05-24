@@ -76,7 +76,7 @@ defmodule TempiWeb.Vite do
     """
     alias TempiWeb.Vite.PhxManifestReader
 
-    @main_js_file "js/app.js"
+    @main_js_file "app/app.js"
 
     @spec read() :: map()
     def read, do: PhxManifestReader.read()
