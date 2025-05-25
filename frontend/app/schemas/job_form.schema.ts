@@ -1,7 +1,7 @@
 import { parseDate, today } from '@internationalized/date'
 import * as v from 'valibot'
 
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 import { formLocationSchema } from './api/google_maps'
 
