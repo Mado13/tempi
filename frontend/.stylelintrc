@@ -1,7 +1,6 @@
 {
-  "processors": [],
-  "extends": ["stylelint-config-standard-scss", "stylelint-config-prettier"],
-  "plugins": ["stylelint-scss"],
+  "extends": ["stylelint-config-standard-scss"],
+  "plugins": ["stylelint-scss", "@stylistic/stylelint-plugin"],
   "rules": {
     "scss/at-rule-no-unknown": true,
     "at-rule-no-unknown": null,
@@ -9,19 +8,20 @@
     "color-hex-length": "short",
     "declaration-block-no-duplicate-properties": true,
     "no-descending-specificity": null,
-    "selector-class-pattern": "^[a-z][a-zA-Z0-9]+$",
-    "unit-allowed-list": ["px", "rem", "em", "%", "deg", "s", "ms"],
+    "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+    "unit-allowed-list": ["px", "%", "vw", "vh", "dvh", "dvw", "deg", "s", "ms"],
     "font-family-name-quotes": "always-unless-keyword",
     "color-function-notation": "modern",
     "alpha-value-notation": "percentage",
     "declaration-block-no-redundant-longhand-properties": true,
-    "scss/double-slash-comment-empty-line-before": [
-      "always",
-      {
-        "except": ["first-nested"],
-        "ignore": ["stylelint-commands"]
-      }
-    ]
+    "@stylistic/indentation": 2,
+    "@stylistic/string-quotes": "single"
   },
+  "overrides": [
+    {
+      "files": ["*.svelte", "**/*.svelte"],
+      "customSyntax": "postcss-html"
+    }
+  ],
   "ignoreFiles": ["dist/**", "node_modules/**"]
 }
