@@ -6,12 +6,12 @@
     <meta name="csrf-token" content={get_csrf_token()} />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <.inertia_title>Tempi</.inertia_title>
     <.inertia_head content={@inertia_head} />
-    <script type="module" src="http://localhost:5173/@vite/client">
-    </script>
-    <script type="module" src="http://localhost:5173/app/app.js">
-    </script>
+    <script type="module" src="http://localhost:5173/@vite/client"></script>
+    <script type="module" src="http://localhost:5173/app/app.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   </head>
   <body>
     <div id="app-container">
