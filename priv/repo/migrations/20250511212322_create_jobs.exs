@@ -2,18 +2,24 @@ defmodule Tempi.Repo.Migrations.CreateJobs do
   use Ecto.Migration
 
   def change do
-    create_query = "CREATE TYPE job_status AS ENUM ('open', 'filled', 'completed', 'canceled')"
-    drop_query = "DROP TYPE job_status"
-    execute(create_query, drop_query)
+    execute(
+      "CREATE TYPE job_status AS ENUM ('open', 'filled', 'completed', 'canceled')",
+      "DROP TYPE job_status"
+    )
+
+    execute(
+      "CREATE TYPE pay_type AS ENUM ('hourly', 'daily')",
+      "DROP TYPE pay_type"
+    )
 
     create table(:jobs, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :title, :string, null: false
       add :description, :string
-      add :location, :string
       add :start_date, :utc_datetime, null: false
       add :end_date, :utc_datetime, null: false
       add :pay_rate, :decimal, precision: 10, scale: 2
+      add :pay_type, :string, null: false
       add :status, :job_status, null: false, default: "open"
 
       add :employer_profile_id,

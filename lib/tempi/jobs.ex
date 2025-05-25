@@ -8,13 +8,11 @@ defmodule Tempi.Jobs do
   alias Tempi.Locations.{Address, AddressBuilder}
   alias Tempi.Jobs.{Job, JobApplication, JobAgreement}
 
-  @job_keys ~w(start_date end_date title name)
+  @job_keys ~w(start_date end_date title name pay_rate pay_type)
   @address_keys ~w(address_id formatted_address location address_components)
 
   def create_job(employer_profile_id, params) do
-    IO.inspect(params)
     {job_attrs, address_attrs} = split_job_and_address_params(params)
-    IO.inspect(job_attrs)
 
     Multi.new()
     |> Multi.insert(:address, fn _changes ->
@@ -52,11 +50,15 @@ defmodule Tempi.Jobs do
   end
 
   defp split_job_and_address_params(params) do
+    pay = Map.get(params, "pay", %{})
+
     job_attrs =
       params
       |> Map.take(@job_keys)
       |> Map.update("start_date", nil, &parse_date!/1)
       |> Map.update("end_date", nil, &parse_date!/1)
+      |> Map.put("pay_rate", pay["rate"])
+      |> Map.put("pay_type", pay["type"])
 
     address_attrs =
       params

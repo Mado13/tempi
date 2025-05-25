@@ -14,6 +14,7 @@ defmodule Tempi.Jobs.Job do
     field :start_date, :utc_datetime
     field :end_date, :utc_datetime
     field :pay_rate, :decimal
+    field :pay_type, Ecto.Enum, values: [:daily, :hourly]
     field :status, Ecto.Enum, values: [:open, :filled, :completed, :canceled], default: :open
 
     belongs_to :employer_profile, Tempi.Profiles.EmployerProfile
@@ -36,11 +37,12 @@ defmodule Tempi.Jobs.Job do
       :start_date,
       :end_date,
       :pay_rate,
+      :pay_type,
       :status,
       :employer_profile_id,
       :address_id
     ])
-    |> validate_required([:title, :start_date, :end_date, :employer_profile_id, :address_id])
+    |> validate_required([:title, :start_date, :end_date, :employer_profile_id, :address_id, :pay_rate, :pay_type])
     |> validate_datetime_range()
     |> foreign_key_constraint(:employer_profile_id)
     |> foreign_key_constraint(:address_id)
