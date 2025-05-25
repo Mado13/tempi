@@ -5,11 +5,11 @@ import { router } from '@inertiajs/svelte'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { watch } from 'runed'
 
-import Calendar from '$components/Calendar.svelte'
+import JobCard from '$components/employer/JobCard.svelte'
 import Button from '$components/ui/Button.svelte'
-import JobCard from '$components/ui/JobCard.svelte'
+import Calendar from '$components/ui/Calendar.svelte'
 
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 let { jobs } = $props()
 

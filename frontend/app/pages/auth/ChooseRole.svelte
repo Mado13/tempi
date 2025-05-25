@@ -1,5 +1,5 @@
 <script lang="ts">
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 import AuthLayout from './AuthLayout.svelte'
 import { router } from '@inertiajs/svelte'
 

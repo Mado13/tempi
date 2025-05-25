@@ -2,7 +2,7 @@
 import { useForm } from '@inertiajs/svelte'
 import { PinInput } from 'melt/builders'
 
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 import AuthLayout from './AuthLayout.svelte'
 

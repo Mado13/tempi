@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 
-import { FormLocationInput, mapsApiSchema } from '@/scehmas/api/google_maps'
+import { FormLocationInput, mapsApiSchema } from '@/schemas/api/google_maps'
 
 export class GoogleMapsPlaces {
   private apiKey: string
@@ -38,10 +38,11 @@ export class GoogleMapsPlaces {
       throw new Error('Google Maps not loaded')
     }
 
-    const { suggestions } = await this.maps!.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
-      input,
-      sessionToken: this.sessionToken,
-    })
+    const { suggestions } =
+      await this.maps!.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+        input,
+        sessionToken: this.sessionToken,
+      })
 
     return suggestions.reduce<Record<string, string>>((acc, suggestion) => {
       const place = suggestion.placePrediction
@@ -54,8 +55,14 @@ export class GoogleMapsPlaces {
 
   async fetchPlaceDetails(placeId: string): Promise<FormLocationInput | undefined> {
     if (!this.maps) throw new Error('Google Maps not loaded')
-    const place = new this.maps.places.Place({ id: placeId, requestedLanguage: 'he', requestedRegion: 'IL' })
-    await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'] })
+    const place = new this.maps.places.Place({
+      id: placeId,
+      requestedLanguage: 'he',
+      requestedRegion: 'IL',
+    })
+    await place.fetchFields({
+      fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'],
+    })
 
     const rawData = {
       name: place.displayName,
@@ -94,7 +101,8 @@ export class GoogleMapsPlaces {
       script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&libraries=${this.libraries.join(',')}`
       script.async = true
       script.defer = true
-      script.onload = () => (isReady() ? resolve(window.google.maps) : reject(new Error('Google Maps failed to load')))
+      script.onload = () =>
+        isReady() ? resolve(window.google.maps) : reject(new Error('Google Maps failed to load'))
       script.onerror = reject
       document.head.appendChild(script)
     })

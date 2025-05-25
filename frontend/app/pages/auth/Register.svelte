@@ -1,9 +1,11 @@
 <!-- Register.svelte -->
 
 <script lang="ts">
-import AuthForm from '../../Components/AuthForm.svelte'
+import AuthForm from '$components/auth/AuthForm.svelte'
+
+import { m } from '$i18n/paraglide/messages.js'
+
 import AuthLayout from './AuthLayout.svelte'
-import { m } from '$paraglide/messages.js'
 
 const messages = {
   title: m.register_title(),

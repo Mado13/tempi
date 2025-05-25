@@ -7,14 +7,14 @@ import { type DateRange } from '@melt-ui/svelte'
 import { watch } from 'runed'
 
 import { validateForm } from '@/helpers/validate-form'
-import { type JobFormData, jobFormSchema } from '@/scehmas/job_form.schema'
+import { type JobFormData, jobFormSchema } from '@/schemas/job_form.schema'
 
-import PayRateInput from '$components/PayRateInput.svelte'
-import ShiftSelector from '$components/ShiftSelector.svelte'
-import AddressInput from '$components/UI/AddressInput.svelte'
-import DateRangeField from '$components/UI/DateRangeField.svelte'
+import AddressInput from '$components/ui/AddressInput.svelte'
+import DateRangeField from '$components/ui/DateRangeField.svelte'
+import PayRateInput from '$components/ui/PayRateInput.svelte'
+import ShiftSelector from '$components/ui/ShiftSelector.svelte'
 
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 let openCalendar = $state<() => void>(() => {})
 
@@ -91,6 +91,7 @@ form {
   display: flex;
   flex-direction: column;
   > .input-group {
+    border: 1px solid $primary-color;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;

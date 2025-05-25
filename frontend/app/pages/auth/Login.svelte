@@ -3,9 +3,9 @@
 <script lang="ts">
 import { Link } from '@inertiajs/svelte'
 
-import AuthForm from '$components/AuthForm.svelte'
+import AuthForm from '$components/auth/AuthForm.svelte'
 
-import { m } from '$paraglide/messages.js'
+import { m } from '$i18n/paraglide/messages.js'
 
 import AuthLayout from './AuthLayout.svelte'
 
