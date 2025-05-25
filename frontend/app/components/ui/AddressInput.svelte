@@ -6,7 +6,7 @@ import { writable } from 'svelte/store'
 
 import { GoogleMapsPlaces } from '@/lib/google-maps-places'
 
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 let { selected: bindableSelected = $bindable() } = $props()
 const selected = writable(bindableSelected)

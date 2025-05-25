@@ -3,7 +3,7 @@
 <script lang="ts">
 import { useForm } from '@inertiajs/svelte'
 import * as v from 'valibot'
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 type AuthFormData = v.InferInput<typeof authFormSchema>
 

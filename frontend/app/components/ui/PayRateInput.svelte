@@ -1,7 +1,7 @@
 <script>
 import { createSwitch } from '@melt-ui/svelte'
 
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 let { type = $bindable(), rate = $bindable() } = $props()
 

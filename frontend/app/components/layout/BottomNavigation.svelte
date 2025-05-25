@@ -6,7 +6,7 @@ import PhUserFour from '~icons/ph/users-four'
 
 import { router } from '@inertiajs/svelte'
 
-import { m } from '$paraglide/messages'
+import { m } from '$i18n/paraglide/messages'
 
 let activeTab = $state('agenda')
 let { activeRole } = $props()

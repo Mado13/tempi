@@ -1,7 +1,7 @@
 <script lang="ts">
-import { createSelect, melt } from '@melt-ui/svelte'
+import { m } from '$i18n/paraglide/messages'
 
-import { m } from '$paraglide/messages'
+import { createSelect, melt } from '@melt-ui/svelte'
 
 let { value = $bindable() } = $props()
 
