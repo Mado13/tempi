@@ -1,6 +1,5 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js'
-import { preprocessMeltUI, sequence } from '@melt-ui/pp'
-import { svelte, vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 import path from 'node:path'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -8,6 +7,8 @@ import Icons from 'unplugin-icons/vite'
 import { defineConfig } from 'vite'
 import viteCompression from 'vite-plugin-compression'
 import { VitePWA } from 'vite-plugin-pwa'
+
+import svelteConfig from './svelte.config.js'
 
 export default defineConfig(({ command }) => {
   const isDev = command !== 'build'
@@ -40,12 +41,12 @@ export default defineConfig(({ command }) => {
       }),
 
       svelte({
+        ...svelteConfig,
         compilerOptions: {
+          ...svelteConfig.compilerOptions,
           hmr: true,
-          modernAst: true,
           dev: isDev,
         },
-        preprocess: [sequence([vitePreprocess({ script: true }), preprocessMeltUI()])],
       }),
 
       VitePWA({
@@ -120,8 +121,8 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './app'),
-        $paraglide: path.resolve(__dirname, './paraglide'),
         $components: path.resolve(__dirname, './app/components/'),
+        $actions: path.resolve(__dirname, './app/actions/'),
         $i18n: path.resolve(__dirname, './i18n/'),
       },
     },

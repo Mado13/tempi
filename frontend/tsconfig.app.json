@@ -33,14 +33,14 @@
       "@/*": [
         "./app/*"
       ],
-      "$paraglide/*": [
-        "./paraglide/*"
-      ],
       "$components/*": [
         "./app/components/*"
       ],
       "$i18n/*": [
         "./i18n/*"
+      ],
+      "$actions/*": [
+        "./app/actions/*"
       ]
     }
   },
