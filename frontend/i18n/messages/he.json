@@ -16,6 +16,12 @@
   "bottom_nvigation_agenda_button": "יומן",
   "bottom_navigation_jobs_button": "עבודות",
   "bottom_navigation_team_button": "צוות",
+  "deleteJob": {
+    "title": "מחיקת משרה",
+    "noWorkers": "האם אתה בטוח שברצונך למחוק את הרשומה?",
+    "workersAssigned": "יש {assignedWorkers} עובדים שמצוותים למשרה. האם לשלוח להם הודעת ביטול?",
+    "button": "סגור"
+  },
   "agenda": {
     "employer": {
       "no_planned_jobs": "כרגע לא מתוכננות עבודות לתאריך הנקוב"
