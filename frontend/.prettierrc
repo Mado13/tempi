@@ -25,7 +25,7 @@
       }
     }
   ],
-  "importOrder": ["^@?\\w", "^@/", "^\\$components", "^\\$paraglide", "^\\$utils", "^[./]"],
+  "importOrder": ["^@?\\w", "^@/", "^\\$components", "^\\$i18n/paraglide", "^\\$utils", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "printWidth": 100,
