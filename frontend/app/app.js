@@ -1,4 +1,4 @@
-import '../styles/global.scss';
+import './styles/global.scss';
 
 import axios from "axios";
 import Layout from './Layout.svelte'

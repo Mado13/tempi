@@ -1,0 +1,29 @@
+$primary-color: green;
+$gradient-start: #f5f7fa;
+$gradient-end: #c3cfe2;
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$touch-target-size: 48px;
+$navbar-height: 56px;
+$border-radius-sm: 4px;
+$border-radius: 8px;
+$border-radius-lg: 16px;
+$shadow-sm:
+  0 1px 3px rgb(0 0 0 / 12%),
+  0 1px 2px rgb(0 0 0 / 24%);
+$shadow-md:
+  0 4px 6px rgb(0 0 0 / 10%),
+  0 1px 3px rgb(0 0 0 / 15%);
+$shadow-lg:
+  0 10px 20px rgb(0 0 0 / 10%),
+  0 3px 6px rgb(0 0 0 / 10%);
+$transition-fast: 0.15s ease;
+$transition-base: 0.3s ease;
+$z-index-navbar: 100;
+$z-index-modal: 200;
