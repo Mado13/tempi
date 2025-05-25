@@ -1,44 +1,22 @@
 <script lang="ts">
 import { router } from '@inertiajs/svelte'
 
-import BottomNavigation from '$components/Layout/BottomNavigation.svelte'
+import BottomNavigation from '$components/layout/BottomNavigation.svelte'
 
 let { children, activeRole } = $props()
 </script>
 
-<div class="app-container">
-  <div class="main-content">
-    <div class="role-switch">
-      <button onclick={() => router.post('/toggle-role')} type="button">Toggle Role</button>
-    </div>
-    <div class="content-wrapper">
-      {@render children()}
-    </div>
+<div class="main-content">
+  <div class="role-switch">
+    <button onclick={() => router.post('/toggle-role')} type="button">Toggle Role</button>
   </div>
-  <BottomNavigation {activeRole} />
+  <div class="content-wrapper">
+    {@render children()}
+  </div>
 </div>
+<BottomNavigation {activeRole} />
 
 <style lang="scss">
-.app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
-}
-
-.main-content {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
-  scroll-padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0));
-}
-
-.content-wrapper {
-  padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0));
-}
-
 .role-switch {
   display: flex;
   align-items: center;
