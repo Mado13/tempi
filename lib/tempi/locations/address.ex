@@ -6,7 +6,7 @@ defmodule Tempi.Locations.Address do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  use Tempi.Encoders.CamelCaseJsonEncoder, except: [:__meta__, :internal_notes, :jobs]
+  use Tempi.Encoders.CamelCaseJsonEncoder, except: [:__meta__, :jobs, :inserted_at, :updated_at]
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
