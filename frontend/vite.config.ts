@@ -47,6 +47,12 @@ export default defineConfig(({ command }) => {
           hmr: true,
           dev: isDev,
         },
+        onwarn: (warning, handler) => {
+          if (warning.code === 'css-unused-selector' && warning.message.includes('[data-melt-')) {
+            return
+          }
+          handler(warning)
+        },
       }),
 
       VitePWA({
