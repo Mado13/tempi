@@ -7,10 +7,10 @@ let { children, activeRole } = $props()
 </script>
 
 <div class="main-content">
-  <div class="role-switch">
-    <button onclick={() => router.post('/toggle-role')} type="button">Toggle Role</button>
-  </div>
   <div class="content-wrapper">
+    <div class="role-switch">
+      <button onclick={() => router.post('/toggle-role')} type="button">Toggle Role</button>
+    </div>
     {@render children()}
   </div>
 </div>
