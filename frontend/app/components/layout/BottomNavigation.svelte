@@ -38,7 +38,7 @@ function fetchData(activeTab: string) {
 <style lang="scss">
 .bottom-navbar {
   display: flex;
-  height: 3.5rem;
+  height: $navbar-height;
   justify-content: space-around;
   align-items: center;
   background: white;
@@ -48,9 +48,11 @@ function fetchData(activeTab: string) {
   left: 0;
   right: 0;
   bottom: 0;
+  bottom: env(safe-area-inset-bottom, 0);
   min-width: 100vw;
   margin: 0 auto;
-  z-index: 100;
+  z-index: $z-index-navbar;
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0));
 
   button {
     -webkit-tap-highlight-color: transparent;
