@@ -41,32 +41,42 @@ const {
 $width: 2.75rem;
 $padding: 0.110rem;
 $thumb-size: 1.20rem;
-
-$bg-default: #1f2937; // Tailwind bg-magnum-800
-$bg-checked: #111827; // Tailwind bg-magnum-950
+$bg-default: #1f2937;
+$bg-checked: #111827;
 
 div {
   display: flex;
   gap: 1rem;
+  
   button {
+    min-height: unset;
+    min-width: unset;
+    padding: $padding;
+    font-size: unset;
+    border-radius: 9999px;
+    
     position: relative;
     width: $width;
     height: 1.5rem;
-    padding: $padding;
     box-sizing: border-box;
-    border-radius: 9999px;
     background-color: $bg-default;
     transition: background-color 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+    
     &:active {
       transform: none !important;
       background-color: $bg-default !important;
       box-shadow: none !important;
     }
-
-
+    
+    &:focus-visible {
+      outline: none;
+    }
+    
     .thumb {
       position: absolute;
-      top: 0.8px;
+      top: 2px;
       width: $thumb-size;
       height: $thumb-size;
       background-color: white;
@@ -74,10 +84,10 @@ div {
       transition: transform 0.2s ease-in-out;
       transform: translateX(0);
     }
-
+    
     &[data-state='checked'] {
       background-color: $bg-checked;
-
+      
       .thumb {
         transform: translateX(calc(#{$width} - #{$thumb-size} - (2 * #{$padding})));
       }
@@ -85,4 +95,3 @@ div {
   }
 }
 </style>
-

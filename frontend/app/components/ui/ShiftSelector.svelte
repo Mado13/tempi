@@ -1,7 +1,7 @@
 <script lang="ts">
-import { m } from '$i18n/paraglide/messages'
-
 import { createSelect, melt } from '@melt-ui/svelte'
+
+import { m } from '$i18n/paraglide/messages'
 
 let { value = $bindable() } = $props()
 
@@ -13,7 +13,7 @@ const options = {
 }
 
 const {
-  elements: { trigger, menu, option, group, label },
+  elements: { trigger, menu, option, label },
   states: { selectedLabel, open },
 } = createSelect<string>({
   forceVisible: true,
@@ -32,13 +32,13 @@ const {
 <button use:melt={$trigger}>{$selectedLabel || m['add_job.shifts.label']()}</button>
 {#if $open}
   <div use:melt={$menu}>
-    {#each Object.entries(options) as [key, arr]}
-      <div use:melt={$group(key)}>
+    <div>
+      {#each Object.entries(options) as [key, arr]}
         {#each arr as item}
           <div use:melt={$option({ value: key, label: item })}>{item}</div>
         {/each}
-      </div>
-    {/each}
+      {/each}
+    </div>
   </div>
 {/if}
 
