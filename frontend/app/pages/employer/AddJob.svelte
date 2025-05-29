@@ -6,6 +6,7 @@ import { CalendarDate } from '@internationalized/date'
 import { type DateRange } from '@melt-ui/svelte'
 import { watch } from 'runed'
 
+import JobClassSelector from '@/components/ui/JobClassSelector.svelte'
 import { validateForm } from '@/helpers/validate-form'
 import { type JobFormData, jobFormSchema } from '@/schemas/job_form.schema'
 
@@ -26,10 +27,11 @@ let form = useForm<JobFormData>({
   title: '',
   location: undefined,
   pay: {
-    rate: undefined,
+    rate: 0,
     type: 'hourly',
   },
   shifts: 'morning',
+  jobClassId: 0,
 })
 
 watch<DateRange>(
@@ -66,6 +68,10 @@ $inspect($form)
     <div class="form-error">{$form.errors.location}</div>
   </div>
   <div class="input-group">
+    <JobClassSelector bind:selected={$form.jobClassId} />
+    <div class="form-error">{$form.errors.jobClassId}</div>
+  </div>
+  <div class="input-group">
     <DateRangeField
       bind:value={selectedRange}
       bind:open={openCalendar}
@@ -78,6 +84,7 @@ $inspect($form)
   </div>
   <div class="input-group">
     <ShiftSelector bind:value={$form.shifts} />
+    <div class="form-error">{$form.errors.shifts}</div>
   </div>
   <div class="input-group">
     <PayRateInput bind:type={$form.pay.type} bind:rate={$form.pay.rate} />
@@ -91,13 +98,26 @@ form {
   display: flex;
   flex-direction: column;
   > .input-group {
-    border: 1px solid $primary-color;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
   }
   button {
     margin-top: 1rem;
+  }
+}
+
+.form-error {
+  min-height: 1.2em; // Reserve space for one line of error text
+  font-size: 0.875rem; // Smaller text (14px if base is 16px)
+  color: #dc2626; // Red color
+  line-height: 1.2;
+  opacity: 0; // Hidden by default
+  transition: opacity 0.2s ease-in-out; // Smooth fade-in
+  
+  // Show error when there's content
+  &:not(:empty) {
+    opacity: 1;
   }
 }
 </style>
