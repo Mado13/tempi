@@ -44,9 +44,21 @@ async function addJob() {
 <Calendar bind:value={selectedDate} bind:placeholder={displayedMonth} />
 <Button onclick={() => addJob()}><IconTablerHexagonPlusFilled /></Button>
 {#if jobs.length > 0}
-  {#each jobs as job (job.id)}
-    <JobCard {job} />
-  {/each}
+  <div class="jobs-list">
+    {#each jobs as job (job.id)}
+      <JobCard {job} />
+    {/each}
+  </div>
 {:else}
   <div>{m['agenda.employer.no_planned_jobs']()}</div>
 {/if}
+
+<style lang="scss">
+.jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+</style>
