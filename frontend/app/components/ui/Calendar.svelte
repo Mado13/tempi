@@ -15,8 +15,10 @@ const {
     value = next
     return next
   },
-  onPlaceholderChange: ({ next }) => {
-    placeholder = next
+  onPlaceholderChange: ({ curr, next }) => {
+    if (curr.month !== next.month) {
+      placeholder = next
+    }
     return next
   },
 })
