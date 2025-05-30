@@ -18,15 +18,16 @@ export const jobFormSchema = v.object({
   ),
   endDate: v.string(),
   pay: v.object({
-    rate: v.optional(v.number()),
-    type: v.union([v.literal('hourly'), v.literal('daily')]),
+    rate: v.pipe(v.number(), v.minValue(0, 'Needs translation')),
+    type: v.picklist(['hourly', 'daily']),
   }),
-  shifts: v.union([
-    v.literal('morning'),
-    v.literal('evening'),
-    v.literal('weekend'),
-    v.literal('flexible'),
-  ]),
+  shifts: v.picklist(['morning', 'evening', 'weekend', 'flex']),
+  jobClassId: v.pipe(
+    v.string(),
+    v.transform(Number),
+    v.number(),
+    v.minValue(1, 'Needs translation'),
+  ),
 })
 
 export type JobFormData = v.InferInput<typeof jobFormSchema>
