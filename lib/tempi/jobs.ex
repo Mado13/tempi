@@ -44,7 +44,7 @@ defmodule Tempi.Jobs do
     end_date = Timex.end_of_month(datetime)
 
     Job
-    |> where([j], j.inserted_at >= ^start_date and j.inserted_at <= ^end_date)
+    |> where([j], j.start_date <= ^end_date and j.end_date >= ^start_date)
     |> preload(:address)
     |> Repo.all()
   end
