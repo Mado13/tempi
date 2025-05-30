@@ -1,7 +1,8 @@
 @use './variables.scss' as *;
+@use 'sass:color';
 
 @font-face {
-  font-family: 'Poppins';
+  font-family: Poppins;
   src: url('/fonts/poppins-regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
@@ -9,7 +10,7 @@
 }
 
 @font-face {
-  font-family: 'Poppins';
+  font-family: Poppins;
   src: url('/fonts/poppins-medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
@@ -17,7 +18,7 @@
 }
 
 @font-face {
-  font-family: 'Poppins';
+  font-family: Poppins;
   src: url('/fonts/poppins-semibold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
@@ -32,16 +33,13 @@
   padding: 0;
 }
 
-// Root element with proper viewport handling
 html {
   font-size: clamp(15px, 2vw + 10px, 18px);
-
-  // Use dynamic viewport height where supported, fallback to standard
-  height: 100vh;
+  height: 100%;
   width: 100%;
   overscroll-behavior: none;
   text-size-adjust: 100%;
-  -webkit-overflow-scrolling: touch;
+  -webkit-text-size-adjust: 100%;
 
   @supports (height: 100dvh) {
     height: 100dvh;
@@ -49,124 +47,35 @@ html {
 }
 
 body {
-  height: 100vh;
+  height: 100%;
   width: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
   font-family:
-    'Poppins',
+    Poppins,
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
-    'Roboto',
-    'Oxygen',
-    'Ubuntu',
-    'Cantarell',
+    Roboto,
     sans-serif;
   background: linear-gradient(135deg, $gradient-start 0%, $gradient-end 100%);
   color: #333;
   line-height: 1.6;
-
-  // Essential mobile touch improvements
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  // Prevent pull-to-refresh and bounce
   overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
 
-  // Prevent zoom on input focus (iOS)
-  &.no-zoom {
-    input,
-    textarea,
-    select {
-      font-size: 16px;
-    }
+  @supports (padding: env(safe-area-inset-top)) {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 0
+      env(safe-area-inset-left);
   }
 
   @supports (height: 100dvh) {
     height: 100dvh;
   }
-}
-
-// Main app container
-#app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-
-  @supports (height: 100dvh) {
-    height: 100dvh;
-  }
-}
-
-html,
-body,
-#app-container {
-  height: 100vh;
-
-  @supports (height: 100dvh) {
-    height: 100dvh;
-  }
-
-  overflow: hidden;
-}
-
-// Scrollable content area
-.main-content {
-  height: calc(100vh - #{$navbar-height});
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-
-  // Safe area support for notched devices
-  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0
-    env(safe-area-inset-left, 0);
-
-  // Proper scroll padding for bottom navigation
-  scroll-padding-bottom: calc(
-    #{$navbar-height} + env(safe-area-inset-bottom, 0) + #{$spacing-md}
-  );
-  position: relative;
-
-  // Custom scrollbar styling
-  &::-webkit-scrollbar {
-    width: 4px; // Thinner for mobile
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgb(0 0 0 / 20%);
-    border-radius: 2px;
-
-    &:hover {
-      background: rgb(0 0 0 / 30%);
-    }
-  }
-
-  @supports (height: 100dvh) {
-    height: calc(100dvh - #{$navbar-height});
-  }
-}
-
-.content-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding-inline: $spacing-md;
-  padding-bottom: calc(
-    #{$navbar-height} + env(safe-area-inset-bottom, 0) + #{$spacing-lg}
-  );
 }
 
 button,
@@ -175,7 +84,7 @@ input[type='submit'],
 input[type='reset'] {
   min-height: $touch-target-size;
   min-width: $touch-target-size;
-  padding: 12px 20px;
+  padding: $spacing-sm $spacing-md;
   border: none;
   border-radius: $border-radius;
   font-size: 16px;
@@ -194,10 +103,16 @@ input[type='reset'] {
   }
 
   &:disabled {
-    opacity: 60%;
+    opacity: 0.6;
     cursor: not-allowed;
     transform: none;
   }
+}
+
+textarea {
+  resize: vertical;
+  min-height: calc(#{$touch-target-size} * 2);
+  font-family: inherit;
 }
 
 input,
@@ -205,7 +120,7 @@ textarea,
 select {
   min-height: $touch-target-size;
   font-size: 16px;
-  padding: 14px 16px;
+  padding: $spacing-sm $spacing-md;
   border: 2px solid #e1e5e9;
   border-radius: $border-radius;
   background: white;
@@ -221,20 +136,160 @@ select {
 
   &::placeholder {
     color: #6b7280;
-    opacity: 100%;
+    opacity: 1;
   }
 
   &:disabled {
     background-color: #f9fafb;
     cursor: not-allowed;
-    opacity: 70%;
+    opacity: 0.7;
+  }
+
+  &.error {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
   }
 }
 
-textarea {
-  resize: vertical;
-  min-height: calc(#{$touch-target-size} * 2);
-  font-family: inherit;
+.bottom-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: $z-index-navbar;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: calc(#{$navbar-height} + env(safe-area-inset-bottom, 0px));
+  min-height: $navbar-height;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: $shadow-md;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding: $spacing-xs;
+  padding-bottom: calc(#{$spacing-xs} + env(safe-area-inset-bottom, 0px));
+  padding-left: max(env(safe-area-inset-left, 0px), $spacing-xs);
+  padding-right: max(env(safe-area-inset-right, 0px), $spacing-xs);
+
+  button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: $touch-target-size;
+    padding: $spacing-xs;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: $border-radius;
+    color: #6b7280;
+    transition:
+      color $transition-fast,
+      transform $transition-fast,
+      background-color $transition-fast;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+    &:active {
+      transform: scale(0.95);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &.active {
+      color: $primary-color;
+      background: rgba($primary-color, 0.1);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 2px;
+      flex-shrink: 0;
+    }
+
+    span {
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.1;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+  }
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  padding: 16px;
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 16px);
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+}
+
+#app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+
+    label {
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  button[type='submit'] {
+    margin-top: $spacing-lg;
+    background: $primary-color;
+    color: white;
+    font-weight: 600;
+
+    &:hover {
+      background: color.adjust($primary-color, $lightness: -5%);
+    }
+  }
+}
+
+.form-error {
+  min-height: 1.2em;
+  font-size: 0.875rem;
+  color: #dc2626;
+  line-height: 1.2;
+  opacity: 0;
+  transition: opacity $transition-fast;
+
+  &:not(:empty) {
+    opacity: 1;
+  }
 }
 
 a {
@@ -243,7 +298,7 @@ a {
   align-items: center;
   text-decoration: none;
   color: $primary-color;
-  padding: 12px 8px;
+  padding: $spacing-sm;
   border-radius: $border-radius;
   transition: all $transition-fast;
 
@@ -257,43 +312,47 @@ a {
   }
 }
 
-// Utility classes for common mobile needs
+@supports (-webkit-touch-callout: none) {
+  body {
+    min-height: calc(100% + env(safe-area-inset-top, 0px));
+  }
+
+  @media (display-mode: standalone) {
+    .content-wrapper::before {
+      content: '';
+      display: block;
+      height: 1px;
+      margin-top: -1px;
+    }
+  }
+}
+
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .no-scroll {
-  overflow: hidden;
-  height: 100vh;
-
-  @supports (height: 100dvh) {
-    height: 100dvh;
-  }
+  overflow: hidden !important;
 }
 
-// Loading state
 .loading {
   cursor: wait;
   pointer-events: none;
-  opacity: 70%;
+  opacity: 0.7;
 }
 
-// Focus trap for modals/overlays
-.focus-trap {
-  &:focus {
-    outline: none;
-  }
+.no-select {
+  user-select: none;
 }
 
-// Safe area utilities
 .safe-top {
   padding-top: env(safe-area-inset-top, 0);
 }
@@ -310,19 +369,6 @@ a {
   padding-right: env(safe-area-inset-right, 0);
 }
 
-// Prevent text selection where not needed
-.no-select {
-  user-select: none;
-}
-
-// Smooth scrolling for anchor links
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-// Respect user's motion preferences
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -334,7 +380,6 @@ a {
   }
 }
 
-// High contrast mode support
 @media (prefers-contrast: high) {
   input,
   textarea,
