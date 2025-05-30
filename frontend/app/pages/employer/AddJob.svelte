@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import { useForm } from '@inertiajs/svelte'
-import { CalendarDate } from '@internationalized/date'
+import { type DateValue } from '@internationalized/date'
 import { type DateRange } from '@melt-ui/svelte'
 import { watch } from 'runed'
 
@@ -19,7 +19,7 @@ import { m } from '$i18n/paraglide/messages'
 
 let openCalendar = $state<() => void>(() => {})
 
-let { selectedDate }: { selectedDate: CalendarDate } = $props()
+let { selectedDate }: { selectedDate?: DateValue } = $props()
 let selectedRange = $state<DateRange>({ start: selectedDate, end: undefined })
 let form = useForm<JobFormData>({
   startDate: '',
@@ -31,7 +31,7 @@ let form = useForm<JobFormData>({
     type: 'hourly',
   },
   shifts: 'morning',
-  jobClassId: 0,
+  jobClassId: "",
 })
 
 watch<DateRange>(
@@ -52,8 +52,6 @@ const onsubmit = (e: SubmitEvent) => {
     $form.post('/employer/jobs')
   }
 }
-
-$inspect($form)
 </script>
 
 <h1>{m['add_job.job_title.value']()}</h1>
