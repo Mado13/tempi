@@ -33,46 +33,7 @@ function fetchData(activeTab: string) {
     <PhUserFour />
     <span>{m.bottom_navigation_team_button()}</span>
   </button>
+  <button onclick={() => router.post('/toggle-role')} type="button">
+    <IconPhUserSwitch />
+  </button>
 </div>
-
-<style lang="scss">
-.bottom-navbar {
-  display: flex;
-  height: $navbar-height;
-  justify-content: space-around;
-  align-items: center;
-  background: white;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 0;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  bottom: env(safe-area-inset-bottom, 0);
-  min-width: 100vw;
-  margin: 0 auto;
-  z-index: $z-index-navbar;
-  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0));
-
-  button {
-    -webkit-tap-highlight-color: transparent;
-    background: transparent;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    flex: 1;
-    cursor: pointer;
-
-    &.active {
-      color: red;
-    }
-
-    span {
-      font-size: 0.75rem;
-    }
-  }
-}
-</style>
