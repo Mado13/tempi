@@ -6,6 +6,8 @@ config :tempi, Tempi.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "tempi_dev",
+  adapter: Ecto.Adapters.Postgres,
+  types: Tempi.PostgresTypes,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

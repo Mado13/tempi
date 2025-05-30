@@ -48,6 +48,7 @@ defmodule Tempi.MixProject do
       {:ex_twilio, "~> 0.10.0"},
       {:finch, "~> 0.13"},
       {:floki, "~> 0.37.0"},
+      {:geo_postgis, "~> 3.7"},
       {:gettext, "~> 0.26"},
       {:igniter, "~> 0.5", only: [:dev, :test]},
       {:inertia, "~> 2.4.0"},

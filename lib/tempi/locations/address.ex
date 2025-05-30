@@ -22,6 +22,7 @@ defmodule Tempi.Locations.Address do
     field :formatted_address, :string
     field :latitude, :float
     field :longitude, :float
+    field :location, Geo.PostGIS.Geometry
 
     has_many :jobs, Tempi.Jobs.Job
 
@@ -57,5 +58,17 @@ defmodule Tempi.Locations.Address do
     |> validate_length(:formatted_address, max: 1024)
     |> unique_constraint(:place_id, name: :addresses_place_id_index)
     |> validate_required([:formatted_address, :latitude, :longitude])
+    |> put_location_geomtry()
+  end
+
+  def put_location_geomtry(changeset) do
+    case {get_field(changeset, :latitude), get_field(changeset, :longitude)} do
+      {lat, lng} when not is_nil(lat) and not is_nil(lng) ->
+        geomtry = %Geo.Point{coordinates: {lat, lng}}
+        put_change(changeset, :location, geomtry)
+
+      _ ->
+        changeset
+    end
   end
 end

@@ -18,6 +18,12 @@ defmodule Tempi.Repo.Migrations.CreateAddresses do
       timestamps()
     end
 
+    # Add PostGIS geometry column with explicit constraints
+    execute("SELECT AddGeometryColumn ('addresses','location',4326,'POINT',2);", "")
+
+    # Add spatial index for performance
+    execute("CREATE INDEX addresses_location_idx ON addresses USING GIST (location);", "")
+
     create unique_index(:addresses, [:place_id], where: "place_id IS NOT NULL")
   end
 end
