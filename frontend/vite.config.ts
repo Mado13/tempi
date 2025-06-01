@@ -13,15 +13,17 @@ import svelteConfig from './svelte.config.js'
 export default defineConfig(({ command }) => {
   const isDev = command !== 'build'
 
-  if (isDev) {
-    process.stdin.on('close', () => process.exit(0))
-    process.stdin.resume()
-  }
-
   return {
     server: { cors: true },
     base: '/',
     publicDir: 'static',
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use '@/styles/variables.scss' as *;\n`,
+        },
+      },
+    },
 
     plugins: [
       Icons({ compiler: 'svelte' }),

@@ -2,20 +2,31 @@
   "extends": ["stylelint-config-standard-scss"],
   "plugins": ["stylelint-scss", "@stylistic/stylelint-plugin"],
   "rules": {
+    "block-no-empty": true,
+    "declaration-block-no-duplicate-properties": true,
+    "declaration-block-no-redundant-longhand-properties": true,
+
     "scss/at-rule-no-unknown": true,
     "at-rule-no-unknown": null,
-    "block-no-empty": true,
-    "color-hex-length": "short",
-    "declaration-block-no-duplicate-properties": true,
-    "no-descending-specificity": null,
-    "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
-    "unit-allowed-list": ["px", "%", "vw", "vh", "dvh", "dvw", "deg", "s", "ms"],
-    "font-family-name-quotes": "always-unless-keyword",
-    "color-function-notation": "modern",
-    "alpha-value-notation": "percentage",
-    "declaration-block-no-redundant-longhand-properties": true,
+
     "@stylistic/indentation": 2,
-    "@stylistic/string-quotes": "single"
+    "@stylistic/string-quotes": "single",
+
+    "color-hex-length": "short",
+    "alpha-value-notation": "number",
+    "color-function-notation": null,
+    "color-function-alias-notation": null,
+
+    "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+
+    "unit-allowed-list": ["px", "%", "vw", "vh", "dvw", "dvh", "rem", "em", "deg", "s", "ms"],
+
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": ["text-size-adjust", "backdrop-filter", "appearance", "user-select"]
+      }
+    ]
   },
   "overrides": [
     {

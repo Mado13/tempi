@@ -16,6 +16,9 @@ config :inertia,
   ssr: false,
   raise_on_ssr_failure: config_env() != :prod
 
+config :elixir, :time_zone_database, Tz.TimeZoneDatabase
+config :tzdata, :autoupdate, :disabled
+
 config :bun,
   version: "1.2.1",
   dev: [
@@ -46,8 +49,7 @@ config :tempi, TempiWeb.Endpoint,
     formats: [html: TempiWeb.ErrorHTML, json: TempiWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Tempi.PubSub,
-  live_view: [signing_salt: "bWy/uoTg"]
+  pubsub_server: Tempi.PubSub
 
 # Configures the mailer
 #

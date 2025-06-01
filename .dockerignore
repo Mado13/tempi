@@ -1,0 +1,48 @@
+# Ignore development files
+.git
+.gitignore
+README.md
+LICENSE
+.vscode
+.idea
+.DS_Store
+
+# Ignore build artifacts
+_build
+deps
+node_modules
+frontend/node_modules
+frontend/dist
+priv/static
+
+# Ignore test files
+test
+cover
+coverage
+
+# Ignore local environment files
+.env
+.env.local
+.env.dev
+
+# Ignore logs
+*.log
+logs
+
+# Ignore temporary files
+tmp
+temp
+
+# Ignore documentation
+doc
+docs
+
+# Ignore CI files
+.github
+.gitlab-ci.yml
+Makefile
+
+# Ignore Docker files
+Dockerfile*
+docker-compose*
+.dockerignore

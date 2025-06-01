@@ -1,24 +1,20 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
-import { preprocessMeltUI, sequence } from '@melt-ui/pp'
+import { preprocessMeltUI } from '@melt-ui/pp'
 
 export default {
-  preprocess: sequence([
-    vitePreprocess({
-      script: true,
-      style: {
-        css: {
-          preprocessorOptions: {
-            scss: { 
-              additionalData: `@use '@/styles/variables.scss' as *;\n`
-            },
-          },
-        },
-      },
-    }),
+  preprocess: [
+    vitePreprocess(),
     preprocessMeltUI(),
-  ]),
+  ],
   
   compilerOptions: {
     modernAst: true,
+  },
+  onwarn: (warning, handler) => {
+    if (warning.code === 'css-unused-selector' && 
+        warning.message.includes('[data-melt-')) {
+      return;
+    }
+    handler(warning);
   }
 }

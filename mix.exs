@@ -10,7 +10,14 @@ defmodule Tempi.MixProject do
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        tempi: [
+          applications: [
+            certifi: :permanent
+          ]
+        ]
+      ]
     ]
   end
 
@@ -25,6 +32,7 @@ defmodule Tempi.MixProject do
   end
 
   # Specifies which paths to compile per environment.
+
   defp elixirc_paths(:test) do
     ["lib", "test/support"]
   end
@@ -42,6 +50,7 @@ defmodule Tempi.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:bun, "~> 1.4"},
       {:dns_cluster, "~> 0.2.0"},
+      {:certifi, "~> 2.15.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:ecto_sql, "~> 3.10"},
       {:ex_phone_number, "~> 0.4.5"},
@@ -65,9 +74,7 @@ defmodule Tempi.MixProject do
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.5"},
       {:timex, "~> 3.7"},
-      {:telemetry_metrics, "~> 1.0"},
-      {:telemetry_poller, "~> 1.0"},
-      {:telemetry_ui, "~> 5.0"}
+      {:tz, "~> 0.28"}
     ]
   end
 
@@ -83,12 +90,11 @@ defmodule Tempi.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["bun.install --if-missing", "bun install"],
-      "assets.build": ["bun install", "bun build", "bun css"],
+      "assets.setup": ["cmd --cd frontend bun install"],
+      "assets.build": ["cmd --cd frontend bun run build"],
       "assets.deploy": [
-        "bun install",
-        "bun build --minify",
-        "bun css --minify",
+        "cmd --cd frontend bun install --no-progress",
+        "cmd --cd frontend bun run build",
         "phx.digest"
       ]
     ]

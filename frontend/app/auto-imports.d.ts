@@ -10,6 +10,7 @@ declare global {
   const IconPhCaretLeft: typeof import('~icons/ph/caret-left.svelte')['default']
   const IconPhCaretRight: typeof import('~icons/ph/caret-right.svelte')['default']
   const IconPhPencilCircleDuotone: typeof import('~icons/ph/pencil-circle-duotone.svelte')['default']
+  const IconPhUserSwitch: typeof import('~icons/ph/user-switch.svelte')['default']
   const IconPhXCircleBold: typeof import('~icons/ph/x-circle-bold.svelte')['default']
   const IconTablerHexagonPlusFilled: typeof import('~icons/tabler/hexagon-plus-filled.svelte')['default']
   const element: (typeof import('~icons/el/ement.svelte'))['default']

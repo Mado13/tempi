@@ -27,6 +27,8 @@ defmodule TempiWeb.Router do
 
   scope "/", TempiWeb do
     pipe_through [:inertia]
+
+    get "/health", HealthController, :index
   end
 
   scope "/", TempiWeb do
