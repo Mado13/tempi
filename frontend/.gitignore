@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+**/node_modules/
 dist
 dist-ssr
 *.local
@@ -26,3 +26,18 @@ dist-ssr
 # API test files
 *.http
 
+# Mobile build artifacts and local configs
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/android/build/
+mobile/android/local.properties
+mobile/android/.idea/
+mobile/android/.DS_Store
+mobile/android/**/*.iml
+mobile/android/captures/
+mobile/android/.cxx/
+mobile/android/.externalNativeBuild/
+
+# Capacitor sync artifacts (optional if regenerable)
+mobile/android/app/src/main/assets/*
+!mobile/android/app/src/main/assets/.gitkeep
