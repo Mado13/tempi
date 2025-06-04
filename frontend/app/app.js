@@ -60,7 +60,7 @@ const initApp = () => {
       let page = pages[`./pages/${name}.svelte`]
       return { 
         default: componentModule.default, 
-        layout:  name.startsWith('Auth/') ? undefined : Layout }
+        layout:  name.startsWith('auth/') ? undefined : Layout }
 
     },
     
