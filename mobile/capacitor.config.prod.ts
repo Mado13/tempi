@@ -3,20 +3,10 @@ import type { CapacitorConfig } from "@capacitor/cli";
 const config: CapacitorConfig = {
   appId: "com.example.tempi",
   appName: "Tempi",
-  webDir: "../priv/static/",
-
-  server: {
-    url: "http://localhost:4000",
-    cleartext: true,
-    hostname: "localhost",
-    allowNavigation: [
-      "https://maps.googleapis.com",
-      "https://places.googleapis.com",
-    ],
-  },
+  webDir: "../priv/static",
 
   android: {
-    allowMixedContent: true,
+    allowMixedContent: false,
     captureInput: true,
   },
 

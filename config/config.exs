@@ -24,7 +24,9 @@ config :bun,
   dev: [
     args: ~w(x --bun vite --host 0.0.0.0),
     cd: Path.expand("../frontend", __DIR__),
-    env: %{}
+    env: %{
+      "VITE_HOST" => System.get_env("VITE_HOST") || "localhost"
+    }
   ],
   install: [
     args: ~w(i),

@@ -5,7 +5,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 import { defineConfig } from 'vite'
-import viteCompression from 'vite-plugin-compression'
 import { VitePWA } from 'vite-plugin-pwa'
 
 import svelteConfig from './svelte.config.js'
@@ -133,9 +132,6 @@ export default defineConfig(({ command }) => {
           type: 'module',
         },
       }),
-
-      viteCompression({ algorithm: 'gzip', threshold: 512 }),
-      viteCompression({ algorithm: 'brotliCompress', threshold: 512 }),
     ],
 
     resolve: {
@@ -148,7 +144,7 @@ export default defineConfig(({ command }) => {
     },
 
     build: {
-      target: 'es2017',
+      target: 'es2022',
       emptyOutDir: true,
       outDir: '../priv/static',
       sourcemap: isDev,
@@ -175,10 +171,7 @@ export default defineConfig(({ command }) => {
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/chunks/[name].[hash].js',
-          assetFileNames: assetInfo => {
-            if (/\.(gz|br)$/.test(assetInfo.name ?? '')) return ''
-            return 'assets/[name].[hash][extname]'
-          },
+          assetFileNames: 'assets/[name].[hash][extname]',
           manualChunks(id) {
             if (!id.includes('node_modules')) return
 
