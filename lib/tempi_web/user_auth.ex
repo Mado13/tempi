@@ -28,22 +28,14 @@ defmodule TempiWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, params \\ %{}) do
+  def log_in_user(conn, user, _params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     _user_return_to = get_session(conn, :user_return_to)
 
     conn
     |> renew_session()
     |> put_token_in_session(token)
-    |> maybe_write_remember_me_cookie(token, params)
-  end
-
-  defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
-    put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
-  end
-
-  defp maybe_write_remember_me_cookie(conn, _token, _params) do
-    conn
+    |> put_resp_cookie(@remember_me_cookie, token, @remember_me_options)
   end
 
   # This function renews the session ID and erases the whole
@@ -110,7 +102,15 @@ defmodule TempiWeb.UserAuth do
       conn = fetch_cookies(conn, signed: [@remember_me_cookie])
 
       if token = conn.cookies[@remember_me_cookie] do
-        {token, put_token_in_session(conn, token)}
+        user = Accounts.get_user_by_session_token(token) |> Tempi.Repo.preload([:account])
+        active_role = UserRole.determine_active_role(user)
+
+        conn =
+          conn
+          |> put_token_in_session(token)
+          |> UserRole.set_active_role(active_role)
+
+        {token, conn}
       else
         {nil, conn}
       end
