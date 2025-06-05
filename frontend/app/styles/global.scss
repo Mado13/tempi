@@ -272,23 +272,19 @@ form {
     background: $primary-color;
     color: white;
     font-weight: 600;
-
-    &:hover {
-      background: color.adjust($primary-color, $lightness: -5%);
-    }
   }
-}
 
-.form-error {
-  min-height: 1.2em;
-  font-size: 0.875rem;
-  color: #dc2626;
-  line-height: 1.2;
-  opacity: 0;
-  transition: opacity $transition-fast;
+  .form-error {
+    min-height: 1.2em;
+    font-size: 0.875rem;
+    color: #dc2626;
+    line-height: 1.2;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 
-  &:not(:empty) {
-    opacity: 1;
+    &:not(:empty) {
+      opacity: 1;
+    }
   }
 }
 
