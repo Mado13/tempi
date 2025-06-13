@@ -74,6 +74,7 @@ defmodule Tempi.MixProject do
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.5"},
       {:timex, "~> 3.7"},
+      {:tidewave, "~> 0.1", only: :dev},
       {:tz, "~> 0.28"}
     ]
   end
