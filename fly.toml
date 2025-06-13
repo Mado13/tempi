@@ -13,6 +13,7 @@ kill_signal = 'SIGTERM'
   release_command = '/app/bin/migrate'
 
 [env]
+  ELIXIR_ERL_OPTIONS = "+fnu"
   PHX_HOST = 'tempi.fly.dev'
   PORT = '8080'
 
