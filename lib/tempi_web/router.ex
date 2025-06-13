@@ -51,6 +51,8 @@ defmodule TempiWeb.Router do
     pipe_through [:inertia, :require_authenticated_user, :require_worker_role]
 
     get "/agenda", Worker.AgendaController, :index
+    get "/profile", Worker.ProfilesController, :show
+    patch "/profile", Worker.ProfilesController, :update
   end
 
   scope "/employer", TempiWeb do
