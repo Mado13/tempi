@@ -15,10 +15,11 @@
     <.inertia_title>Tempi</.inertia_title>
     <.inertia_head content={@inertia_head} />
 
-    <%= if Mix.env() == :dev do %>
+    <%= if TempiWeb.Vite.Manifest.use_dev_server?() do %>
       <% vite_host = System.get_env("VITE_HOST") || "localhost" %>
-      <script type="module" src={"http://#{vite_host}:5173/@vite/client"}></script>
-      <script type="module" src={"http://#{vite_host}:5173/app/app.js"}></script>
+      <% scripts = TempiWeb.Vite.Manifest.dev_server_scripts(vite_host) %>
+      <script crossorigin type="module" src={scripts.client}></script>
+      <script crossorigin type="module" src={scripts.app}></script>
     <% else %>
       <link rel="stylesheet" href={TempiWeb.Vite.Manifest.main_css()} />
       <%= for path <- TempiWeb.Vite.Manifest.get_imports("app/app.js") do %>

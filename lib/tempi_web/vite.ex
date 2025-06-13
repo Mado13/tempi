@@ -81,6 +81,21 @@ defmodule TempiWeb.Vite do
     @spec read() :: map()
     def read, do: PhxManifestReader.read()
 
+    @doc "Returns true if we should use Vite dev server"
+    @spec use_dev_server?() :: boolean()
+    def use_dev_server? do
+      PhxManifestReader.current_env() == :dev
+    end
+
+    @doc "Returns the Vite dev server script URLs"
+    @spec dev_server_scripts(String.t()) :: %{client: String.t(), app: String.t()}
+    def dev_server_scripts(vite_host \\ "localhost") do
+      %{
+        client: "http://#{vite_host}:5173/@vite/client",
+        app: "http://#{vite_host}:5173/app/app.js"
+      }
+    end
+
     @doc "Returns the main JavaScript file path prepended with a slash."
     @spec main_js() :: String.t()
     def main_js, do: get_file(@main_js_file)
