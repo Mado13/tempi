@@ -43,3 +43,4 @@ npm-debug.log
 # API test files
 *.http
 
+mobile/node_modules/
