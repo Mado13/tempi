@@ -6,6 +6,7 @@ import { type DateValue } from '@internationalized/date'
 import { type DateRange } from '@melt-ui/svelte'
 import { watch } from 'runed'
 
+import FormField from '@/components/ui/FormField.svelte'
 import JobClassSelector from '@/components/ui/JobClassSelector.svelte'
 import { validateForm } from '@/helpers/validate-form'
 import { type JobFormData, jobFormSchema } from '@/schemas/job_form.schema'
@@ -31,7 +32,7 @@ let form = useForm<JobFormData>({
     type: 'hourly',
   },
   shifts: 'morning',
-  jobClassId: "",
+  jobClassId: '',
 })
 
 watch<DateRange>(
@@ -56,11 +57,12 @@ const onsubmit = (e: SubmitEvent) => {
 
 <h1>{m['add_job.job_title.value']()}</h1>
 <form {onsubmit}>
-  <div class="input-group">
-    <label for="title">{m['add_job.job_title.value']()}</label>
-    <input id="title" type="text" bind:value={$form.title} class:error={$form.errors.title} />
-    <div class="form-error">{$form.errors.title}</div>
-  </div>
+  <FormField
+    id="title"
+    label={m['add_job.job_title.value']()}
+    bind:value={$form.title}
+    error={$form.errors.title}
+  />
   <div class="input-group">
     <AddressInput bind:selected={$form.location} />
     <div class="form-error">{$form.errors.location}</div>
@@ -77,7 +79,6 @@ const onsubmit = (e: SubmitEvent) => {
       startName="jobStart"
       endName="jobEnds"
     />
-    <!-- <button onclick={() => openCalendar()}>Open</button> -->
     <div class="form-error">{$form.errors.startDate}</div>
   </div>
   <div class="input-group">
@@ -90,32 +91,3 @@ const onsubmit = (e: SubmitEvent) => {
   </div>
   <button type="submit">{m['add_job.submit_button']()}</button>
 </form>
-
-<style lang="scss">
-form {
-  display: flex;
-  flex-direction: column;
-  > .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  button {
-    margin-top: 1rem;
-  }
-}
-
-.form-error {
-  min-height: 1.2em; // Reserve space for one line of error text
-  font-size: 0.875rem; // Smaller text (14px if base is 16px)
-  color: #dc2626; // Red color
-  line-height: 1.2;
-  opacity: 0; // Hidden by default
-  transition: opacity 0.2s ease-in-out; // Smooth fade-in
-  
-  // Show error when there's content
-  &:not(:empty) {
-    opacity: 1;
-  }
-}
-</style>
