@@ -2,7 +2,7 @@ defmodule TempiWeb.Vite do
   @moduledoc false
 
   # Provide "constants" as functions so that inner modules can refer to them.
-  def manifest_file, do: "priv/static/assets/vite_manifest.json"
+  def manifest_file, do: "priv/static/.vite/manifest.json"
   def cache_key, do: {:vite, "vite_manifest"}
   def default_env, do: :prod
   def endpoint, do: TempiWeb.Endpoint
