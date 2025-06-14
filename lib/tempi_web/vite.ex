@@ -4,8 +4,10 @@ defmodule TempiWeb.Vite do
   # Provide "constants" as functions so that inner modules can refer to them.
   def manifest_file, do: "priv/static/assets/vite_manifest.json"
   def cache_key, do: {:vite, "vite_manifest"}
-  def default_env, do: :dev
+  def default_env, do: :prod
   def endpoint, do: TempiWeb.Endpoint
+
+  def dev?, do: Application.get_env(:tempi, :vite_mode, :prod) == :dev
 
   defmodule PhxManifestReader do
     @moduledoc """

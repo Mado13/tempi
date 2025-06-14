@@ -110,4 +110,7 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+  #
+  # use either, your choice
+  config :tempi, :vite_mode, System.get_env("VITE_MODE", "prod") |> String.to_atom()
 end
