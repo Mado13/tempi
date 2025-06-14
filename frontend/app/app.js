@@ -50,6 +50,7 @@ const getCookieValue = (name) => {
 const initApp = () => {
   createInertiaApp({
     // Resolve page components
+    id: 'app',
     resolve: async name => {
       const pages = import.meta.glob('./pages/**/*.svelte')
       const pageImporter = pages[`./pages/${name}.svelte`]
