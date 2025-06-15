@@ -8,13 +8,7 @@ import { createInertiaApp } from "@inertiajs/svelte";
 import { Inertia } from "@inertiajs/inertia";
 import { mount, hydrate } from "svelte";
 import "phoenix_html";
-import { setupPWA } from "./pwa-setup";
 import { Index, IndexedDB } from '../node_modules/flexsearch/dist/flexsearch.bundle.module.min.js';
-
-
-// Initialize application state
-window.pwa = {};
-window.isPWAInstalled = false;
 
 // Configure HTTP requests
 const configureAxios = () => {
@@ -86,7 +80,6 @@ const initApp = () => {
 const bootstrap = async () => {
   configureAxios();
   initApp();
-  setupPWA();
 };
 
 // Start the application

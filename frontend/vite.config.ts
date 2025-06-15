@@ -144,7 +144,7 @@ export default defineConfig(({ command }) => {
     },
 
     build: {
-      target: 'es2022',
+      target: 'es2017',
       emptyOutDir: true,
       outDir: '../priv/static',
       sourcemap: isDev,
