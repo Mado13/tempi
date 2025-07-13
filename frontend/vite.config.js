@@ -11,8 +11,17 @@ import IconsResolver from 'unplugin-icons/resolver'
 
 // https://vite.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+  include: ['@sqlite.org/sqlite-wasm'],
+  },
+  server: {
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+    },
+  },
   build: {
-    minify: 'terser',
+    minify: false,
     terserOptions: {
       compress: {
         drop_console: true,
@@ -38,6 +47,7 @@ export default defineConfig({
       include: [
         /\.svelte$/,
         /\.svelte\?svelte/,
+        /src\/lib\/components\/.*\.svelte$/,
         './src/**/*.svelte', // Explicitly include all Svelte files
       ],
       resolvers: [

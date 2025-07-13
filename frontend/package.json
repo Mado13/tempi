@@ -31,7 +31,13 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
+    "@capacitor-community/sqlite": "^7.0.1",
+    "@capacitor/app": "^7.0.1",
+    "@capacitor/network": "^7.0.1",
+    "@capacitor/preferences": "^7.0.1",
+    "@capacitor/status-bar": "^7.0.1",
     "@use-gesture/vanilla": "^10.3.1",
+    "flexsearch": "^0.8.205",
     "melt": "^0.38.0",
     "runed": "^0.29.1",
     "sv-router": "^0.7.1",

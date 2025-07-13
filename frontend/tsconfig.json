@@ -9,17 +9,13 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "$routes/*": ["src/routes/*"],
-      "$components/*": ["src/components/*"],
-      "$i18n/*": ["src/lib/i18n/*"],
-      "$utils/*": ["src/lib/utils/*"],
       "$lib/*": ["src/lib/*"],
       "$router": ["./router.ts"],
-      "$api": ["src/lib/api.ts"]
-    },
+      "$routes/*": ["src/routes/*"],
+      "@/*": ["src/*"]
+    }
   },
   "types": [
     "unplugin-icons/types/svelte"

@@ -9,9 +9,23 @@
   "auth": {
     "login": {
       "title": "שלום",
+      "label": "מספר טלפון",
+      "submit": "התחבר",
       "errors": {
         "phone_missing": "אנא הכנס מספר טלפון כדי להמשיך",
         "wrong_format": "אנא הכנס מספר טלפון בפורמט ישראלי 05XXXXXXXX"
+      }
+    }
+  },
+  "employer": {
+    "jobs": {
+      "add": {
+        "header": "הוסף הצעת עבודה",
+        "title": "שם הפרוייקט",
+        "address": "כתובת/שם בית עסק",
+        "addressPlaceholder": "אנא הכנס כתובת...",
+        "classification": "סקטור",
+        "classificationPlaceholder": "אנא בחר סקטור..."
       }
     }
   }
