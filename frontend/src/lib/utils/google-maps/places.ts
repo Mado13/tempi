@@ -1,11 +1,7 @@
 import * as v from 'valibot'
 
 import { loadGoogleMaps } from './loader'
-import {
-  type FormLocationInput,
-  GoogleMapsFormLocationSchema,
-  type GoogleMapsPlaceSchema,
-} from './schema'
+import { type FormLocationInput, GoogleMapsFormLocationSchema } from './schema'
 
 export interface GoogleMapsPlacesOptions {
   apiKey: string
@@ -47,7 +43,7 @@ export class GoogleMapsPlaces {
     this.sessionToken = undefined
   }
 
-  async fetchAutocompleteSuggestions(input: string): Promise<Record<string, string>> {
+  async fetchAutocompleteSuggestions(input: string): Promise<Array<{ id: string; label: string }>> {
     await this.ensureLoaded()
 
     if (!this.autocompleteService || !this.sessionToken) {
@@ -61,13 +57,15 @@ export class GoogleMapsPlaces {
         includedRegionCodes: [this.requestedRegion!],
       })
 
-    return suggestions.reduce<Record<string, string>>((acc, suggestion) => {
-      const place = suggestion.placePrediction
-      if (place?.placeId && place.text) {
-        acc[place.placeId] = place.text.toString()
-      }
-      return acc
-    }, {})
+    return suggestions
+      .map((suggestion) => {
+        const place = suggestion.placePrediction
+        if (place?.placeId && place.text) {
+          return { id: place.placeId, label: place.text.toString() }
+        }
+        return null
+      })
+      .filter((item): item is { id: string; label: string } => item !== null)
   }
 
   async fetchPlaceDetails(placeId: string): Promise<FormLocationInput | undefined> {
@@ -84,23 +82,31 @@ export class GoogleMapsPlaces {
     })
 
     await place.fetchFields({
-      fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'],
+      fields: ['displayName', 'formattedAddress', 'addressComponents', 'location', 'types'],
     })
+
+    const locality = place.addressComponents?.find((c) => c.types.includes('locality'))?.longText
+
+    const district = place.addressComponents?.find((c) =>
+      c.types.includes('administrative_area_level_1'),
+    )?.longText
 
     const rawData = {
       name: place.displayName,
       formattedAddress: place.formattedAddress,
-      addressComponents: place.addressComponents,
+      locality,
+      district,
       location: {
         lat: place.location?.lat(),
         lng: place.location?.lng(),
       },
+      types: place.types,
     }
 
     try {
       return v.parse(GoogleMapsFormLocationSchema, {
         ...rawData,
-        addressId: placeId,
+        googlePlaceId: placeId,
       })
     } catch (error) {
       console.error('Validation failed:', error)
