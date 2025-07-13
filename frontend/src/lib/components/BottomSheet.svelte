@@ -1,9 +1,27 @@
 <script lang="ts">
   import { Keyboard } from '@capacitor/keyboard'
-  import { Gesture } from '@use-gesture/vanilla'
+  import type { Snippet } from 'svelte'
   import { fade, fly } from 'svelte/transition'
 
-  let { open = $bindable(false), title = '', children, fullHeight = false } = $props()
+  import { dismissable } from '$lib/actions/gestures'
+
+  interface Props {
+    open?: boolean
+    title?: string
+    fullHeight?: boolean
+    children: Snippet
+    footer?: Snippet
+    header?: Snippet
+  }
+
+  let {
+    open = $bindable(false),
+    title = '',
+    fullHeight = false,
+    children,
+    footer,
+    header,
+  }: Props = $props()
 
   let sheetElement = $state<HTMLElement>()
   let keyboardHeight = $state(0)
@@ -28,36 +46,6 @@
   $effect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
   })
-
-  $effect(() => {
-    if (!sheetElement || !open) return
-
-    const gesture = new Gesture(
-      sheetElement,
-      {
-        onDrag: ({ movement: [, my], last }) => {
-          dragOffset = Math.max(0, my)
-
-          if (last) {
-            if (dragOffset > 100) {
-              open = false
-              dragOffset = 0
-            } else {
-              dragOffset = 0
-            }
-          }
-        },
-      },
-      {
-        drag: {
-          filterTaps: true,
-          axis: 'y',
-        },
-      },
-    )
-
-    return () => gesture.destroy()
-  })
 </script>
 
 {#if open}
@@ -74,27 +62,44 @@
       aria-modal="true"
       aria-label={title || 'Bottom sheet'}
       bind:this={sheetElement}
-      style:height={fullHeight ? '100vh' : ''}
+      class:full-height={fullHeight}
       style:--keyboard-height="{keyboardHeight}px"
       style:transform="translateY({dragOffset}px)"
       transition:fly={{ y: '100%', duration: 300 }}
-      onclick={(e) => e.stopPropagation()}>
+      onclick={(e) => e.stopPropagation()}
+      use:dismissable={{
+        axis: 'y',
+        onDismiss: () => (open = false),
+        fadeOnDrag: false,
+        dismissThreshold: 0.3,
+      }}>
       <div class="drag-indicator"></div>
 
-      <header class="header">
-        <h3>{title}</h3>
-        <button
-          class="close-btn"
-          type="button"
-          aria-label="Close bottom sheet"
-          onclick={() => (open = false)}>
-          <IconPhPlusSquare />
-        </button>
-      </header>
+      {#if title || header}
+        <header class="header">
+          {#if header}
+            {@render header()}
+          {/if}
+          <h3>{title}</h3>
+          <button
+            class="close-btn"
+            type="button"
+            aria-label="Close bottom sheet"
+            onclick={() => (open = false)}>
+            <IconPhPlusSquare />
+          </button>
+        </header>
+      {/if}
 
       <div class="content">
         {@render children()}
       </div>
+
+      {#if footer}
+        <div class="footer">
+          {@render footer()}
+        </div>
+      {/if}
     </div>
   </div>
 {/if}
@@ -102,7 +107,10 @@
 <style>
   .backdrop {
     position: fixed;
-    inset: 0;
+    top: var(--safe-area-top);
+    bottom: var(--safe-area-bottom);
+    left: var(--safe-area-left);
+    right: var(--safe-area-right);
     background: rgba(0, 0, 0, 0.5);
     z-index: 2000;
   }
@@ -113,13 +121,22 @@
     right: 0;
     bottom: 0;
     background: var(--color-background-surface);
+    border-top: 1px solid var(--color-border-default);
     border-radius: var(--radius-l) var(--radius-l) 0 0;
     box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease-out;
     touch-action: none;
-    padding-bottom: env(keyboard-inset-height);
+    padding-bottom: var(--safe-area-bottom);
+
+    &.full-height {
+      height: 100%;
+      padding-top: var(--safe-area-top);
+      padding-bottom: 0;
+      border-radius: 0;
+      border-top: none;
+    }
   }
 
   .drag-indicator {
@@ -167,5 +184,15 @@
     padding: var(--spacing-m);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+  }
+
+  .footer {
+    flex-shrink: 0;
+    &:not(:empty) {
+      padding: var(--spacing-m);
+      padding-top: var(--spacing-xs);
+      background: var(--color-background-surface);
+      border-top: 1px solid var(--color-border-default);
+    }
   }
 </style>

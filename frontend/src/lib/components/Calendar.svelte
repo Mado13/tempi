@@ -59,31 +59,37 @@
 <style>
   [data-melt-calendar] {
     width: 100%;
-    max-width: 400px;
-    margin: 1rem auto;
+    max-width: min(400px, calc(100vw - 2rem)); /* Responsive max-width */
+    margin: 0 auto;
     background-color: var(--color-background-surface);
     border-radius: var(--radius-l);
     box-shadow: var(--shadow-card);
     overflow: hidden;
+
     &[data-disabled] {
       opacity: 0.6;
       pointer-events: none;
     }
+
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: var(--spacing-m);
+      padding: clamp(0.75rem, 3vw, 1rem); /* Dynamic padding */
       background-color: var(--color-background-surface);
       border-bottom: 1px solid var(--color-border-default);
+      gap: 0.5rem; /* Prevent button/text collision */
+
       [data-melt-calendar-nextbutton],
       [data-melt-calendar-prevbutton] {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: var(--size-tap-target);
-        height: var(--size-tap-target);
-        min-height: var(--size-tap-target);
+        /* Dynamic sizing based on viewport */
+        width: clamp(2.5rem, 10vw, 3rem);
+        height: clamp(2.5rem, 10vw, 3rem);
+        min-height: 44px; /* iOS minimum tap target */
+        min-width: 44px;
         background-color: transparent;
         border: 1px solid var(--color-border-default);
         border-radius: var(--radius-m);
@@ -91,6 +97,7 @@
         transition: all var(--transition-fast);
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
 
         &:active {
           background-color: var(--color-background-surface-active);
@@ -106,10 +113,14 @@
       [data-melt-calendar-heading] {
         flex: 1;
         text-align: center;
-        font-size: var(--font-size-headline-s);
+        font-size: clamp(1rem, 4vw, 1.125rem); /* Responsive font size */
         font-weight: var(--font-weight-semibold);
         color: var(--color-text-primary);
-        padding: 0 var(--spacing-s);
+        padding: 0 clamp(0.25rem, 2vw, 0.5rem);
+        min-width: 0; /* Allow text truncation if needed */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
@@ -117,11 +128,13 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
+      table-layout: fixed; /* Equal column widths */
+
       thead {
         th {
-          padding: var(--spacing-s) 0;
+          padding: clamp(0.375rem, 2vw, 0.5rem) 0;
           text-align: center;
-          font-size: var(--font-size-label-s);
+          font-size: clamp(0.625rem, 2.5vw, 0.75rem); /* Responsive font */
           font-weight: var(--font-weight-medium);
           color: var(--color-text-secondary);
           text-transform: uppercase;
@@ -133,9 +146,10 @@
 
       tbody {
         td {
-          padding: 2px;
+          padding: 1px; /* Minimal padding for mobile */
           text-align: center;
           position: relative;
+
           &[aria-disabled='true'] {
             pointer-events: none;
 
@@ -155,11 +169,13 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          width: var(--size-tap-target);
-          height: var(--size-tap-target);
-          min-height: var(--size-tap-target);
+          /* Dynamic sizing with minimum for touch */
+          width: clamp(2.25rem, calc((100vw - 3rem) / 7), 3rem);
+          height: clamp(2.25rem, calc((100vw - 3rem) / 7), 3rem);
+          min-height: 36px; /* Smaller than header buttons but still tappable */
+          min-width: 36px;
           border-radius: var(--radius-m);
-          font-size: var(--font-size-body-r);
+          font-size: clamp(0.875rem, 3vw, 1rem); /* Responsive font */
           font-weight: var(--font-weight-medium);
           color: var(--color-text-primary);
           background-color: transparent;
@@ -195,11 +211,11 @@
           &[data-today]:not([data-selected])::after {
             content: '';
             position: absolute;
-            bottom: 4px;
+            bottom: clamp(2px, 0.5vw, 4px);
             left: 50%;
             transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
+            width: clamp(3px, 0.8vw, 4px);
+            height: clamp(3px, 0.8vw, 4px);
             border-radius: var(--radius-full);
             background-color: var(--color-interactive-accent-default);
           }
@@ -216,6 +232,7 @@
     }
   }
 
+  /* RTL support remains the same */
   [dir='rtl'] [data-melt-calendar] {
     header {
       direction: rtl;
@@ -230,20 +247,63 @@
     }
   }
 
-  @media (orientation: landscape) and (max-height: 500px) {
+  /* Small phones (< 360px width) */
+  @media (max-width: 359px) {
     [data-melt-calendar] {
-      table {
-        tbody {
-          td {
-            padding: 1px;
+      [data-melt-calendar-grid] {
+        thead th {
+          font-size: 0.625rem;
+          padding: 0.25rem 0;
+        }
 
-            div {
-              width: calc(var(--size-tap-target) * 0.85);
-              height: calc(var(--size-tap-target) * 0.85);
-              min-height: calc(var(--size-tap-target) * 0.85);
-              font-size: var(--font-size-label-m);
-            }
-          }
+        tbody [data-melt-calendar-cell] {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+
+  /* Landscape orientation handling */
+  @media (orientation: landscape) {
+    [data-melt-calendar] {
+      max-width: min(400px, 60vh); /* Limit width in landscape */
+
+      header {
+        padding: 0.75rem;
+      }
+
+      [data-melt-calendar-grid] {
+        tbody [data-melt-calendar-cell] {
+          /* Adjust size based on viewport height in landscape */
+          width: clamp(2rem, 8vh, 2.5rem);
+          height: clamp(2rem, 8vh, 2.5rem);
+        }
+      }
+    }
+  }
+
+  /* Very small landscape (like iPhone SE landscape) */
+  @media (orientation: landscape) and (max-height: 400px) {
+    [data-melt-calendar] {
+      header {
+        padding: 0.5rem;
+
+        [data-melt-calendar-heading] {
+          font-size: 0.875rem;
+        }
+      }
+
+      [data-melt-calendar-grid] {
+        thead th {
+          padding: 0.25rem 0;
+          font-size: 0.5rem;
+        }
+
+        tbody [data-melt-calendar-cell] {
+          width: 1.75rem;
+          height: 1.75rem;
+          min-height: 28px;
+          font-size: 0.75rem;
         }
       }
     }
