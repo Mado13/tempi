@@ -11,4 +11,8 @@ deps/
 _build/
 .elixir_ls/
 mobile/android
+mobile/ios
 .elixir-tools
+.jj/
+frontend/project.inlang
+frontend/dist

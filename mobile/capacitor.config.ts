@@ -17,9 +17,30 @@ const config: CapacitorConfig = {
     captureInput: true,
   },
   ios: {
-    scheme: 'Tempi',
+    scheme: 'App',
   },
   plugins: {
+    CapacitorSQLite: {
+      iosDatabaseLocation: 'Library/CapacitorDatabase',
+      iosIsEncryption: true,
+      iosKeychainPrefix: 'svelte-sqlite-app-starter',
+      iosBiometric: {
+        biometricAuth: false,
+        biometricTitle: 'Biometric login for capacitor sqlite',
+      },
+      androidIsEncryption: true,
+      androidBiometric: {
+        biometricAuth: false,
+        biometricTitle: 'Biometric login for capacitor sqlite',
+        biometricSubTitle: 'Log in using your biometric',
+      },
+    },
+    StatusBar: {
+      style: 'Light',
+      overlaysWebView: false,
+      backgroundColor: '#F8F9FA',
+    },
+    Preferences: {},
     Keyboard: {
       resize: 'none',
       resizeOnFullScreen: true,

@@ -17,6 +17,11 @@
     "@capacitor/ios": "^7.4.0"
   },
   "dependencies": {
-    "@capacitor/keyboard": "^7.0.1"
+    "@capacitor-community/sqlite": "^7.0.1",
+    "@capacitor/app": "^7.0.1",
+    "@capacitor/keyboard": "^7.0.1",
+    "@capacitor/network": "^7.0.1",
+    "@capacitor/preferences": "^7.0.1",
+    "@capacitor/status-bar": "^7.0.1"
   }
 }
