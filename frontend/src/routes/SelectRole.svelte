@@ -1,7 +1,9 @@
 <script lang="ts">
   import * as v from 'valibot'
 
-  import { createForm } from '../lib/forms.svelte'
+  import { api } from '$lib/api'
+
+  import { createForm } from '../lib/forms'
 
   const selectRoleSchema = v.object({
     currentRole: v.string(),
@@ -12,8 +14,8 @@
     defaultValues: {
       currentRole: 'worker',
     },
-    onSubmit({ currentRole }) {
-      form.post('/profile/role')
+    onSubmit(data) {
+      api.post('/role', data)
     },
   })
 

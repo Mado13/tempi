@@ -1,9 +1,13 @@
 <script lang="ts">
-  import { m } from '$i18n/messages'
   import { navigate } from '$router'
   import * as v from 'valibot'
 
-  import { createForm } from '$lib/forms.svelte'
+  import { api } from '$lib/api'
+  import { createForm } from '$lib/forms'
+  import { m } from '$lib/i18n/messages'
+
+  import Input from '../../lib/components/Input.svelte'
+  import PrimaryButton from '../../lib/components/PrimaryButton.svelte'
 
   const loginSchema = v.object({
     phoneNumber: v.pipe(
@@ -18,109 +22,43 @@
     defaultValues: {
       phoneNumber: '',
     },
-    async onSubmit() {
-      const response = await form.post('/auth/send_code')
+    async onSubmit(formData) {
+      const response = await api.post('/auth/send_code', formData)
+
       if (response.success) {
-        navigate('/auth/verify', { state: form.phoneNumber })
+        navigate('/auth/verify', { state: form.phoneNumber, search: `?code=${response.data.code}` })
+      } else {
+        throw response
       }
     },
   })
 </script>
 
-<header class="auth-header">
-  <h1 class="auth-title">{m['auth.login.title']()}</h1>
-  <p class="auth-subtitle">subtitle</p>
+<header>
+  <h1>{m['auth.login.title']()}</h1>
+  <p>subtitle</p>
 </header>
 
-<form class="auth-form" onsubmit={form.handleSubmit}>
-  <div class="auth-form-group">
-    <label class="auth-label" for="phoneNumber">phoneNumber</label>
+<form onsubmit={form.handleSubmit}>
+  <Input
+    id="phone-number"
+    label={m['auth.login.label']()}
+    bind:value={form.phoneNumber}
+    error={form.errors.phoneNumber}
+    inputmode="numeric"
+    autocomplete="tel"
+    disabled={form.isSubmitting}
+    onblur={() => form.handleBlur('phoneNumber')} />
 
-    <div class="phone-input-wrapper">
-      <input
-        id="phoneNumber"
-        class="phone-input {form.errors.phoneNumber ? 'input-error' : ''}"
-        type="text"
-        inputmode="numeric"
-        autocomplete="tel"
-        bind:value={form.phoneNumber}
-        oninput={() => form.clearErrors('phoneNumber')}
-        disabled={form.isSubmitting} />
+  <PrimaryButton type="submit">
+    {m['auth.login.submit']()}
+  </PrimaryButton>
 
-      {#if form.errors.phoneNumber}
-        <span class="auth-error" role="alert">
-          {form.errors.phoneNumber}
-        </span>
-      {:else}
-        <span class="auth-helper-text">Helper</span>
-      {/if}
-    </div>
-  </div>
-
-  <div class="auth-button-container">
-    <button type="submit" class="auth-button" disabled={form.isSubmitting}>
-      {#if form.isSubmitting}
-        <span class="auth-loading"></span>
-      {:else}
-        Submit
-      {/if}
-    </button>
-
-    <p class="phone-disclaimer">Disclaimer</p>
-  </div>
+  <p class="disclaimer">Disclaimer</p>
 </form>
 
 <style>
-  /* Phone-specific styles only */
-  .phone-input-wrapper {
-    position: relative;
-  }
-
-  .phone-input {
-    font-size: 16px !important;
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    min-height: var(--size-tap-target);
-    padding: 0 var(--spacing-m);
-    font-family: var(--font-family-base);
-    font-weight: var(--font-weight-regular);
-    color: var(--color-text-primary);
-    background-color: var(--color-background-surface);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-m);
-    transition:
-      border-color var(--transition-fast),
-      box-shadow var(--transition-fast);
-    touch-action: manipulation;
-    -webkit-user-select: text;
-    user-select: text;
-  }
-
-  .phone-input:focus {
-    outline: none;
-    border-color: var(--color-border-focused);
-    box-shadow: var(--ring-accent);
-  }
-
-  .phone-input::placeholder {
-    color: var(--color-text-placeholder);
-  }
-
-  .phone-input:disabled {
-    background-color: var(--color-background-surface-active);
-    cursor: not-allowed;
-  }
-
-  .input-error {
-    border-color: var(--color-semantic-error-fg) !important;
-  }
-
-  .input-error:focus {
-    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.25) !important;
-  }
-
-  .phone-disclaimer {
+  .disclaimer {
     font-size: var(--font-size-label-s);
     color: var(--color-text-secondary);
     line-height: 1.5;
