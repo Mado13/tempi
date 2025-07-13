@@ -16,7 +16,6 @@ defmodule TempiWeb do
   below. Instead, define additional modules and import
   those modules here.
   """
-  alias TempiWeb.ApiAuth
 
   def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
 
@@ -39,10 +38,11 @@ defmodule TempiWeb do
   def controller do
     quote do
       use Phoenix.Controller,
-        formats: [:html, :json],
+        formats: [:json],
         layouts: [html: TempiWeb.Layouts]
 
       import Plug.Conn
+      action_fallback TempiWeb.FallbackController
       unquote(verified_routes())
 
       import TempiWeb.ApiAuth, only: [current_user: 1]

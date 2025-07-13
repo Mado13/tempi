@@ -11,6 +11,8 @@ config :tempi,
   ecto_repos: [Tempi.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
+config :tempi, Tempi.Repo, types: Tempi.PostgresTypes
+
 # Configures the endpoint
 config :tempi, TempiWeb.Endpoint,
   url: [host: "localhost"],

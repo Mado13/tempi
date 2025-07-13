@@ -11,8 +11,7 @@ defmodule Tempi.Accounts.User do
              :phone_number,
              :current_role,
              :employer_profile,
-             :worker_profile,
-             :inserted_at
+             :worker_profile
            ]}
 
   schema "users" do
