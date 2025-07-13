@@ -21,7 +21,9 @@ export const GoogleMapsPlaceSchema = v.object({
   formattedAddress: v.string(),
   addressComponents: v.array(AddressComponentSchema),
   location: LocationSchema,
+  types: v.array(v.string()),
 })
+
 export type GoogleMapsPlaceInput = v.InferInput<typeof GoogleMapsPlaceSchema>
 
 // Extended with the selected address ID

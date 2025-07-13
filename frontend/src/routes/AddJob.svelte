@@ -4,19 +4,18 @@
   import AddressPicker from '$lib/components/AddressPicker.svelte'
   import FormField from '$lib/components/FormField.svelte'
   import { createForm } from '$lib/forms.svelte'
-
-  let openAddressPicker = $state(false)
+  import { GoogleMapsFormLocationSchema } from '$lib/utils/google-maps/schema'
 
   const jobFormSchema = v.object({
     title: v.string(),
-    address: v.string(),
+    address: GoogleMapsFormLocationSchema,
   })
 
   const form = createForm({
     schema: jobFormSchema,
     defaultValues: {
       title: '',
-      address: '',
+      address: undefined,
     },
     onSubmit: async () => {},
   })
@@ -25,9 +24,5 @@
 <h1>Add Job</h1>
 <form>
   <FormField id="title" label="title" bind:value={form.title} error={form.errors.title} />
-  <AddressPicker
-    required
-    bind:value={form.address}
-    error={form.errors.address}
-    open={openAddressPicker} />
+  <AddressPicker required bind:value={form.address} error={form.errors.address} />
 </form>

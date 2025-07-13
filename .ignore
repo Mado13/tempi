@@ -12,3 +12,5 @@ _build/
 .elixir_ls/
 mobile/android
 .elixir-tools
+.jj/
+frontend/project.inlang

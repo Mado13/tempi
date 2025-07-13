@@ -1,11 +1,7 @@
 import * as v from 'valibot'
 
 import { loadGoogleMaps } from './loader'
-import {
-  type FormLocationInput,
-  GoogleMapsFormLocationSchema,
-  type GoogleMapsPlaceSchema,
-} from './schema'
+import { type FormLocationInput, GoogleMapsFormLocationSchema } from './schema'
 
 export interface GoogleMapsPlacesOptions {
   apiKey: string
@@ -84,7 +80,7 @@ export class GoogleMapsPlaces {
     })
 
     await place.fetchFields({
-      fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'],
+      fields: ['displayName', 'formattedAddress', 'addressComponents', 'location', 'types'],
     })
 
     const rawData = {
@@ -95,6 +91,7 @@ export class GoogleMapsPlaces {
         lat: place.location?.lat(),
         lng: place.location?.lng(),
       },
+      types: place.types,
     }
 
     try {
