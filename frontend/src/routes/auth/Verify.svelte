@@ -28,8 +28,6 @@
       }
     },
   })
-
-  $inspect(form.errors)
 </script>
 
 <header class="auth-header verify-header">

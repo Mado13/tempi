@@ -9,8 +9,6 @@
     required = false,
     ...restProps
   } = $props()
-
-  $inspect(value)
 </script>
 
 <div>
