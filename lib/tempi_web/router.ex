@@ -1,8 +1,6 @@
 defmodule TempiWeb.Router do
   use TempiWeb, :router
 
-  import TempiWeb.UserAuth
-
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -29,9 +27,12 @@ defmodule TempiWeb.Router do
     # Protected endpoints (require bearer token)
     get "/user/me", UserController, :current_user
     get "/profile", UserController, :profile
-    patch "/profile/role", UserController, :update_role
-    post "/profile/role", UserController, :create_role
+    patch "/role", UserController, :update_role
+    post "/role", UserController, :create_role
     delete "/auth/logout", AuthController, :logout
+
+    post "/jobs", JobsController, :create
+    get "/jobs", JobsController, :index
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

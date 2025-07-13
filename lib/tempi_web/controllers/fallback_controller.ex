@@ -11,6 +11,13 @@ defmodule TempiWeb.FallbackController do
     |> render(:"429", error_code: "RATE_LIMIT_EXCEEDED", retry_after: retry_after)
   end
 
+  def call(conn, {:error, error_code}) when is_binary(error_code) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(json: TempiWeb.ErrorJSON)
+    |> render(:"422", error_code: error_code)
+  end
+
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     Logger.warning("Validation failed - IP: #{get_client_ip(conn)}")
 

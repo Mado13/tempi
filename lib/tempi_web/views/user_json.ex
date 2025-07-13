@@ -12,5 +12,7 @@ defmodule TempiWeb.UserJSON do
   end
 
   defp render_profile(nil), do: nil
+  # Add this line
+  defp render_profile(%Ecto.Association.NotLoaded{}), do: nil
   defp render_profile(profile), do: %{id: profile.id}
 end

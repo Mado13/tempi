@@ -4,8 +4,6 @@ defmodule TempiWeb.UserController do
   alias TempiWeb.ApiAuth
   alias Tempi.{Accounts, Repo}
 
-  action_fallback TempiWeb.FallbackController
-
   @doc """
   GET /api/profile
 
@@ -23,25 +21,24 @@ defmodule TempiWeb.UserController do
   end
 
   def create_role(conn, %{"current_role" => role}) do
-    case Accounts.create_user_profile(current_user(conn), role) do
-      {:ok, updated_user} ->
-        updated_user = Repo.preload(updated_user, [:employer_profile, :worker_profile])
-        render(conn, :current_user, user: updated_user)
+    with {:ok, updated_user} <- Accounts.create_user_profile(current_user(conn), role) do
+      updated_user = Repo.preload(updated_user, [:employer_profile, :worker_profile])
+      render(conn, :current_user, user: updated_user)
     end
   end
 
   def update_role(conn, %{"current_role" => new_role}) do
-    user = ApiAuth.current_user(conn)
+    user = current_user(conn)
 
-    case Accounts.update_user_role(user, %{current_role: new_role}) do
-      {:ok, updated_user} ->
-        render(conn, :current_user, user: updated_user)
+    with {:ok, updated_user} <- Accounts.update_user_role(user, %{current_role: new_role}) do
+      preloaded_user = Repo.preload(updated_user, [:worker_profile, :employer_profile])
+      render(conn, :current_user, user: preloaded_user)
     end
   end
 
   def current_user(conn, _params) do
     user =
-      ApiAuth.current_user(conn)
+      current_user(conn)
       |> Repo.preload([:employer_profile, :worker_profile])
 
     json(conn, %{user: user})

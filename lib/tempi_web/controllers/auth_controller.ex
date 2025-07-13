@@ -4,8 +4,6 @@ defmodule TempiWeb.AuthController do
   alias Tempi.{Accounts, AuthCodeServer, RateLimit, Repo}
   alias Tempi.Accounts.PhoneHelper
 
-  action_fallback TempiWeb.FallbackController
-
   require Logger
 
   @doc """
