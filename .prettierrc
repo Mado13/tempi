@@ -1,0 +1,59 @@
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "endOfLine": "lf",
+  "embeddedLanguageFormatting": "auto",
+  "plugins": [
+    "prettier-plugin-svelte",
+    "@trivago/prettier-plugin-sort-imports"
+  ],
+  "importOrder": ["^\\$lib/(.*)$", "^\\$app/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "overrides": [
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte",
+        "svelteSortOrder": "options-scripts-markup-styles",
+        "svelteAllowShorthand": true,
+        "svelteBracketNewLine": false,
+        "svelteIndentScriptAndStyle": true
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "options": {
+        "parser": "typescript"
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "options": {
+        "parser": "babel"
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "parser": "json",
+        "trailingComma": "none"
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "parser": "markdown",
+        "printWidth": 80,
+        "proseWrap": "always"
+      }
+    }
+  ]
+}

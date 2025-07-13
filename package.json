@@ -1,0 +1,33 @@
+{
+  "name": "tempi",
+  "private": true,
+  "workspaces": ["frontend", "mobile"],
+  "engines": {
+    "bun": ">=1.2.16",
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"mix phx.server\" \"cd frontend && bun run dev\"",
+    "dev:api": "mix phx.server",
+    "dev:frontend": "cd frontend && bun run dev",
+    "mobile:dev": "adb reverse tcp:5173 tcp:5173 && adb reverse tcp:4000 tcp:4000 && cd mobile && CAP_DEV=true bunx cap run android",
+    "mobile:ios": "cd mobile && CAP_DEV=true bunx cap run ios",
+    "build": "cd frontend && bun run build",
+    "mobile:sync": "cd frontend && bun run build && cd ../mobile && bunx cap sync",
+    "mobile:build": "cd frontend && bun run build && cd ../mobile && bunx cap sync && bunx cap build android",
+    "mobile:sync:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync",
+    "mobile:build:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync && bunx cap build android",
+    "mobile:build:ios:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync && bunx cap open ios"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.8.3",
+    "@types/node": "^24.0.7",
+    "@tsconfig/svelte": "^5.0.4"
+  },
+  "dependencies": {
+    "ts-case-convert": "^2.1.0",
+    "@capacitor/keyboard": "^7.0.1",
+    "@capacitor/preferences": "^7.0.1"
+  }
+}

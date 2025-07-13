@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "apiErrors": {
+    "generic": "no",
+    "sessionExpired": "no",
+    "networkError": "no",
+    "INVALID_AUTH_CODE": "blat"
+  },
+  "auth": {
+    "login": {
+      "title": "שלום",
+      "errors": {
+        "phone_missing": "אנא הכנס מספר טלפון כדי להמשיך",
+        "wrong_format": "אנא הכנס מספר טלפון בפורמט ישראלי 05XXXXXXXX"
+      }
+    }
+  }
+}

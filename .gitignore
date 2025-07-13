@@ -1,0 +1,49 @@
+# The directory Mix will write compiled artifacts to.
+/_build/
+
+# If you run "mix test --cover", coverage assets end up here.
+/cover/
+
+# The directory Mix downloads your dependencies sources to.
+/deps/
+
+# Where 3rd-party dependencies like ExDoc output generated docs.
+/doc/
+
+# Ignore .fetch files in case you like to edit your project deps locally.
+/.fetch
+
+# If the VM crashes, it generates a dump, let's ignore it too.
+erl_crash.dump
+
+# Also ignore archive artifacts (built via "mix archive.build").
+*.ez
+
+# Temporary files, for example, from tests.
+/tmp/
+
+# Ignore package tarball (built via "mix hex.build").
+tempi-*.tar
+
+# Frontend (Svelte/TypeScript with Vite + Bun)
+frontend.bak/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/bun.lockb
+frontend/.env
+frontend/.env.local
+frontend/.DS_Store
+
+# Mobile (Capacitor with Bun)
+mobile/node_modules/
+mobile/dist/
+mobile/www/
+mobile/android/
+mobile/ios/
+mobile/.capacitor/
+mobile/bun.lockb
+
+node_modules/
+bun.lockb

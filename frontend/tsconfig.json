@@ -1,0 +1,39 @@
+{
+  "extends": "../node_modules/@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "allowJs": true,
+    "checkJs": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "$routes/*": ["src/routes/*"],
+      "$components/*": ["src/components/*"],
+      "$i18n/*": ["src/lib/i18n/*"],
+      "$utils/*": ["src/lib/utils/*"],
+      "$lib/*": ["src/lib/*"],
+      "$router": ["./router.ts"],
+      "$api": ["src/lib/api.ts"]
+    },
+  },
+  "types": [
+    "unplugin-icons/types/svelte"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "src/**/*.d.ts",
+    "router.ts",
+    "./auto-imports.d.ts"
+  ],
+  "exclude": [
+    "node_modules/*",
+    "dist/*"
+  ]
+}

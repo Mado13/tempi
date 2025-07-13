@@ -1,0 +1,14 @@
+vendor/
+node_modules/
+tmp/
+log/
+coverage/
+public/assets/
+public/packs/
+.git/
+*.sqlite3
+deps/
+_build/
+.elixir_ls/
+mobile/android
+.elixir-tools

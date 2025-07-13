@@ -1,0 +1,462 @@
+/*
+ * ====================================================================
+ * CAPACITOR MOBILE APP CSS & DESIGN SYSTEM - V3.0 (Optimized)
+ * ====================================================================
+ * This file integrates a robust set of mobile-specific best practices
+ * with a complete, modern design system. It is designed to be the
+ * single source of truth for all UI styling in the application.
+ *
+ * Structure:
+ * 1. :root Definitions (Mobile Resets & Design Tokens)
+ * 2. Mobile Viewport & Scrolling Fixes
+ * 3. Core App Containers
+ * 4. Global Styles & Resets
+ * 5. Core Typography Styles
+ * 6. Core Component Styles
+ * 7. Mobile-Specific Helpers & Fixes
+ * ====================================================================
+ */
+
+/*
+ * ====================================================================
+ * 1. :root DEFINITIONS (Mobile Resets & Design Tokens)
+ * ====================================================================
+ */
+:root {
+  /* -- Design System Tokens -- */
+  /* This is the single source of truth for all visual styling. */
+
+  /* -- Colors -- */
+  --color-interactive-accent-default: #6C62D0;
+  --color-interactive-accent-active: #5A51B0;
+  --color-text-on-accent: #FFFFFF;
+  --color-background-page: #F8F9FA;
+  --color-background-surface: #FFFFFF;
+  --color-background-surface-active: #F1F3F5;
+  --color-text-primary: #212121;
+  --color-text-secondary: #616161;
+  --color-text-placeholder: #BDBDBD;
+  --color-text-link: #1976D2;
+  --color-border-default: #E0E0E0;
+  --color-border-focused: var(--color-interactive-accent-default);
+  --color-semantic-success-bg: #E8F5E9;
+  --color-semantic-success-fg: #2E7D32;
+  --color-semantic-warning-bg: #FFF8E1;
+  --color-semantic-warning-fg: #F9A825;
+  --color-semantic-error-bg: #FFEBEE;
+  --color-semantic-error-fg: #C62828;
+
+  /* -- Typography -- */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-size-headline-l: 1.953rem;
+  --font-size-headline-m: 1.563rem;
+  --font-size-headline-s: 1.25rem;
+  --font-size-body-r: 1rem;
+  --font-size-label-l: 1rem;
+  --font-size-label-m: 0.875rem;
+  --font-size-label-s: 0.75rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* -- Spacing & Sizing (8pt Grid System) -- */
+  --spacing-xs: 0.25rem;  /* 4pt */
+  --spacing-s: 0.5rem;   /* 8pt */
+  --spacing-m: 1rem;     /* 16pt */
+  --spacing-l: 1.5rem;   /* 24pt */
+  --spacing-xl: 2rem;    /* 32pt */
+  --spacing-xxl: 3rem;   /* 48pt */
+  --size-tap-target: 3rem; /* 48pt */
+
+  /* -- Layout & Navigation -- */
+  --bottom-nav-height: 56px; /* Add this line */
+
+  /* -- Border Radius -- */
+  --radius-s: 0.25rem; /* 4pt */
+  --radius-m: 0.5rem;  /* 8pt */
+  --radius-l: 1rem;    /* 16pt */
+  --radius-full: 9999px;
+
+  /* -- Shadows & Transitions -- */
+  --shadow-card: 
+    0 4px 6px rgb(0 0 0 / 5%),
+    0 1px 3px rgb(0 0 0 / 10%);
+
+  --shdaow-md:   
+    0 4px 6px rgb(0 0 0 / 10%),
+    0 1px 3px rgb(0 0 0 / 15%);
+
+  --shadow-lg:
+    0 8px 16px rgb(108 98 208 / 30%),
+    0 4px 8px  rgb(0 0 0 / 10%);
+
+  --shadow-lg-active:
+    0 4px 8px  rgb(108 98 208 / 40%),
+    0 2px 4px  rgb(0 0 0 / 15%);
+
+  --ring-accent: 0 0 0 3px rgba(108,98,208,0.25);
+
+  --transition-fast: 150ms ease-in-out;
+
+  /* -- Foundational Mobile Resets -- */
+  font-family: var(--font-family-base);
+  line-height: 1.5;
+  font-weight: var(--font-weight-regular);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  scroll-behavior: smooth;
+
+  /* -- iOS Safe Area Variables -- */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+
+  /* -- Status bar height -- */
+  --status-bar-height: var(--safe-area-top);
+}
+
+/*
+ * ====================================================================
+ * 2. MOBILE VIEWPORT & SCROLLING FIXES
+ * ====================================================================
+ */
+/* Critical: Prevent iOS bounce scrolling and ensure full-height layout */
+html,
+body {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * ====================================================================
+ * 3. CORE APP CONTAINERS
+ * ====================================================================
+ */
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-background-page);
+  color: var(--color-text-primary);
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: var(--safe-area-top);
+  padding-bottom: var(--safe-area-bottom);
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+  overscroll-behavior: contain;
+  -webkit-overscroll-behavior: contain;
+}
+
+/*
+ * ====================================================================
+ * 4. GLOBAL STYLES & RESETS
+ * ====================================================================
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Hide scrollbars but maintain scroll functionality */
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * ====================================================================
+ * 5. CORE TYPOGRAPHY STYLES
+ * ====================================================================
+ */
+h1 {
+  font-size: var(--font-size-headline-l);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  margin: var(--spacing-l) 0 var(--spacing-m);
+}
+
+h2 {
+  font-size: var(--font-size-headline-m);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  margin: var(--spacing-l) 0 var(--spacing-m);
+}
+
+h3 {
+  font-size: var(--font-size-headline-s);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  margin: var(--spacing-m) 0 var(--spacing-s);
+}
+
+p {
+  font-size: var(--font-size-body-r);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-m);
+}
+
+small {
+  font-size: var(--font-size-label-s);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+a {
+  color: var(--color-text-link);
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+/*
+ * ====================================================================
+ * 6. CORE COMPONENT STYLES
+ * ====================================================================
+ */
+
+/* -- Buttons -- */
+button,.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-m);
+  min-height: var(--size-tap-target);
+  border-radius: var(--radius-m);
+  border: 1px solid transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label-l);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform 0.1s, opacity 0.1s;
+}
+
+button:active,.btn:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.btn-primary {
+  background-color: var(--color-interactive-accent-default);
+  color: var(--color-text-on-accent);
+  border-color: var(--color-interactive-accent-default);
+}
+.btn-primary:active {
+  background-color: var(--color-interactive-accent-active);
+  border-color: var(--color-interactive-accent-active);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-interactive-accent-default);
+  border-color: var(--color-interactive-accent-default);
+}
+.btn-secondary:active {
+  background-color: var(--color-interactive-accent-default);
+  color: var(--color-text-on-accent);
+}
+
+button:disabled,.btn:disabled {
+  background-color: var(--color-border-default);
+  color: var(--color-text-placeholder);
+  border-color: var(--color-border-default);
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+/* -- Forms & Inputs -- */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l)
+}
+
+label {
+  display: block;
+  font-size: var(--font-size-label-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  margin-bottom: var(--spacing-s);
+    &.required::after {
+    content: ' *';
+    color: var(--color-semantic-error-fg);
+  }
+}
+
+
+input,
+textarea,
+select {
+  font-size: 16px!important; /* Critical: Prevent iOS zoom on focus */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  padding: 0 var(--spacing-m);
+  min-height: var(--size-tap-target);
+  font-family: var(--font-family-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-m);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  touch-action: manipulation;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-border-focused);
+  box-shadow: 0 0 0 3px rgba(108, 98, 208, 0.25);
+}
+
+/* Allow text selection only in inputs */
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* -- Cards -- */
+.card {
+  padding: var(--spacing-m);
+  background-color: var(--color-background-surface);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+/* -- Images & Media -- */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+video {
+  pointer-events: auto;
+}
+
+/*
+ * ====================================================================
+ * 7. MOBILE-SPECIFIC HELPERS & FIXES
+ * ====================================================================
+ */
+
+/* -- Disable Callouts & Context Menus -- */
+* {
+  -webkit-touch-callout: none;
+}
+
+/* -- Scrollable Containers -- */
+.scrollable {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* -- Performance Optimizations -- */
+.hardware-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+}
+
+/* -- Utility Classes -- */
+.no-select {
+  -webkit-user-select: none!important;
+  user-select: none!important;
+}
+.allow-select {
+  -webkit-user-select: text!important;
+  user-select: text!important;
+}
+.no-scroll {
+  overflow: hidden!important;
+}
+
+/* -- Android Specific Fixes -- */
+@supports (padding: max(0px)) {
+  #app {
+    padding-top: max(var(--safe-area-top), env(safe-area-inset-top));
+    padding-bottom: max(var(--safe-area-bottom), env(safe-area-inset-bottom));
+    padding-left: max(var(--safe-area-left), env(safe-area-inset-left));
+    padding-right: max(var(--safe-area-right), env(safe-area-inset-right));
+  }
+}
+
+/* -- iOS Specific Fixes -- */
+@supports (-webkit-touch-callout: none) {
+  #app {
+    padding-bottom: calc(var(--safe-area-bottom) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* -- Landscape Orientation -- */
+@media (orientation: landscape) {
+  #app {
+    padding-left: max(var(--safe-area-left), 20px);
+    padding-right: max(var(--safe-area-right), 20px);
+  }
+}

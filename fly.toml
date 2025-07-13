@@ -1,0 +1,44 @@
+# fly.toml optimized for API-only Phoenix in Amsterdam
+app = 'tempi'
+primary_region = 'ams'
+kill_signal = 'SIGTERM'
+
+[build]
+
+[deploy]
+  release_command = 'bin/tempi eval "Tempi.Release.migrate()"'
+
+[env]
+  PHX_HOST = 'tempi.fly.dev'
+  PORT = '8080'
+  PHX_SERVER = 'true'
+  POOL_SIZE = '10'
+  # Better Erlang VM settings for API server
+  ERL_FLAGS = '-proto_dist inet6_tcp +P 1000000'
+  ELIXIR_ERL_OPTIONS = '+fnu'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+  
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+# Health check for API
+[[services.http_checks]]
+  interval = "30s"
+  timeout = "5s"
+  grace_period = "10s"
+  method = "GET"
+  path = "/api/health"

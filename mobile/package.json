@@ -1,0 +1,22 @@
+{
+  "name": "@tempi/mobile",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "CAP_DEV=true bunx cap run android",
+    "ios": "CAP_DEV=true bunx cap run ios",
+    "sync": "bunx cap sync",
+    "build:android": "bunx cap build android",
+    "build:ios": "bunx cap build ios"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.0",
+    "@capacitor/core": "^7.4.0",
+    "@capacitor/android": "^7.4.0",
+    "@capacitor/ios": "^7.4.0"
+  },
+  "dependencies": {
+    "@capacitor/keyboard": "^7.0.1"
+  }
+}
