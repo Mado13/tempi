@@ -47,3 +47,5 @@ mobile/bun.lockb
 
 node_modules/
 bun.lockb
+
+/supabase/
