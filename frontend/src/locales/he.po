@@ -1,0 +1,471 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-03T20:49:16.220Z\n"
+"PO-Revision-Date: 2025-08-04T20:09:44.842Z\n"
+"Last-Translator: \n"
+"Language: hebrew\n"
+"Language-Team: \n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
+"MIME-Version: 1.0\n"
+
+#: src/routes/Layout.svelte
+msgid "Authenticating..."
+msgstr ""
+
+#: src/lib/components/BottomNavigation.svelte
+#: src/routes/Jobs.svelte
+msgid "Jobs"
+msgstr ""
+
+#: src/routes/Jobs.svelte
+msgid "Loading jobs..."
+msgstr ""
+
+#: src/routes/Jobs.svelte
+msgid "You haven't created any jobs yet."
+msgstr ""
+
+#: src/lib/components/CreateCompanyProfile.svelte
+#: src/lib/components/JobCreationFab.svelte
+msgid "First, Let's Set Up Your Company"
+msgstr ""
+
+#: src/lib/components/JobCreationFab.svelte
+msgid "Save and Continue to Post Job"
+msgstr ""
+
+#: src/routes/AddJob.svelte
+#: src/routes/CreateJob.svelte
+msgid "Transalte Me"
+msgstr ""
+
+#: src/routes/AddJob.svelte
+#: src/routes/CreateJob.svelte
+msgid "Employees"
+msgstr ""
+
+#: src/routes/AddJob.svelte
+#: src/routes/CreateJob.svelte
+msgid "Address"
+msgstr ""
+
+#: src/routes/AddJob.svelte
+#: src/routes/CreateJob.svelte
+msgid "Classification"
+msgstr ""
+
+#: src/routes/AddJob.svelte
+#: src/routes/CreateJob.svelte
+msgid "Create Job"
+msgstr ""
+
+#: src/routes/AddJob.svelte
+#: src/routes/CreateJob.svelte
+msgid "Translate me"
+msgstr ""
+
+#: src/routes/RedirectToApp.svelte
+msgid "Loading..."
+msgstr ""
+
+#: src/routes/SelectRole.svelte
+msgid "SelectRole"
+msgstr ""
+
+#: src/routes/SelectRole.svelte
+msgid "Worker"
+msgstr ""
+
+#: src/routes/SelectRole.svelte
+msgid "Both"
+msgstr ""
+
+#: src/routes/SelectRole.svelte
+msgid "Employer"
+msgstr ""
+
+#: src/routes/Notfound.svelte
+msgid "Not Found"
+msgstr ""
+
+#: src/routes/Team.svelte
+#: src/lib/components/BottomNavigation.svelte
+msgid "Team"
+msgstr ""
+
+#: src/lib/components/CreateCompanyProfile.svelte
+msgid "Company name"
+msgstr ""
+
+#: src/lib/components/CreateCompanyProfile.svelte
+msgid "Business number"
+msgstr ""
+
+#: src/routes/Agenda.svelte
+msgid "Worker cards"
+msgstr ""
+
+#: src/routes/Agenda.svelte
+msgid "Employer cards"
+msgstr ""
+
+#: src/lib/components/AddressPicker.svelte
+msgid "Add Address"
+msgstr ""
+
+#: src/lib/components/AddressPicker.svelte
+msgid "Search for an address..."
+msgstr ""
+
+#: src/lib/components/AddressPicker.svelte
+msgid "IL"
+msgstr ""
+
+#: src/lib/components/BottomNavigation.svelte
+msgid "Agenda"
+msgstr ""
+
+#: src/lib/components/BottomNavigation.svelte
+msgid "Profile"
+msgstr ""
+
+#: src/lib/components/EmployerCardMenu.svelte
+msgid "Edit Listing"
+msgstr ""
+
+#: src/lib/components/EmployerCardMenu.svelte
+msgid "Delte listing"
+msgstr ""
+
+#: src/lib/components/BottomSheet.svelte
+#: src/lib/components/BottomSheetContainer.svelte
+msgid "Bottom sheet"
+msgstr ""
+
+#: src/lib/components/BottomSheet.svelte
+#: src/lib/components/BottomSheetContainer.svelte
+msgid "Close bottom sheet"
+msgstr ""
+
+#: src/lib/components/PayRate.svelte
+msgid "Pay Rate"
+msgstr ""
+
+#: src/lib/components/PayRate.svelte
+msgid "Daily"
+msgstr ""
+
+#: src/lib/components/PayRate.svelte
+msgid "Hourly"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "Company Name"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "Role or Skill"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "Salary"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "5 applications"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "{0} Saved"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "Boob"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "Apply now"
+msgstr ""
+
+#: src/lib/components/JobCard.svelte
+msgid "More options"
+msgstr ""
+
+#: src/lib/components/JobClassificationPicker.svelte
+msgid "Job Classification"
+msgstr ""
+
+#: src/lib/components/JobClassificationPicker.svelte
+msgid "Type to search..."
+msgstr ""
+
+#: src/lib/components/JobClassificationPicker.svelte
+msgid "Selected"
+msgstr ""
+
+#: src/lib/components/Stepper.svelte
+msgid "Increment"
+msgstr ""
+
+#: src/lib/components/SnackbarContainer.svelte
+msgid "סגור"
+msgstr ""
+
+#: src/lib/components/WorkerCardMenu.svelte
+msgid "Share Job"
+msgstr ""
+
+#: src/lib/components/WorkerCardMenu.svelte
+msgid "More from The same"
+msgstr ""
+
+#: src/lib/components/WorkerCardMenu.svelte
+msgid "Report Job"
+msgstr ""
+
+#~ msgid "Blat"
+#~ msgstr ""
+
+#: src/lib/components/RangeDatePicker.svelte
+msgid "UTC"
+msgstr ""
+
+#: src/lib/components/RangeDatePicker.svelte
+msgid "Apply"
+msgstr ""
+
+#: src/lib/components/Temp.svelte
+msgid "Close"
+msgstr ""
+
+#: src/lib/components/Temp.svelte
+msgid "M18 6L6 18M6 6L18 18"
+msgstr ""
+
+#: src/lib/components/SearchableBottomSheet.svelte
+#: src/lib/components/SearchableList.svelte
+msgid "Searching..."
+msgstr ""
+
+#: src/lib/components/SearchableBottomSheet.svelte
+#: src/lib/components/SearchableList.svelte
+msgid "No addresses found"
+msgstr ""
+
+#: src/lib/components/SearchableBottomSheet.svelte
+#: src/lib/components/JobClassificationPicker.svelte
+msgid "Approve"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Please enter a valid phone number"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "The verification code is incorrect"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "You need to be logged in"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "This field is required"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "This value is too short"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "This value is too long"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Invalid format"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "This value is already taken"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Too many attempts. Please try again later"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Some required information is missing"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Something went wrong. Please try again"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Error: {0}"
+msgstr ""
+
+#: src/lib/schemas/job.scehma.ts
+#: src/lib/schemas/job.scehma.svelte.ts
+msgid "A pay rate is required."
+msgstr ""
+
+#: src/lib/schemas/job.scehma.ts
+#: src/lib/schemas/job.scehma.svelte.ts
+msgid "Pay rate must not be negative."
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "Title"
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "subTitle"
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "your auth code: {0}"
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "Resend code"
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "<0/> Resend code in {0}"
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "Resend Code"
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "Change phone number"
+msgstr ""
+
+#: src/routes/auth/Verify.svelte
+msgid "Hidden Submti"
+msgstr ""
+
+#: src/lib/stores/StoreProvider.svelte
+msgid "Initializing application..."
+msgstr ""
+
+#: src/lib/stores/StoreProvider.svelte
+msgid "Failed to start application"
+msgstr ""
+
+#: src/lib/stores/StoreProvider.svelte
+msgid "Retry"
+msgstr ""
+
+#: src/routes/auth/Login.svelte
+msgid "Welcome to Tempi!"
+msgstr ""
+
+#: src/routes/auth/Login.svelte
+msgid "we are here to connect"
+msgstr ""
+
+#: src/routes/auth/Login.svelte
+msgid "Phone number"
+msgstr ""
+
+#: src/routes/auth/Login.svelte
+msgid "Submit"
+msgstr ""
+
+#: src/routes/auth/Login.svelte
+msgid "Disclaimer"
+msgstr ""
+
+#: src/routes/auth/Login.svelte
+msgid "Phone number must exist"
+msgstr ""
+
+#: src/routes/auth/Login.svelte
+msgid "Phone number must meet expecations"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Session expired. Please login again"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Failed to fetch user data"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "An unknown error occurred"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Mobile util error"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Item no found"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Network error occurred"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Cannot load more"
+msgstr ""
+
+#: src/lib/i18n/errors.ts
+#: src/lib/i18n/errors.svelte.ts
+msgid "Google Maps not loaded"
+msgstr ""
+
+#: src/lib/components/CreateCompanyProfile.svelte
+msgid "Choose Photo"
+msgstr ""
+
+#~ msgid "M18 6L6 18M6 6l12 12"
+#~ msgstr ""
+
+#~ msgid "Escape"
+#~ msgstr ""
+
+#~ msgid "M15 5L5 15M5 5l10 10"
+#~ msgstr ""
+
+#~ msgid "Job Card"
+#~ msgstr ""
+
+#: src/lib/components/CreateCompanyProfile.svelte
+msgid "Save and Continue"
+msgstr ""
+
+#~ msgid "Select Date Range"
+#~ msgstr ""
+
+#: src/lib/components/RangeDatePicker.svelte
+msgid "Pick Address"
+msgstr ""

@@ -1,4 +1,3 @@
-import { paraglideVitePlugin } from '@inlang/paraglide-js'
 import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -7,6 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
+import { wuchale } from 'wuchale'
 
 
 // https://vite.dev/config/
@@ -42,6 +42,7 @@ export default defineConfig({
     postcss: './postcss.config.js'
   },
   plugins: [
+    wuchale(),
     svelte(),
     AutoImport({
       include: [
@@ -120,10 +121,6 @@ export default defineConfig({
           }
         ]
       }
-    }),
-    paraglideVitePlugin({
-      project: './project.inlang',
-      outdir: './src/lib/i18n'
     }),
   ],
 })
