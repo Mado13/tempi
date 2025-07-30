@@ -5,6 +5,8 @@ defmodule Tempi.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
+  @actors [:employer, :worker]
+
   @derive {Jason.Encoder,
            only: [
              :id,
@@ -16,7 +18,7 @@ defmodule Tempi.Accounts.User do
 
   schema "users" do
     field :phone_number, :string
-    field :current_role, Ecto.Enum, values: [:employer, :worker], default: nil
+    field :current_role, Ecto.Enum, values: @actors, default: nil
 
     has_one :employer_profile, Tempi.Profiles.EmployerProfile
     has_one :worker_profile, Tempi.Profiles.WorkerProfile
@@ -31,7 +33,7 @@ defmodule Tempi.Accounts.User do
     user
     |> cast(attrs, [:phone_number, :current_role])
     |> validate_required([:phone_number])
-    |> validate_inclusion(:current_role, [:employer, :worker],
+    |> validate_inclusion(:current_role, @actors,
       message: "INVALID_ROLE",
       validation: :inclusion
     )

@@ -5,7 +5,16 @@ defmodule Tempi.Profiles.WorkerProfile do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
-  @derive {Jason.Encoder, except: [:__meta__, :user]}
+  @availabilities [:full_time, :part_time, :contract]
+
+  @derive {Jason.Encoder,
+           except: [
+             :__meta__,
+             :user,
+             :job_applications,
+             :worker_favorite_jobs,
+             :favorite_jobs
+           ]}
 
   schema "worker_profiles" do
     field :full_name, :string
@@ -13,9 +22,14 @@ defmodule Tempi.Profiles.WorkerProfile do
     field :experience_years, :integer
     field :bio, :string
     field :hourly_rate, :decimal
-    field :availability, Ecto.Enum, values: [:full_time, :part_time, :contract]
+    field :availability, Ecto.Enum, values: @availabilities
 
     belongs_to :user, Tempi.Accounts.User
+
+    has_many :job_applications, Tempi.JobApplication
+    has_many :worker_favorite_jobs, Tempi.WorkerFavoriteJob
+
+    many_to_many :favorite_jobs, Tempi.Job, join_through: Tempi.WorkerFavoriteJob
 
     timestamps(type: :utc_datetime)
   end

@@ -5,8 +5,6 @@ defmodule Tempi.Profiles.EmployerProfile do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
-  @derive {Jason.Encoder, except: [:__meta__, :user, :jobs]}
-
   schema "employer_profiles" do
     field :company_name, :string
     field :business_type, :string
@@ -15,6 +13,7 @@ defmodule Tempi.Profiles.EmployerProfile do
 
     belongs_to :user, Tempi.Accounts.User
     has_many :jobs, Tempi.Job
+    has_many :company_profiles, Tempi.Profiles.CompanyProfile
 
     timestamps(type: :utc_datetime)
   end

@@ -1,25 +1,33 @@
 defmodule TempiWeb.FallbackController do
-  use Phoenix.Controller
+  use TempiWeb, :controller
   require Logger
 
-  def call(conn, {:error, :rate_limit, retry_after}) do
-    Logger.warning("Rate limit exceeded for #{conn.request_path} - IP: #{get_client_ip(conn)}")
+  def call(conn, {:error, :rate_limit, retry_after}),
+    do: render_error(conn, :too_many_requests, "RATE_LIMIT_EXCEEDED", %{retry_after: retry_after})
 
-    conn
-    |> put_status(:too_many_requests)
-    |> put_view(json: TempiWeb.ErrorJSON)
-    |> render(:"429", error_code: "RATE_LIMIT_EXCEEDED", retry_after: retry_after)
-  end
+  def call(conn, {:error, error_code}) when is_binary(error_code),
+    do: render_error(conn, :unprocessable_entity, error_code)
 
-  def call(conn, {:error, error_code}) when is_binary(error_code) do
-    conn
-    |> put_status(:unprocessable_entity)
-    |> put_view(json: TempiWeb.ErrorJSON)
-    |> render(:"422", error_code: error_code)
-  end
+  def call(conn, {:error, :invalid_phone}),
+    do: render_error(conn, :bad_request, "INVALID_PHONE_FORMAT")
 
+  def call(conn, {:error, :invalid}), do: render_error(conn, :unauthorized, "INVALID_AUTH_CODE")
+
+  def call(conn, {:error, :missing_params, _params}),
+    do: render_error(conn, :bad_request, "MISSING_PARAMETERS")
+
+  def call(conn, {:error, :missing_auth_header}),
+    do: render_error(conn, :unauthorized, "MISSING_AUTH_HEADER")
+
+  def call(conn, {:error, :logout_failed}),
+    do: render_error(conn, :internal_server_error, "LOGOUT_FAILED")
+
+  @doc """
+  Handles Ecto changesets separately as its structure is unique.
+  """
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
-    Logger.warning("Validation failed - IP: #{get_client_ip(conn)}")
+    error_details = inspect(changeset.errors)
+    Logger.warning("Validation failed - IP: #{get_client_ip(conn)} - Errors: #{error_details}")
 
     conn
     |> put_status(:unprocessable_entity)
@@ -27,47 +35,16 @@ defmodule TempiWeb.FallbackController do
     |> render(:"422", changeset: changeset)
   end
 
-  def call(conn, {:error, :invalid_phone}) do
-    Logger.warning("Invalid phone number format - IP: #{get_client_ip(conn)}")
+  defp render_error(conn, status, error_code, assigns \\ %{}) do
+    Logger.warning("#{error_code} for #{conn.request_path} - IP: #{get_client_ip(conn)}")
+
+    status_code_str = to_string(Plug.Conn.Status.code(status))
+    render_assigns = Map.put(assigns, :error_code, error_code)
 
     conn
-    |> put_status(:bad_request)
+    |> put_status(status)
     |> put_view(json: TempiWeb.ErrorJSON)
-    |> render(:"400", error_code: "INVALID_PHONE_FORMAT")
-  end
-
-  def call(conn, {:error, :invalid}) do
-    Logger.warning("Invalid auth code attempt - IP: #{get_client_ip(conn)}")
-
-    conn
-    |> put_status(:unauthorized)
-    |> put_view(json: TempiWeb.ErrorJSON)
-    |> render(:"401", error_code: "INVALID_AUTH_CODE")
-  end
-
-  def call(conn, {:error, :missing_params, params}) do
-    Logger.warning("Missing required parameters: #{params} - IP: #{get_client_ip(conn)}")
-
-    conn
-    |> put_status(:bad_request)
-    |> put_view(json: TempiWeb.ErrorJSON)
-    |> render(:"400", error_code: "MISSING_PARAMETERS")
-  end
-
-  def call(conn, {:error, :missing_auth_header}) do
-    conn
-    |> put_status(:unauthorized)
-    |> put_view(json: TempiWeb.ErrorJSON)
-    |> render(:"401", error_code: "MISSING_AUTH_HEADER")
-  end
-
-  def call(conn, {:error, :logout_failed}) do
-    Logger.error("Logout failed for authenticated user - IP: #{get_client_ip(conn)}")
-
-    conn
-    |> put_status(:internal_server_error)
-    |> put_view(json: TempiWeb.ErrorJSON)
-    |> render(:"500", error_code: "LOGOUT_FAILED")
+    |> render(:"#{status_code_str}", render_assigns)
   end
 
   defp get_client_ip(conn) do

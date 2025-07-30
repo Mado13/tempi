@@ -85,6 +85,5 @@ defmodule TempiWeb.ErrorJSON do
           "FIELD_INVALID"
       end
     end)
-    |> Enum.into(%{})
   end
 end

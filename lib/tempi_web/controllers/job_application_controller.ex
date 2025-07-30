@@ -1,0 +1,2 @@
+defmodule TempiWeb.JobApplicationController do
+end

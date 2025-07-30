@@ -19,7 +19,7 @@ defmodule Tempi.Address do
   def changeset(address, attrs) do
     address
     |> cast(attrs, [:google_place_id, :formatted_address, :locality, :district])
-    |> validate_required([:google_place_id, :formatted_address, :locality, :district])
+    |> validate_required([:google_place_id, :formatted_address])
     |> unique_constraint(:google_place_id)
     |> put_coordinates(attrs)
   end

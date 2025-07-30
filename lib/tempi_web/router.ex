@@ -26,13 +26,20 @@ defmodule TempiWeb.Router do
 
     # Protected endpoints (require bearer token)
     get "/user/me", UserController, :current_user
-    get "/profile", UserController, :profile
     patch "/role", UserController, :update_role
     post "/role", UserController, :create_role
+
     delete "/auth/logout", AuthController, :logout
 
-    post "/jobs", JobsController, :create
-    get "/jobs", JobsController, :index
+    resources "/companies", CompanyController, only: [:index, :create, :show, :update, :delete]
+
+    resources "/jobs", JobController, only: [:create, :index, :show, :update, :delete] do
+      resources "/applications", JobApllicationController,
+        only: [:index, :create, :delete],
+        as: :job_applications
+    end
+
+    patch "/jobs/:job_id/favorite", FavoriteController, :toggle
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

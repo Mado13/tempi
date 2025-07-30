@@ -1,7 +1,7 @@
 defmodule TempiWeb.AuthController do
   use TempiWeb, :controller
 
-  alias Tempi.{Accounts, AuthCodeServer, RateLimit, Repo}
+  alias Tempi.{Accounts, AuthCodeServer, RateLimit}
   alias Tempi.Accounts.PhoneHelper
 
   require Logger
@@ -41,7 +41,6 @@ defmodule TempiWeb.AuthController do
          {:ok, :valid} <- AuthCodeServer.verify_code(normalized_phone, code) do
       user =
         Accounts.find_or_create_user_by_phone(phone_number)
-        |> Repo.preload([:worker_profile, :employer_profile])
 
       token = Accounts.create_user_api_token(user)
 

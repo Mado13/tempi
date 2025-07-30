@@ -1,7 +1,14 @@
 defmodule Tempi.Repo.Migrations.CreateUserProfiles do
   use Ecto.Migration
 
+  @disable_ddl_transaction true
+
   def change do
+    execute(
+      "CREATE TYPE public.worker_availability AS ENUM ('full_time', 'part_time', 'contract');",
+      "DROP TYPE public.worker_availability;"
+    )
+
     create table(:employer_profiles, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :company_name, :string
@@ -22,7 +29,9 @@ defmodule Tempi.Repo.Migrations.CreateUserProfiles do
       add :experience_years, :integer
       add :bio, :text
       add :hourly_rate, :decimal, precision: 10, scale: 2
-      add :availability, :string
+
+      add :availability, :worker_availability
+
       add :user_id, references(:users, type: :binary_id, on_delete: :delete_all), null: false
 
       timestamps(type: :utc_datetime)

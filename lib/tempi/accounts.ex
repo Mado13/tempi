@@ -107,7 +107,8 @@ defmodule Tempi.Accounts do
   def fetch_user_by_api_token(token) do
     with {:ok, query} <- UserToken.verify_api_token_query(token),
          %User{} = user <- Repo.one(query) do
-      {:ok, user}
+      preloaded_user = Repo.preload(user, [:employer_profile, :worker_profile])
+      {:ok, preloaded_user}
     else
       _ -> :error
     end

@@ -6,6 +6,7 @@ config :tempi, Tempi.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "tempi_dev",
+  log: :debug,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -53,7 +54,19 @@ config :tempi, TempiWeb.Endpoint,
 config :tempi, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger, :console,
+  format: "$time [$level] $metadata$message\n",
+  metadata: [:request_id, :domain, :error_reason],
+  colors: [
+    debug: :cyan,
+    info: :normal,
+    warn: :yellow,
+    error: [:red, :bright]
+  ]
+
+config :phoenix, :logger, false
+
+config :phoenix, :filter_parameters, ["password", "token", "secret"]
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
