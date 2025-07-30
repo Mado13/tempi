@@ -6,7 +6,7 @@
  * with a complete, modern design system. It is designed to be the
  * single source of truth for all UI styling in the application.
  *
- * Structure:
+ * Structure
  * 1. :root Definitions (Mobile Resets & Design Tokens)
  * 2. Mobile Viewport & Scrolling Fixes
  * 3. Core App Containers
@@ -39,6 +39,8 @@
   --color-text-link: #1976D2;
   --color-border-default: #E0E0E0;
   --color-border-focused: var(--color-interactive-accent-default);
+  --color-semantic-info-bg: #E3F2FD;
+  --color-semantic-info-fg: #1976D2;
   --color-semantic-success-bg: #E8F5E9;
   --color-semantic-success-fg: #2E7D32;
   --color-semantic-warning-bg: #FFF8E1;
@@ -97,6 +99,10 @@
   --ring-accent: 0 0 0 3px rgba(108,98,208 / 25%);
 
   --transition-fast: 150ms ease-in-out;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-short: 150ms;
+  --duration-medium: 300ms;
+  --motion-fade-in: fade-in var(--duration-medium) var(--ease-out-quint);
 
   /* -- Foundational Mobile Resets -- */
   font-family: var(--font-family-base);
@@ -274,9 +280,14 @@ button:active,.btn:active {
   transform: scale(0.98);
 }
 
-button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
+  box-shadow: var(--ring-accent);
+}
+
+button:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
 }
 
 .btn-primary {

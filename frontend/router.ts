@@ -1,7 +1,7 @@
 // routes.ts
-import AddJob from '$routes/AddJob.svelte'
 import Agenda from '$routes/Agenda.svelte'
 import AuthLayout from '$routes/AuthLayout.svelte'
+import CreateJob from '$routes/CreateJob.svelte'
 import Jobs from '$routes/Jobs.svelte'
 import Layout from '$routes/Layout.svelte'
 import NotFound from '$routes/Notfound.svelte'
@@ -37,7 +37,7 @@ export const { p, navigate, isActive, route } = createRouter({
       '/team': Team,
       '/jobs': Jobs,
       '/job': {
-        '/new': AddJob,
+        '/new': CreateJob,
       },
     },
     '/select-role': SelectRole,
