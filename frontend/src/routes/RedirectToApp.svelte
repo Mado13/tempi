@@ -1,7 +1,7 @@
 <script lang="ts">
   import { navigate } from '$router'
 
-  import { authStoreContext } from '$lib/stores/contexts'
+  import { authStoreContext } from '$lib/stores/registry.store.svelte'
 
   const authStore = authStoreContext.get()
 

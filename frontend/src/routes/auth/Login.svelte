@@ -4,7 +4,6 @@
 
   import { api } from '$lib/api'
   import { createForm } from '$lib/forms'
-  import { m } from '$lib/i18n/messages'
 
   import Input from '../../lib/components/Input.svelte'
   import PrimaryButton from '../../lib/components/PrimaryButton.svelte'
@@ -12,8 +11,8 @@
   const loginSchema = v.object({
     phoneNumber: v.pipe(
       v.string(),
-      v.minLength(1, m['auth.login.errors.phone_missing']()),
-      v.regex(/^05[0-9]{8}$/, m['auth.login.errors.wrong_format']()),
+      v.minLength(1, 'Phone number must exist'),
+      v.regex(/^05[0-9]{8}$/, 'Phone number must meet expecations'),
     ),
   })
 
@@ -35,14 +34,14 @@
 </script>
 
 <header>
-  <h1>{m['auth.login.title']()}</h1>
-  <p>subtitle</p>
+  <h1>Welcome to Tempi!</h1>
+  <p>we are here to connect</p>
 </header>
 
 <form onsubmit={form.handleSubmit}>
   <Input
     id="phone-number"
-    label={m['auth.login.label']()}
+    label="Phone number"
     bind:value={form.phoneNumber}
     error={form.errors.phoneNumber}
     inputmode="numeric"
@@ -50,9 +49,7 @@
     disabled={form.isSubmitting}
     onblur={() => form.handleBlur('phoneNumber')} />
 
-  <PrimaryButton type="submit">
-    {m['auth.login.submit']()}
-  </PrimaryButton>
+  <PrimaryButton type="submit">Submit</PrimaryButton>
 
   <p class="disclaimer">Disclaimer</p>
 </form>

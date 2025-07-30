@@ -9,7 +9,7 @@
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import SecondaryButton from '$lib/components/SecondaryButton.svelte'
   import { createForm } from '$lib/forms'
-  import { authStoreContext } from '$lib/stores/contexts'
+  import { authStoreContext } from '$lib/stores/registry.store.svelte'
 
   const authStore = authStoreContext.get()
 
@@ -32,14 +32,14 @@
     async onSubmit(data) {
       const response = await api.post('/auth/verify_code', data)
       if (response.success && response.data) {
-        const { currentRole, user, token } = response.data
+        const { user, token } = response.data
 
         await authStore.login(token, user)
 
-        if (!currentRole) {
+        if (!user.currentRole) {
           navigate('/app/select-role')
         } else {
-          navigate('/app/:role/agenda', { params: { role: currentRole } })
+          navigate('/app/:role/agenda', { params: { role: user.currentRole } })
         }
       } else {
         throw response

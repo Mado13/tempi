@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { authStoreContext } from '$lib/stores/contexts'
+  import { authStoreContext } from '$lib/stores/registry.store.svelte'
 
   const authStore = authStoreContext.get()
 
@@ -38,8 +38,5 @@
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s;
-  }
-  .role-switch-button:hover {
-    background-color: var(--color-primary-accent-hover, #dbe9ff);
   }
 </style>

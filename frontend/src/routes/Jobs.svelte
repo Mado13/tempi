@@ -1,46 +1,63 @@
 <script lang="ts">
-  import { p, route } from '$router'
-  import type { Snippet } from 'svelte'
+  import { route } from '$router'
+  import { onMount } from 'svelte'
 
-  import BottomSheet from '$lib/components/BottomSheet.svelte'
   import Fab from '$lib/components/Fab.svelte'
   import JobCard from '$lib/components/JobCard.svelte'
-  import { jobsStoreContext } from '$lib/stores/contexts'
+  import JobCreationFab from '$lib/components/JobCreationFab.svelte'
+  import { useCompaniesStore } from '$lib/stores/resources/companies.store.svelte'
+  import { useJobsStore } from '$lib/stores/resources/jobs.store.svelte'
 
-  const jobsStore = jobsStoreContext.get()
-  let activeMenuSnippet = $state<Snippet | null>(null)
-  let isMenuOpen = $state(false)
+  const jobsStore = useJobsStore()
+  const companyStore = useCompaniesStore()
+
+  onMount(() => {
+    companyStore.init()
+    jobsStore.init()
+  })
+
+  $effect(() => {
+    jobsStore.refresh()
+  })
+
   const role = $derived(route.params.role as string)
-
-  function openJobMenu(menuSnippet: Snippet) {
-    activeMenuSnippet = menuSnippet
-    isMenuOpen = true
-  }
 </script>
 
 <div>
-  {#if jobsStore.isLoading}
-    <p>Loading jobs...</p>
-  {:else if jobsStore.items.length === 0}
-    <p>You haven't created any jobs yet.</p>
-  {:else}
-    {#each jobsStore.items as job (job.id)}
-      <JobCard {job} onmenuopen={openJobMenu} />
-    {/each}
-  {/if}
-  <Fab href={p('/app/:role/job/new', { role })}><IconPhPlusSquare /></Fab>
+  <header><h1>Jobs</h1></header>
+  <div>
+    {#if jobsStore.isLoading}
+      <p>Loading jobs...</p>
+    {:else if jobsStore.items.length === 0}
+      <p>You haven't created any jobs yet.</p>
+    {:else}
+      {#each jobsStore.items as job (job.id)}
+        <JobCard {job} />
+      {/each}
+    {/if}
+    {#if role === 'employer'}
+      <JobCreationFab {role}>
+        {#snippet children(props)}
+          <Fab {...props}>
+            <IconPhPlusSquare />
+          </Fab>
+        {/snippet}
+      </JobCreationFab>
+    {/if}
+  </div>
 </div>
-
-<BottomSheet bind:open={isMenuOpen}>
-  {#if activeMenuSnippet}
-    {@render activeMenuSnippet()}
-  {/if}
-</BottomSheet>
 
 <style>
   div {
-    position: relative;
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     padding: var(--spacing-m);
+    gap: var(--spacing-l);
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-m);
+    }
   }
 </style>
