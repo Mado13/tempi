@@ -22,7 +22,7 @@ const config: CapacitorConfig = {
   plugins: {
     CapacitorSQLite: {
       iosDatabaseLocation: 'Library/CapacitorDatabase',
-      iosIsEncryption: true,
+      iosIsEncryption: false,
       iosKeychainPrefix: 'svelte-sqlite-app-starter',
       iosBiometric: {
         biometricAuth: false,

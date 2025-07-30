@@ -1,5 +1,5 @@
 // forms/mobile-utils.ts - Mobile-specific utilities
-import { m } from '$lib/i18n/messages'
+import { getErrorMessage } from '$lib/i18n/errors.svelte'
 
 // Haptic feedback wrapper (gracefully degrades if not available)
 export function triggerHaptic(type: 'error' | 'success' | 'warning' = 'error') {
@@ -27,7 +27,7 @@ export function isOnline(): boolean {
 export function translateError(error: string): string {
   // API errors are typically ALL_CAPS_WITH_UNDERSCORES
   if (/^[A-Z_]+$/.test(error)) {
-    const translated = (m as any)[`apiErrors.${error}`]?.()
+    const translated = getErrorMessage('MOBILE_UTIL_ERROR')
     return translated || error
   }
   return error

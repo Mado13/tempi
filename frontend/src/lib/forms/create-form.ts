@@ -1,6 +1,8 @@
 // forms/create-form.ts - Simplified form creation
 import type { GenericSchema, InferOutput } from 'valibot'
 
+import { getErrorMessage } from '$lib/i18n/errors.svelte'
+
 import { createFormState } from './form-state.svelte'
 import { formatFieldError, triggerHaptic } from './mobile-utils'
 import type { FormConfig, FormInstance, MobileOptions } from './types'
@@ -194,7 +196,7 @@ export function createForm<TSchema extends GenericSchema>(
         state.setErrors(error.errors)
       } else {
         state.setErrors({
-          _all: [error?.error || error?.message || 'An unknown error occurred'],
+          _all: [error?.error || error?.message || getErrorMessage('UNKNOWN_ERROR')],
         })
       }
 

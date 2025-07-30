@@ -9,6 +9,20 @@ export function formatHebrewDateRange(dateRange: DateRange): string {
   return formatter.formatRange(dateRange.start.toDate('UTC'), dateRange.end.toDate('UTC'))
 }
 
+export function formatHebrewDateRangeFromStrings(startString?: string, endString?: string): string {
+  if (!startString || !endString) return ''
+
+  const [startYear, startMonth, startDay] = startString.split('-').map(Number)
+  const [endYear, endMonth, endDay] = endString.split('-').map(Number)
+
+  const dateRange: DateRange = {
+    start: new CalendarDate(startYear, startMonth, startDay),
+    end: new CalendarDate(endYear, endMonth, endDay),
+  }
+
+  return formatHebrewDateRange(dateRange)
+}
+
 // For database/API submission
 export function serializeDateRange(dateRange: DateRange): Record<string, string> {
   if (!dateRange?.start || !dateRange?.end) {

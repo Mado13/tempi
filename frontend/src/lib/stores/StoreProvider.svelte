@@ -1,51 +1,60 @@
 <script lang="ts">
-  import { initApi } from '$lib/api'
-  import { syncService } from '$lib/services/sync.service'
-  import { type Job, authStoreContext, jobsStoreContext } from '$lib/stores/contexts'
-  import { createAuthStore } from '$lib/stores/create-auth-store.svelte'
-  import { createCrudStore } from '$lib/stores/create-crud-store.svelte'
+  import { createAuthStore } from './create-auth-store.svelte'
+  import { authStoreContext } from './registry.store.svelte'
+  import { destroyAllStores, initializeAllStores } from './registry.store.svelte'
 
   let { children } = $props()
 
+  // Only create auth store - CRUD stores created on-demand
   const authStore = createAuthStore()
-  const jobsStore = createCrudStore<Job>('jobs')
-
-  initApi(authStore)
-
   authStoreContext.set(authStore)
-  jobsStoreContext.set(jobsStore)
 
-  const initializationPromise = (async () => {
-    try {
-      await syncService.init()
-    } catch (error) {
-      console.error('Critical Failure: Sync Service could not initialize.', error)
+  const initPromise = authStore.init()
+
+  // Auto-manage all registered stores based on auth
+  $effect(() => {
+    if (authStore.isAuthenticated) {
+      initializeAllStores(authStore)
+    } else {
+      destroyAllStores()
     }
+  })
 
-    await authStore.init()
-
-    try {
-      await jobsStore.init({ authStore })
-    } catch (error) {
-      console.error('A non-critical store (jobsStore) failed to initialize:', error)
-    }
-  })()
-
+  // Cleanup on unmount
   $effect(() => {
     return () => {
-      syncService.destroy()
       authStore.destroy()
-      jobsStore.destroy()
+      destroyAllStores()
     }
   })
 </script>
 
-{#await initializationPromise}
-  <p>Loading application...</p>
+{#await initPromise}
+  <div class="loading-screen">
+    <p>Initializing application...</p>
+  </div>
 {:then}
   {@render children()}
 {:catch error}
-  <p style="color: red;">
-    A critical error occurred while starting the application. Please restart.
-  </p>
+  <div class="error-screen">
+    <h2>Failed to start application</h2>
+    <p>{error.message}</p>
+    <button onclick={() => window.location.reload()}> Retry </button>
+  </div>
 {/await}
+
+<style>
+  .loading-screen,
+  .error-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .error-screen {
+    color: #dc2626;
+  }
+</style>

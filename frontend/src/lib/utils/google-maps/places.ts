@@ -1,5 +1,7 @@
 import * as v from 'valibot'
 
+import { getErrorMessage } from '$lib/i18n/errors.svelte'
+
 import { loadGoogleMaps } from './loader'
 import { type FormLocationInput, GoogleMapsFormLocationSchema } from './schema'
 
@@ -47,7 +49,7 @@ export class GoogleMapsPlaces {
     await this.ensureLoaded()
 
     if (!this.autocompleteService || !this.sessionToken) {
-      throw new Error('Google Maps not loaded')
+      throw new Error(getErrorMessage('GMAPS_NOT_LOADED'))
     }
 
     const { suggestions } =
@@ -72,7 +74,7 @@ export class GoogleMapsPlaces {
     await this.ensureLoaded()
 
     if (!this.maps) {
-      throw new Error('Google Maps not loaded')
+      throw new Error(getErrorMessage('GMAPS_NOT_LOADED'))
     }
 
     const place = new this.maps.places.Place({

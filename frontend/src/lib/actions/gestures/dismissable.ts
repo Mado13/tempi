@@ -67,21 +67,35 @@ export const dismissable: Action<HTMLElement, DismissableOptions> = (node, optio
   let {
     axis,
     onDismiss,
-    dismissThreshold = 0.5,
+    dismissThreshold = 0.3,
     flickVelocity = 0.5,
     lockDirection = true,
-    fadeOnDrag = true,
-    ignore = 'a, button',
+    fadeOnDrag = false, // Default to false for performance
+    ignore = 'a, button, input, textarea, select',
     enabled = true,
   } = options
 
-  if (!axis) {
-    throw new Error('[dismissable] The "axis" option is required.')
+  if (!axis || !onDismiss) {
+    throw new Error('[dismissable] "axis" and "onDismiss" are required.')
   }
 
-  if (!onDismiss) {
-    throw new Error('[dismissable] The "onDismiss" callback is required.')
+  // Pre-calculate for performance
+  const isAxisY = axis === 'y'
+  let nodeSize = 0
+  let raf: number | null = null
+
+  // Set up initial styles for GPU acceleration
+  node.style.willChange = 'transform'
+  node.style.transform = 'translateZ(0)' // Force GPU layer
+
+  // Cache size on mount and resize
+  const updateSize = () => {
+    nodeSize = isAxisY ? node.offsetHeight : node.offsetWidth
   }
+  updateSize()
+
+  const resizeObserver = new ResizeObserver(updateSize)
+  resizeObserver.observe(node)
 
   const gesture = new DragGesture(
     node,
@@ -95,58 +109,67 @@ export const dismissable: Action<HTMLElement, DismissableOptions> = (node, optio
         velocity: [vx, vy],
         direction: [dx, dy],
         last,
+        first,
       } = state
 
-      // Prevent gesture if the user interacts with an ignored element
-      if ((event.target as HTMLElement).closest(ignore)) return
+      // Early exit for ignored elements
+      if (first && (event.target as HTMLElement).closest(ignore)) return
 
-      // Determine movement and velocity based on the specified axis
-      const move = axis === 'y' ? my : mx
-      const velocity = axis === 'y' ? vy : vx
-      const direction = axis === 'y' ? dy : dx
-
-      // Get the size of the node for percentage calculations
-      const size = axis === 'y' ? node.offsetHeight : node.offsetWidth
+      const move = isAxisY ? my : mx
+      const velocity = isAxisY ? vy : vx
+      const direction = isAxisY ? dy : dx
 
       if (down) {
-        // While dragging, directly update the position and opacity
+        // Cancel any pending RAF
+        if (raf) cancelAnimationFrame(raf)
+
         const dragOffset = lockDirection ? Math.max(0, move) : move
 
-        node.style.setProperty('--tw-translate-x', axis === 'x' ? `${dragOffset}px` : '0')
-        node.style.setProperty('--tw-translate-y', axis === 'y' ? `${dragOffset}px` : '0')
-        node.style.transform = `translate(var(--tw-translate-x), var(--tw-translate-y))`
-        node.style.transition = 'none'
+        // Use RAF for smooth updates
+        raf = requestAnimationFrame(() => {
+          // Use a single transform for better performance
+          const transform = isAxisY
+            ? `translate3d(0, ${dragOffset}px, 0)`
+            : `translate3d(${dragOffset}px, 0, 0)`
 
-        if (fadeOnDrag) {
-          const opacity = 1 - Math.abs(move) / (size * 0.75)
-          node.style.opacity = `${opacity}`
-        }
+          node.style.transform = transform
+
+          if (fadeOnDrag) {
+            const opacity = Math.max(0, Math.min(1, 1 - Math.abs(move) / (nodeSize * 0.75)))
+            node.style.opacity = String(opacity)
+          }
+        })
       } else if (last) {
-        // When the drag is released, decide whether to dismiss or snap back
+        if (raf) cancelAnimationFrame(raf)
+
         const isFlick = Math.abs(velocity) > flickVelocity
-        const isSwipedFarEnough = Math.abs(move) > size * dismissThreshold
+        const isSwipedFarEnough = Math.abs(move) > nodeSize * dismissThreshold
 
         if ((isFlick || isSwipedFarEnough) && direction !== 0) {
-          // --- Dismiss ---
-          const targetX = axis === 'x' ? size * direction : 0
-          const targetY = axis === 'y' ? size * direction : 0
+          // Dismiss
+          const target = nodeSize * direction
+          const transform = isAxisY
+            ? `translate3d(0, ${target}px, 0)`
+            : `translate3d(${target}px, 0, 0)`
 
-          node.style.transition = `transform 150ms ease-out, opacity 150ms ease-out`
-          node.style.setProperty('--tw-translate-x', `${targetX}px`)
-          node.style.setProperty('--tw-translate-y', `${targetY}px`)
-          node.style.transform = `translate(var(--tw-translate-x), var(--tw-translate-y))`
-          node.style.opacity = '0'
+          // Use CSS for the animation
+          node.style.transition = 'transform 150ms ease-out'
+          node.style.transform = transform
 
-          setTimeout(() => {
-            onDismiss?.()
-          }, 150)
-        } else {
-          // --- Snap Back ---
-          node.style.transition = `transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 300ms ease`
-          node.style.setProperty('--tw-translate-x', '0px')
-          node.style.setProperty('--tw-translate-y', '0px')
-          node.style.transform = `translate(var(--tw-translate-x), var(--tw-translate-y))`
           if (fadeOnDrag) {
+            node.style.transition = 'transform 150ms ease-out, opacity 150ms ease-out'
+            node.style.opacity = '0'
+          }
+
+          setTimeout(onDismiss, 150)
+        } else {
+          // Snap back
+          node.style.transition = 'transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1)'
+          node.style.transform = 'translate3d(0, 0, 0)'
+
+          if (fadeOnDrag) {
+            node.style.transition =
+              'transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 300ms ease'
             node.style.opacity = '1'
           }
         }
@@ -154,26 +177,22 @@ export const dismissable: Action<HTMLElement, DismissableOptions> = (node, optio
     },
     {
       axis,
-      // Using window as the target makes the gesture feel more natural,
-      // as it continues even if the user's finger leaves the element.
       target: typeof window !== 'undefined' ? window : undefined,
-      eventOptions: { passive: false },
+      eventOptions: { passive: true }, // Use passive for better scroll performance
+      from: () => [0, 0], // Prevent jumps
     },
   )
 
   return {
     update(newOptions: DismissableOptions) {
+      Object.assign(options, newOptions)
       enabled = newOptions.enabled ?? true
-      axis = newOptions.axis
-      onDismiss = newOptions.onDismiss
-      dismissThreshold = newOptions.dismissThreshold ?? 0.5
-      flickVelocity = newOptions.flickVelocity ?? 0.5
-      lockDirection = newOptions.lockDirection ?? true
-      fadeOnDrag = newOptions.fadeOnDrag ?? true
-      ignore = newOptions.ignore ?? 'a, button'
     },
     destroy() {
+      if (raf) cancelAnimationFrame(raf)
+      resizeObserver.disconnect()
       gesture.destroy()
+      node.style.willChange = ''
     },
   }
 }
