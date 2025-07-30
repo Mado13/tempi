@@ -1,105 +1,91 @@
 <script lang="ts">
-  import { Document } from 'flexsearch'
-  import { Debounced } from 'runed'
+  import { Debounced, watch } from 'runed'
+  import IconTablerTag from '~icons/tabler/tag'
 
+  import PrimaryButton from '$lib/components/PrimaryButton.svelte'
+  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
+  import {
+    allClassifications,
+    searchClassifications,
+  } from '$lib/services/job_classification.service'
   import type { Item, JobDocument } from '$lib/types/job'
   import { buildSearchItems } from '$lib/utils/serach_item_builder'
 
-  import data from '../../../data/job_classifications.json'
-  import SearchableBottomSheet from './SearchableBottomSheet.svelte'
+  // Import the reusable components
+  import SearchableList from './SearchableList.svelte'
 
-  let { value = $bindable(), open = $bindable() } = $props()
+  let { value = $bindable({}), open = $bindable(false) } = $props()
 
+  // All your existing state and derived logic remains exactly the same.
   let query = $state('')
-  let groupedResults = $state<Record<string, JobDocument[]>>({})
-
   const debouncedQuery = new Debounced(() => query, 200)
 
-  const enhancedData = $derived.by(() =>
-    data.map((job) => ({
-      ...job,
-      parentContext: job.path.slice(0, -1).join(' > '),
-    })),
-  )
+  const searchResults = $derived.by(() => {
+    return searchClassifications(debouncedQuery.current)
+  })
+
+  const groupedResults = $derived.by(() => {
+    return groupBy(searchResults)
+  })
 
   const itemsList = $derived.by((): Item[] =>
     buildSearchItems({
       searchResults: groupedResults,
       selectedItems: value || {},
-      allData: enhancedData,
+      allData: allClassifications,
       selectedGroupLabel: 'Selected',
     }),
   )
 
-  let index: Document | null = null
-
-  // Initialize search index
-  $effect(() => {
-    if (!enhancedData.length) return
-    index = new Document({
-      tokenize: 'forward',
-      resolution: 3,
-      document: {
-        id: 'id',
-        index: ['label', 'searchText'],
-        store: ['id', 'label', 'hierarchy', 'parentContext'],
-      },
-    })
-    enhancedData.forEach((doc) => index!.add(doc))
-  })
-
-  // Search effect
-  $effect(() => {
-    const currentQuery = debouncedQuery.current
-
-    if (!currentQuery) {
-      groupedResults = {}
-      return
-    }
-    if (!index) return
-
-    const fields = index.search(currentQuery, { limit: 20, enrich: true }) as any[]
-    const docs: JobDocument[] = []
-    const seenIds = new Set<string>()
-
-    fields.forEach((field) => {
-      field.result.forEach((r: any) => {
-        const id = String(r.id)
-        if (!seenIds.has(id)) {
-          seenIds.add(id)
-          docs.push(r.doc as JobDocument)
-        }
-      })
-    })
-
-    groupedResults = groupBy(docs)
-  })
-
   function groupBy(docs: JobDocument[]): Record<string, JobDocument[]> {
     const groups: Record<string, JobDocument[]> = {}
-    const seen = new Map<string, Set<string>>()
     for (const doc of docs) {
       const key = doc.hierarchy.group.label
-      if (!seen.has(key)) {
-        seen.set(key, new Set())
+      if (!groups[key]) {
         groups[key] = []
       }
-      if (!seen.get(key)!.has(doc.id)) {
-        seen.get(key)!.add(doc.id)
-        groups[key].push(doc)
-      }
+      groups[key].push(doc)
     }
     return groups
   }
+
+  // Apply the watch pattern to interact with the bottom sheet service
+  watch(
+    () => open,
+    (isOpen) => {
+      if (isOpen) {
+        bottomSheet.show({
+          id: 'job-classification-picker',
+          title: 'Job Classification',
+          content: pickerContent,
+          footer: footerContent, // Provide the footer for the approve button
+          fullHeight: true,
+          onClose: () => {
+            open = false
+          },
+        })
+      } else {
+        if (bottomSheet.bottomSheetState.current?.id === 'job-classification-picker') {
+          bottomSheet.close()
+        }
+      }
+    },
+  )
 </script>
 
-<SearchableBottomSheet
-  multiSelect
-  title="Job Classification"
-  placeholder="Type to search..."
-  loading={query !== debouncedQuery.current}
-  items={itemsList}
-  bind:open
-  bind:value={query}
-  bind:selectedItems={value}
-  Icon={IconTablerTag} />
+{#snippet pickerContent()}
+  <SearchableList
+    multiSelect
+    placeholder="Type to search..."
+    loading={query !== debouncedQuery.current}
+    items={itemsList}
+    Icon={IconTablerTag}
+    bind:value={query}
+    bind:selectedItems={value} />
+{/snippet}
+
+{#snippet footerContent()}
+  <PrimaryButton onclick={() => (open = false)} disabled={Object.keys(value || {}).length === 0}>
+    Approve
+  </PrimaryButton>
+{/snippet}

@@ -26,11 +26,7 @@
     <legend>{label}</legend>
 
     <div class="stepper-content-wrapper">
-      <button
-        type="button"
-        onclick={decrement}
-        disabled={isMinDisabled}
-        aria-label="Decrement {label}">
+      <button type="button" onclick={decrement} disabled={isMinDisabled} aria-label="dec">
         −
       </button>
 
@@ -45,7 +41,7 @@
         aria-valuemin={min}
         aria-valuenow={value} />
 
-      <button type="button" onclick={increment} aria-label="Increment {label}"> + </button>
+      <button type="button" onclick={increment} aria-label="Increment"> + </button>
     </div>
   </fieldset>
 

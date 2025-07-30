@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { Debounced } from 'runed'
+  import { Debounced, watch } from 'runed'
 
   import SearchableBottomSheet, { type Item } from '$lib/components/SearchableBottomSheet.svelte'
+  import SearchableList from '$lib/components/SearchableList.svelte'
+  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
   import { GoogleMapsPlaces } from '$lib/utils/google-maps/places'
   import { type GoogleMapsFormLocationInput } from '$lib/utils/google-maps/schema'
 
@@ -19,13 +21,19 @@
     isLoading: boolean
   }
 
-  let { open = $bindable(), value = $bindable<GoogleMapsFormLocationInput | undefined>() }: Props =
-    $props()
+  let { open = $bindable(), value = $bindable() }: Props = $props()
 
   let searchState = $state<State>({
     query: '',
     results: [],
     isLoading: false,
+  })
+
+  const places = new GoogleMapsPlaces({
+    apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries: ['places'],
+    requestedLanguage: 'he',
+    requestedRegion: 'IL',
   })
 
   const debouncedSearch = new Debounced(() => searchState.query, SEARCH_DEBOUNCE_MS)
@@ -50,27 +58,41 @@
     searchPlaces(debouncedSearch.current)
   })
 
-  const places = new GoogleMapsPlaces({
-    apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: ['places'],
-    requestedLanguage: 'he',
-    requestedRegion: 'IL',
-  })
-
   const onResultClick = async (item: Item) => {
     const result = await places.fetchPlaceDetails(item.id)
     value = result
     open = false
     searchState.query = ''
   }
+
+  watch(
+    () => open,
+    (isOpen) => {
+      if (isOpen) {
+        bottomSheet.show({
+          id: 'address-picker',
+          title: 'Add Address',
+          content: pickerContent,
+          fullHeight: true,
+          onClose: () => {
+            open = false
+          },
+        })
+      } else {
+        if (bottomSheet.bottomSheetState.current?.id === 'address-picker') {
+          bottomSheet.close()
+        }
+      }
+    },
+  )
 </script>
 
-<SearchableBottomSheet
-  title="Add Address"
-  placeholder="Search for an address..."
-  loading={searchState.isLoading}
-  items={searchState.results}
-  {onResultClick}
-  Icon={IconTablerBuildingEstate}
-  bind:open
-  bind:value={searchState.query} />
+{#snippet pickerContent()}
+  <SearchableList
+    placeholder="Search for an address..."
+    loading={searchState.isLoading}
+    items={searchState.results}
+    {onResultClick}
+    Icon={IconTablerBuildingEstate}
+    bind:value={searchState.query} />
+{/snippet}

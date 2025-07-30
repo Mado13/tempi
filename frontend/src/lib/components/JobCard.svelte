@@ -1,17 +1,32 @@
 <script lang="ts">
   import { route } from '$router'
+  import { Toggle } from 'melt/builders'
   import type { Snippet } from 'svelte'
 
   import { dismissable } from '$lib/actions/gestures'
+  import { api } from '$lib/api'
   import CardButton from '$lib/components/CardButton.svelte'
   import EmployerCardMenu from '$lib/components/EmployerCardMenu.svelte'
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import WorkerCardMenu from '$lib/components/WorkerCardMenu.svelte'
-  import type { Job } from '$lib/schemas/job.scehma'
+  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
+  import { getClassificationById } from '$lib/services/job_classification.service'
+  import type { Job } from '$lib/stores/resources/jobs.store.svelte'
+  import { formatHebrewDateRangeFromStrings } from '$lib/utils/dates'
+
+  interface Props {
+    job: Job
+  }
+
+  let { job }: Props = $props()
 
   const role = $derived(route.params.role as string)
-
-  let { job, onmenuopen }: { job: Job; onmenuopen: (menuSnippet: Snippet) => void } = $props()
+  const dateRange = formatHebrewDateRangeFromStrings(job.date.start, job.date.end)
+  const toggle = new Toggle({
+    onValueChange: () => {
+      api.patch(`/jobs/${job.id}/favorite`)
+    },
+  })
 </script>
 
 <article
@@ -25,27 +40,43 @@
   }}>
   <header>
     {#if role === 'employer'}
-      <h3>Role or Skill</h3>
-      <span>Job Status</span>
+      {#each Object.values(job.jobClassifications) as classification}
+        {@const jobClass = getClassificationById(classification)}
+        {jobClass?.label}
+      {/each}
+      <span data-status={job.status}>{job.status}</span>
     {:else if role === 'worker'}
       <a>
         <img />
         <div>
           <strong>Company Name</strong>
-          <span>Job location</span>
+          <span>{job.address}</span>
         </div>
       </a>
-      <CardButton aria-label="Save to favorites">
-        <IconPhHeart />
+      <CardButton {...toggle.trigger} aria-label="toggle favourite">
+        {#if toggle.value}
+          <IconPhHeartFill />
+        {:else}
+          <IconPhHeart />
+        {/if}
       </CardButton>
     {/if}
   </header>
 
   {#if role === 'employer'}
     <ul class="details-list">
-      <li>Where:</li>
-      <li>When:</li>
-      <li>2 / 4 Filled</li>
+      <li>
+        <IconPhMapPinLine />
+        {job.address.formattedAddress}
+      </li>
+      <li>
+        <IconPhCalendar />
+        {dateRange}
+      </li>
+      <li>
+        <IconPhUsers />
+        2/4
+      </li>
     </ul>
   {:else if role === 'worker'}
     <div class="job-details">
@@ -58,7 +89,7 @@
     {#if role === 'employer'}
       <div>
         <span>5 applications</span>
-        <span>15 Saved</span>
+        <span>{job.favoritesCount} Saved</span>
       </div>
     {:else if role === 'worker'}
       <div class="tags">
@@ -69,16 +100,24 @@
       </div>
     {/if}
 
-    <CardButton onclick={() => onmenuopen(menuContent)} aria-label="More options">
+    <CardButton
+      onclick={() =>
+        bottomSheet.show({
+          id: 'job-card-sheet',
+          content: menuContent,
+        })}
+      aria-label="More options">
       &#x22EE;
     </CardButton>
   </footer>
 
-  {#snippet menuContent()}{#if role === 'employer'}
+  {#snippet menuContent()}
+    {#if role === 'employer'}
       <EmployerCardMenu {job} />
     {:else}
       <WorkerCardMenu />
-    {/if}{/snippet}
+    {/if}
+  {/snippet}
 </article>
 
 <style>
@@ -87,7 +126,8 @@
     flex-direction: column;
     gap: var(--spacing-m);
     min-height: 150px;
-    touch-action: none;
+    touch-action: pan-y;
+    will-change: transform;
 
     header,
     footer {
@@ -118,7 +158,19 @@
       border-radius: var(--radius-full);
       font-size: var(--font-size-label-s);
       font-weight: var(--font-weight-medium);
-      /* ... data-status attributes will handle colors ... */
+      &[data-status='open'] {
+        background-color: var(--color-semantic-info-bg);
+        color: var(--color-semantic-info-fg);
+      }
+      &[data-status='filled'],
+      &[data-status='finished'] {
+        background-color: var(--color-semantic-success-bg);
+        color: var(--color-semantic-success-fg);
+      }
+      &[data-status='canceled'] {
+        background-color: var(--color-border-default);
+        color: var(--color-text-secondary);
+      }
     }
 
     .details-list {
@@ -129,6 +181,9 @@
       color: var(--color-text-secondary);
 
       li {
+        display: flex;
+        gap: var(--spacing-s);
+        align-items: center;
         margin-bottom: var(--spacing-xs);
       }
     }

@@ -32,9 +32,4 @@
     padding: 0;
     cursor: pointer;
   }
-
-  button:hover,
-  button:focus-visible {
-    background-color: var(--color-background-surface-active);
-  }
 </style>
