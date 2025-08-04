@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "@tempi/frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.367",
     "@melt-ui/pp": "^0.3.2",
     "@melt-ui/svelte": "^0.86.6",
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
@@ -31,13 +30,6 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
-    "@capacitor-community/sqlite": "^7.0.1",
-    "@capacitor/app": "^7.0.2",
-    "@capacitor/camera": "^7.0.2",
-    "@capacitor/network": "^7.0.2",
-    "@capacitor/preferences": "^7.0.2",
-    "@capacitor/push-notifications": "^7.0.2",
-    "@capacitor/status-bar": "^7.0.2",
     "@supabase/supabase-js": "^2.54.0",
     "@use-gesture/vanilla": "^10.3.1",
     "@wuchale/svelte": "^0.9.4",
@@ -46,7 +38,6 @@
     "remeda": "^2.30.0",
     "runed": "^0.31.1",
     "sv-router": "^0.7.2",
-    "ts-case-convert": "^2.1.0",
     "valibot": "^1.1.0",
     "wuchale": "^0.9.7"
   }

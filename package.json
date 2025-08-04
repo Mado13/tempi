@@ -20,18 +20,25 @@
     "mobile:build:ios:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync && bunx cap open ios"
   },
   "devDependencies": {
-    "@iconify-json/tabler": "^1.2.22",
     "@iconify/json": "^2.2.377",
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^24.2.1",
     "concurrently": "^8.2.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "@capacitor/cli": "^7.4.2"
   },
   "dependencies": {
+    "@capacitor/core": "^7.4.2",
+    "@capacitor/android": "^7.4.2",
+    "@capacitor/ios": "^7.4.2",
+    "@capacitor-community/sqlite": "^7.0.1",
+    "@capacitor/app": "^7.0.2",
+    "@capacitor/camera": "^7.0.2",
     "@capacitor/keyboard": "^7.0.2",
+    "@capacitor/network": "^7.0.2",
     "@capacitor/preferences": "^7.0.2",
-    "@sveltejs/vite-plugin-svelte": "^6.1.3",
-    "ts-case-convert": "^2.1.0",
-    "vite": "^7.1.3"
+    "@capacitor/push-notifications": "^7.0.2",
+    "@capacitor/status-bar": "^7.0.2",
+    "ts-case-convert": "^2.1.0"
   }
 }
