@@ -1,477 +1,541 @@
 /*
  * ====================================================================
- * CAPACITOR MOBILE APP CSS & DESIGN SYSTEM - V3.0 (Optimized)
+ * CAPACITOR MOBILE APP DESIGN SYSTEM V4.3 - FIXED VISUAL HIERARCHY
  * ====================================================================
- * This file integrates a robust set of mobile-specific best practices
- * with a complete, modern design system. It is designed to be the
- * single source of truth for all UI styling in the application.
- *
- * Structure
- * 1. :root Definitions (Mobile Resets & Design Tokens)
- * 2. Mobile Viewport & Scrolling Fixes
- * 3. Core App Containers
- * 4. Global Styles & Resets
- * 5. Core Typography Styles
- * 6. Core Component Styles
- * 7. Mobile-Specific Helpers & Fixes
+ * Mobile-first. Clear surface elevation. Touch-optimized.
  * ====================================================================
  */
 
-/*
- * ====================================================================
- * 1. :root DEFINITIONS (Mobile Resets & Design Tokens)
- * ====================================================================
- */
 :root {
-  /* -- Design System Tokens -- */
-  /* This is the single source of truth for all visual styling. */
+  /* ====================================================================
+   * MOBILE-FIRST COLOR SYSTEM - CLEAR SURFACE HIERARCHY
+   * ====================================================================*/
+  
+  /* -- Electric Purple (2025 Trendy) -- */
+  --color-primary: #8B5CF6;               
+  --color-primary-hover: #7C3AED;
+  --color-primary-active: #6D28D9;
+  --primary-rgb: 139, 92, 246;
+  
+  /* -- Semantic Colors -- */
+  --color-succe #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: var(--color-primary);
+  
+  /* -- FIXED: Clear Mobile Surface Hierarchy -- */
+  --color-background-app: #F8FAFC;         /* Slightly blue-tinted base */
+  --color-background-screen: #FFFFFF;      /* Pure white content */
+  --color-background-elevated: #FFFFFF;    /* Cards/inputs */
+  --color-background-overlay: #FEFEFE;     /* Nav/actions - subtle warm tint */
+  
+  --color-text-primary: #0F172A;           /* Deeper for better contrast */
+  --color-text-secondary: #475569;         /* Stronger secondary */
+  --color-text-tertiary: #94A3B8;
+  --color-text-on-primary: #FFFFFF;
+  
+  /* -- Mobile Borders with Better Separation -- */
+  --color-border-default: #E2E8F0;         /* Cooler, more visible */
+  --color-border-strong: #CBD5E1;
+  --color-border-focused: var(--color-primary);
+  --color-border-elevated: rgba(148, 163, 184, 0.2); /* Subtle elevated borders */
 
-  /* -- Colors -- */
-  --color-interactive-accent-default: #6C62D0;
-  --color-interactive-accent-active: #5A51B0;
-  --accent-rgb: 108,98,208;
-  --color-text-on-accent: #FFFFFF;
-  --color-background-page: #F8F9FA;
-  --color-background-surface: #FFFFFF;
-  --color-background-surface-active: #F1F3F5;
-  --color-text-primary: #212121;
-  --color-text-secondary: #616161;
-  --color-text-placeholder: #BDBDBD;
-  --color-text-link: #1976D2;
-  --color-border-default: #E0E0E0;
-  --color-border-focused: var(--color-interactive-accent-default);
-  --color-semantic-info-bg: #E3F2FD;
-  --color-semantic-info-fg: #1976D2;
-  --color-semantic-success-bg: #E8F5E9;
-  --color-semantic-success-fg: #2E7D32;
-  --color-semantic-warning-bg: #FFF8E1;
-  --color-semantic-warning-fg: #F9A825;
-  --color-semantic-error-bg: #FFEBEE;
-  --color-semantic-error-fg: #C62828;
+  /* ====================================================================
+   * ENHANCED MOBILE GLASSMORPHISM 
+   * ====================================================================*/
+  
+  --glass-bg-light: rgba(255, 255, 255, 0.85);     /* Lighter glass */
+  --glass-bg-heavy: rgba(254, 254, 254, 0.95);     /* Heavier glass for nav */
+  --glass-border: rgba(226, 232, 240, 0.6);        /* Visible glass border */
+  --glass-blur: 12px;                              /* More blur */
+  --glass-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
 
-  /* -- Typography -- */
-  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --font-size-headline-l: 1.953rem;
-  --font-size-headline-m: 1.563rem;
-  --font-size-headline-s: 1.25rem;
-  --font-size-body-r: 1rem;
-  --font-size-label-l: 1rem;
-  --font-size-label-m: 0.875rem;
-  --font-size-label-s: 0.75rem;
+  /* ====================================================================
+   * MOBILE TYPOGRAPHY (Touch-optimized)
+   * ====================================================================*/
+  
+  --font-family-app: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  
+  /* -- Mobile Scale -- */
+  --font-size-hero: 2.5rem;              /* 40px */
+  --font-size-title: 2rem;               /* 32px - Screen titles */
+  --font-size-heading: 1.5rem;           /* 24px - Card headers */
+  --font-size-subhead: 1.25rem;          /* 20px - Subheadings */
+  --font-size-body: 1rem;                /* 16px - Primary text */
+  --font-size-caption: 0.875rem;         /* 14px - Secondary text */
+  --font-size-small: 0.75rem;            /* 12px - Helper text */
+  
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.4;
+  --line-height-loose: 1.6;
 
-  /* -- Spacing & Sizing (8pt Grid System) -- */
-  --spacing-xs: 0.25rem;  /* 4pt */
-  --spacing-s: 0.5rem;   /* 8pt */
-  --spacing-m: 1rem;     /* 16pt */
-  --spacing-l: 1.5rem;   /* 24pt */
-  --spacing-xl: 2rem;    /* 32pt */
-  --spacing-xxl: 3rem;   /* 48pt */
-  --size-tap-target: 3rem; /* 48pt */
+  /* ====================================================================
+   * MOBILE SPACING & TOUCH TARGETS
+   * ====================================================================*/
+  
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  
+  /* -- Touch Targets -- */
+  --tap-min: 44px;                       /* WCAG minimum */
+  --tap-comfortable: 48px;               /* Comfortable size */
+  --tap-large: 56px;                     /* Primary actions */
 
-  /* -- Layout & Navigation -- */
-  --bottom-nav-height: calc(56px + var(--safe-area-bottom));
+  /* ====================================================================
+   * MOBILE RADIUS
+   * ====================================================================*/
+  
+  --radius-sm: 0.25rem;      /* 4px - Small elements */
+  --radius-md: 0.5rem;       /* 8px - Inputs */
+  --radius-lg: 0.75rem;      /* 12px - Cards */
+  --radius-xl: 1rem;         /* 16px - Buttons */
+  --radius-2xl: 1.5rem;      /* 24px - Sheets */
+  --radius-full: 9999px;     /* Pills */
 
-  /* -- Border Radius -- */
-  --radius-s: 0.25rem; /* 4pt */
-  --radius-m: 0.5rem;  /* 8pt */
-  --radius-l: 1rem;    /* 16pt */
-  --radius-full: 9999px;
+  /* ====================================================================
+   * ENHANCED MOBILE SHADOWS (Better Elevation)
+   * ====================================================================*/
+  
+  --shadow-none: none;
+  --shadow-border: 0 0 0 1px var(--color-border-default);
+  --shadow-subtle: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-elevated: 0 4px 12px rgba(15, 23, 42, 0.12);
+  --shadow-floating: 0 8px 24px rgba(15, 23, 42, 0.16);
+  --shadow-overlay: 0 12px 32px rgba(15, 23, 42, 0.2);
 
-  /* -- Shadows & Transitions -- */
-  --shadow-card: 
-    0 4px 6px rgb(0 0 0 / 5%),
-    0 1px 3px rgb(0 0 0 / 10%);
+  /* ====================================================================
+   * MOBILE INTERACTIONS
+   * ====================================================================*/
+  
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  
+  /* -- Focus Ring Token -- */
+  --ring: 0 0 0 3px rgba(var(--primary-rgb), 0.18);
 
-  --shdaow-md:   
-    0 4px 6px rgb(0 0 0 / 10%),
-    0 1px 3px rgb(0 0 0 / 15%);
-
-  --shadow-lg:
-    0 8px 16px rgb(108 98 208 / 30%),
-    0 4px 8px  rgb(0 0 0 / 10%);
-
-  --shadow-lg-active:
-    0 4px 8px  rgb(108 98 208 / 40%),
-    0 2px 4px  rgb(0 0 0 / 15%);
-
-  --ring-accent: 0 0 0 3px rgba(108,98,208 / 25%);
-
-  --transition-fast: 150ms ease-in-out;
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-short: 150ms;
-  --duration-medium: 300ms;
-  --motion-fade-in: fade-in var(--duration-medium) var(--ease-out-quint);
-
-  /* -- Foundational Mobile Resets -- */
-  font-family: var(--font-family-base);
-  line-height: 1.5;
-  font-weight: var(--font-weight-regular);
+  /* ====================================================================
+   * MOBILE SAFE AREAS
+   * ====================================================================*/
+  
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  
+  /* -- App Layout -- */
+  --header-height: calc(3.5rem + var(--safe-top));
+  --bottom-nav-height: calc(5rem + var(--safe-bottom));
+  
+  /* ====================================================================
+   * MOBILE SYSTEM INTEGRATION
+   * ====================================================================*/
+  
+  color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  scroll-behavior: smooth;
-
-  /* -- iOS Safe Area Variables -- */
-  --safe-area-top: env(safe-area-inset-top, 0px);
-  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-area-left: env(safe-area-inset-left, 0px);
-  --safe-area-right: env(safe-area-inset-right, 0px);
-
-  /* -- Status bar height -- */
-  --status-bar-height: var(--safe-area-top);
 }
 
-/*
- * ====================================================================
- * 2. MOBILE VIEWPORT & SCROLLING FIXES
- * ====================================================================
- */
-/* Critical: Prevent iOS bounce scrolling and ensure full-height layout */
-html,
-body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: none;
-  -webkit-overscroll-behavior: none;
-  margin: 0;
-  padding: 0;
+/* ====================================================================
+ * DARK MODE (Mobile App Standard)
+ * ====================================================================*/
+
+/* @media (prefers-color-scheme: dark) { */
+/*   :root { */
+/*     --color-primary: #A78BFA;               */
+/*     --color-background-app: #0F172A; */
+/*     --color-background-screen: #1E293B; */
+/*     --color-background-elevated: #334155; */
+/*     --color-background-overlay: #1E293B; */
+/*     --color-text-primary: #F1F5F9; */
+/*     --color-text-secondary: #94A3B8; */
+/*     --color-text-tertiary: #64748B; */
+/*     --color-border-default: #334155; */
+/*     --color-border-strong: #475569; */
+/*     --glass-bg-light: rgba(30, 41, 59, 0.85); */
+/*     --glass-bg-heavy: rgba(30, 41, 59, 0.95); */
+/*     --glass-border: rgba(51, 65, 85, 0.6); */
+/*   } */
+/* } */
+
+/* ====================================================================
+ * PLATFORM-SPECIFIC OPTIMIZATIONS
+ * ====================================================================*/
+
+/* iOS: Enable glassmorphism */
+@supports (-webkit-backdrop-filter: blur(12px)) {
+  :root {
+    --glass-blur: 12px;
+  }
 }
 
-/*
- * ====================================================================
- * 3. CORE APP CONTAINERS
- * ====================================================================
- */
-body {
-  font-family: var(--font-family-base);
-  background-color: var(--color-background-page);
-  color: var(--color-text-primary);
+/* Android: Reduced glass for performance */
+.platform-android .glass.overlay {
+  backdrop-filter: blur(6px);
+  background: var(--glass-bg-heavy);
 }
 
-#app {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: var(--safe-area-top);
-  padding-left: var(--safe-area-left);
-  padding-right: var(--safe-area-right);
-  overscroll-behavior: contain;
-  -webkit-overscroll-behavior: contain;
+.platform-android .bottom-nav.glass,
+.platform-android .form-actions.glass {
+  backdrop-filter: none;
+  background: var(--color-background-overlay);
+  box-shadow: var(--shadow-elevated);
 }
 
-/*
- * ====================================================================
- * 4. GLOBAL STYLES & RESETS
- * ====================================================================
- */
+/* Low-end device optimizations */
+@media (max-resolution: 1.5dppx) {
+  :root {
+    --glass-blur: 0px;
+    --shadow-elevated: var(--shadow-border);
+    --shadow-floating: var(--shadow-subtle);
+  }
+}
+
+/* ====================================================================
+ * ACCESSIBILITY (Mobile App Requirements)
+ * ====================================================================*/
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --glass-blur: 0px;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --color-border-default: #000000;
+    --glass-bg-light: var(--color-background-screen);
+    --glass-bg-heavy: var(--color-background-overlay);
+    --glass-blur: 0px;
+    --ring: 0 0 0 3px #000000;
+  }
+}
+
+/* ====================================================================
+ * MOBILE APP BASE STYLES
+ * ====================================================================*/
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Hide scrollbars but maintain scroll functionality */
-* {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-*::-webkit-scrollbar {
-  display: none;
-}
-
-/*
- * ====================================================================
- * 5. CORE TYPOGRAPHY STYLES
- * ====================================================================
- */
-h1 {
-  font-size: var(--font-size-headline-l);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.3;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-family-app);
   color: var(--color-text-primary);
-  margin: var(--spacing-l) 0 var(--spacing-m);
+  background: var(--color-background-app);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
 }
 
-h2 {
-  font-size: var(--font-size-headline-m);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.3;
-  color: var(--color-text-primary);
-  margin: var(--spacing-l) 0 var(--spacing-m);
-}
-
-h3 {
-  font-size: var(--font-size-headline-s);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.4;
-  color: var(--color-text-primary);
-  margin: var(--spacing-m) 0 var(--spacing-s);
-}
-
-p {
-  font-size: var(--font-size-body-r);
-  font-weight: var(--font-weight-regular);
-  line-height: 1.5;
-  color: var(--color-text-secondary);
-  margin: 0 0 var(--spacing-m);
-}
-
-small {
-  font-size: var(--font-size-label-s);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.5;
-  color: var(--color-text-secondary);
-}
-
-a {
-  color: var(--color-text-link);
-  text-decoration: none;
-  touch-action: manipulation;
-}
-
-/*
- * ====================================================================
- * 6. CORE COMPONENT STYLES
- * ====================================================================
- */
-
-/* -- Buttons -- */
-button,.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 var(--spacing-m);
-  min-height: var(--size-tap-target);
-  border-radius: var(--radius-m);
-  border: 1px solid transparent;
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-label-l);
-  font-weight: var(--font-weight-medium);
-  text-align: center;
-  vertical-align: middle;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  white-space: nowrap;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform 0.1s, opacity 0.1s;
-}
-
-button:active,.btn:active {
-  opacity: 0.8;
-  transform: scale(0.98);
-}
-
-button:focus-visible {
-  outline: none;
-  box-shadow: var(--ring-accent);
-}
-
-button:focus:not(:focus-visible) {
-  outline: none;
-  box-shadow: none;
-}
-
-.btn-primary {
-  background-color: var(--color-interactive-accent-default);
-  color: var(--color-text-on-accent);
-  border-color: var(--color-interactive-accent-default);
-}
-.btn-primary:active {
-  background-color: var(--color-interactive-accent-active);
-  border-color: var(--color-interactive-accent-active);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-interactive-accent-default);
-  border-color: var(--color-interactive-accent-default);
-}
-.btn-secondary:active {
-  background-color: var(--color-interactive-accent-default);
-  color: var(--color-text-on-accent);
-}
-
-button:disabled,.btn:disabled {
-  background-color: var(--color-border-default);
-  color: var(--color-text-placeholder);
-  border-color: var(--color-border-default);
-  cursor: not-allowed;
-  opacity: 0.7;
-  transform: none;
-}
-
-/* -- Forms & Inputs -- */
-form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-l);
-  padding: 0 var(--spacing-m);
-}
-
-label {
-  display: block;
-  font-size: var(--font-size-label-m);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-  line-height: 1.4;
-  margin-bottom: var(--spacing-s);
-    &.required::after {
-    content: ' *';
-    color: var(--color-semantic-error-fg);
-  }
-}
-
-
-textarea,
-select {
-  font-size: 16px!important; /* Critical: Prevent iOS zoom on focus */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  display: block;
+#app {
+  position: fixed;
+  inset: 0;
   width: 100%;
-  padding: 0 var(--spacing-m);
-  min-height: var(--size-tap-target);
-  font-family: var(--font-family-base);
-  color: var(--color-text-primary);
-  background-color: var(--color-background-surface);
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-m);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  touch-action: manipulation;
+  height: 100%;
+  overflow: hidden;
+  padding-top: var(--safe-top);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: var(--color-text-placeholder);
+/* ====================================================================
+ * MOBILE CONTAINER SYSTEM
+ * ====================================================================*/
+
+.container {
+  container-type: inline-size;
+  container-name: main;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: var(--color-border-focused);
-  box-shadow: 0 0 0 3px rgba(108, 98, 208, 0.25);
+.screen {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  background: var(--color-background-screen);
 }
 
-/* Allow text selection only in inputs */
+.screen-content {
+  padding-bottom: calc(var(--bottom-nav-height) + var(--space-4));
+}
+
+/* ====================================================================
+ * ENHANCED MOBILE COMPONENTS
+ * ====================================================================*/
+
+.card {
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-subtle);
+}
+
+.card.glass {
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* -- Enhanced Mobile Inputs -- */
 input,
 textarea {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-4);
+  font-family: var(--font-family-app);
+  font-size: 16px; /* Prevent iOS zoom */
+  color: var(--color-text-primary);
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-fast) var(--ease-out);
+  -webkit-appearance: none;
+  appearance: none;
   -webkit-user-select: text;
   user-select: text;
 }
 
-/* -- Cards -- */
-.card {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  touch-action: manipulation;
-  contain: layout;
-  padding: var(--spacing-m);
-  background-color: var(--color-background-surface);
-  border-radius: var(--radius-l);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-border-focused);
+  box-shadow: var(--ring);
+  background: var(--color-background-screen); /* Lift on focus */
 }
 
-/* -- Images & Media -- */
-img,
-video {
-  max-width: 100%;
-  height: auto;
-  -webkit-user-drag: none;
-  user-drag: none;
-  pointer-events: none;
-}
-video {
-  pointer-events: auto;
+input:disabled,
+textarea:disabled {
+  background: var(--color-background-app);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
 }
 
-/*
- * ====================================================================
- * 7. MOBILE-SPECIFIC HELPERS & FIXES
- * ====================================================================
- */
+textarea {
+  min-height: calc(var(--tap-min) * 2);
+  resize: vertical;
+}
 
-/* -- Disable Callouts & Context Menus -- */
-* {
+/* -- Focus Management -- */
+button {
   -webkit-touch-callout: none;
 }
 
-/* -- Scrollable Containers -- */
-.scrollable {
+:where(a, button, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+/* ====================================================================
+ * ENHANCED MOBILE NAVIGATION
+ * ====================================================================*/
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-height);
+  background: var(--color-background-overlay);
+  border-top: 1px solid var(--color-border-strong);
+  padding-bottom: var(--safe-bottom);
+  box-shadow: var(--shadow-elevated);
+  z-index: 100;
+  display: flex;
+}
+
+.bottom-nav.glass {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(var(--glass-blur));
+  border-top: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-overlay);
+}
+
+.tab-button {
+  min-height: var(--tap-min);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  touch-action: manipulation;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.tab-button.active,
+.tab-button.is-active {
+  color: var(--color-primary);
+}
+
+.tab-button:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+/* Active indicator - top line */
+.tab-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 48px;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.tab-button.is-active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.tab-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.tab-button span {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+}
+
+/* ====================================================================
+ * FORM ACTION BAR STYLING
+ * ====================================================================*/
+
+.form-actions {
+  background: var(--color-background-overlay);
+  border-top: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-elevated);
+}
+
+.form-actions.glass {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(var(--glass-blur));
+  border-top: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-overlay);
+}
+
+/* ====================================================================
+ * MOBILE SCROLLING
+ * ====================================================================*/
+
+.scroll-area {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
-/* -- Performance Optimizations -- */
-.hardware-accelerated {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ====================================================================
+ * MOBILE TYPOGRAPHY CLASSES
+ * ====================================================================*/
+
+.text-hero {
+  font-size: var(--font-size-hero);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.025em;
+}
+
+.text-title {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.text-heading {
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.text-subhead {
+  font-size: var(--font-size-subhead);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+.text-body {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
+}
+
+.text-caption {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-secondary);
+}
+
+.text-small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* ====================================================================
+ * PERFORMANCE HINTS
+ * ====================================================================*/
+
+.will-change-transform {
   will-change: transform;
-  -webkit-backface-visibility: hidden;
+}
+
+.gpu-layer {
+  transform: translateZ(0);
   backface-visibility: hidden;
-  -webkit-perspective: 1000;
-  perspective: 1000;
 }
 
-/* -- Utility Classes -- */
-.no-select {
-  -webkit-user-select: none!important;
-  user-select: none!important;
-}
-.allow-select {
-  -webkit-user-select: text!important;
-  user-select: text!important;
-}
-.no-scroll {
-  overflow: hidden!important;
-}
-
-/* -- Android Specific Fixes -- */
-@supports (padding: max(0px)) {
-  #app {
-    padding-top: max(var(--safe-area-top), env(safe-area-inset-top));
-    padding-bottom: max(var(--safe-area-bottom), env(safe-area-inset-bottom));
-    padding-left: max(var(--safe-area-left), env(safe-area-inset-left));
-    padding-right: max(var(--safe-area-right), env(safe-area-inset-right));
-  }
-}
-
-/* -- iOS Specific Fixes -- */
-@supports (-webkit-touch-callout: none) {
-  #app {
-    padding-bottom: calc(var(--safe-area-bottom) + env(safe-area-inset-bottom, 0px));
-  }
-}
-
-/* -- Landscape Orientation -- */
-@media (orientation: landscape) {
-  #app {
-    padding-left: max(var(--safe-area-left), 20px);
-    padding-right: max(var(--safe-area-right), 20px);
-  }
+.virtual-list-item {
+  contain: layout paint style;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 80px;
 }

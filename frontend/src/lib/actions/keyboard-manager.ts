@@ -2,6 +2,12 @@ import { Capacitor } from '@capacitor/core'
 import type { PluginListenerHandle } from '@capacitor/core'
 import { Keyboard, type KeyboardInfo } from '@capacitor/keyboard'
 
+type Options = {
+  scroll?: boolean
+  block?: ScrollLogicalPosition
+  delayMs?: number
+}
+
 /**
  * A Svelte action to gracefully handle the on-screen keyboard in a Capacitor app.
  *
@@ -15,61 +21,65 @@ import { Keyboard, type KeyboardInfo } from '@capacitor/keyboard'
  *
  * @param {HTMLElement} node - The HTML element this action is applied to.
  */
-export function keyboardManager(node: HTMLElement) {
-  // We only run this logic on native platforms (iOS/Android)
-  if (!Capacitor.isNativePlatform()) {
-    return
+
+export function keyboardManager(node: HTMLElement, opts: Options = {}) {
+  if (!Capacitor.isNativePlatform()) return
+
+  const { scroll = true, block = 'center', delayMs = 250 } = opts
+
+  let handles: PluginListenerHandle[] = []
+  const origPadding = node.style.paddingBottom || ''
+  let scrollTimer: number | null = null
+
+  const setKeyboardHeight = (px: number) => {
+    // set on node AND globally so CSS (nav/sheet) can use it
+    node.style.setProperty('--keyboard-height', `${px}px`)
+    document.documentElement.style.setProperty('--keyboard-height', `${px}px`)
   }
 
-  let listenerHandles: PluginListenerHandle[] = []
-  const originalPaddingBottom = node.style.paddingBottom || ''
-
-  const onKeyboardShow = (info: KeyboardInfo) => {
-    // Use a CSS variable for the keyboard height for more flexible styling
-    node.style.setProperty('--keyboard-height', `${info.keyboardHeight}px`)
-    // Set paddingBottom to match the keyboard height, making space for it
-    node.style.paddingBottom = `var(--keyboard-height)`
+  const show = (info: KeyboardInfo) => {
+    setKeyboardHeight(info.keyboardHeight)
+    node.style.paddingBottom = 'var(--keyboard-height)'
+    document.body.classList.add('keyboard-visible')
   }
 
-  const onKeyboardHide = () => {
-    // Restore the original padding when the keyboard hides
-    node.style.paddingBottom = originalPaddingBottom
+  const hide = () => {
+    node.style.paddingBottom = origPadding
     node.style.removeProperty('--keyboard-height')
+    document.documentElement.style.removeProperty('--keyboard-height')
+    document.body.classList.remove('keyboard-visible')
   }
 
-  const onFocusIn = (event: FocusEvent) => {
-    const target = event.target as HTMLElement
-    // Check for common editable elements
-    const isEditable =
-      target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable
+  const onFocusIn = (e: FocusEvent) => {
+    if (!scroll) return
+    const el = e.target as HTMLElement
+    const isEditable = el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable
+    if (!isEditable) return
 
-    if (isEditable) {
-      // A short delay helps sync the scroll with the keyboard's animation
-      setTimeout(() => {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center', // 'center' usually provides the best visibility
-        })
-      }, 300)
-    }
+    if (scrollTimer) clearTimeout(scrollTimer)
+    scrollTimer = window.setTimeout(() => {
+      // align with keyboard animation
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: 'smooth', block, inline: 'nearest' })
+      })
+    }, delayMs)
   }
 
-  // Attach Capacitor keyboard listeners and store their handles for cleanup
-  Keyboard.addListener('keyboardWillShow', onKeyboardShow).then((handle) =>
-    listenerHandles.push(handle),
-  )
-  Keyboard.addListener('keyboardWillHide', onKeyboardHide).then((handle) =>
-    listenerHandles.push(handle),
-  )
+  // iOS fires Will*, Android often fires only Did*
+  Keyboard.addListener('keyboardWillShow', show).then((h) => handles.push(h))
+  Keyboard.addListener('keyboardDidShow', show).then((h) => handles.push(h))
+  Keyboard.addListener('keyboardWillHide', hide).then((h) => handles.push(h))
+  Keyboard.addListener('keyboardDidHide', hide).then((h) => handles.push(h))
 
-  // Attach focus listener to the container to handle any input within it
   node.addEventListener('focusin', onFocusIn)
 
   return {
     destroy() {
-      // Clean up all listeners when the component is unmounted
-      listenerHandles.forEach((handle) => handle.remove())
+      handles.forEach((h) => h.remove())
       node.removeEventListener('focusin', onFocusIn)
+      if (scrollTimer) clearTimeout(scrollTimer)
+      document.body.classList.remove('keyboard-visible')
+      document.documentElement.style.removeProperty('--keyboard-height')
     },
   }
 }

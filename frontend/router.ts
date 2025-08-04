@@ -1,11 +1,13 @@
 // routes.ts
 import Agenda from '$routes/Agenda.svelte'
 import AuthLayout from '$routes/AuthLayout.svelte'
-import CreateJob from '$routes/CreateJob.svelte'
+import CreateProject from '$routes/CreateProject.svelte'
 import Jobs from '$routes/Jobs.svelte'
 import Layout from '$routes/Layout.svelte'
 import NotFound from '$routes/Notfound.svelte'
+import Opportunities from '$routes/Opportunities.svelte'
 import Profile from '$routes/Profile.svelte'
+import Projects from '$routes/Projects.svelte'
 import RedirectToApp from '$routes/RedirectToApp.svelte'
 import SelectRole from '$routes/SelectRole.svelte'
 import Team from '$routes/Team.svelte'
@@ -31,13 +33,22 @@ export const { p, navigate, isActive, route } = createRouter({
         snackbar.processPendingMessage()
       },
     },
-    '/:role': {
+    '/employer': {
+      '/projects': {
+        '/': Projects,
+        '/new': CreateProject,
+      },
       '/agenda': Agenda,
+    },
+    '/worker': {
+      '/opportunities': Opportunities,
+    },
+    '/:role': {
       '/profile': Profile,
       '/team': Team,
       '/jobs': Jobs,
       '/job': {
-        '/new': CreateJob,
+        '/new': CreateProject,
       },
     },
     '/select-role': SelectRole,

@@ -58,7 +58,6 @@
           id: 'job-classification-picker',
           title: 'Job Classification',
           content: pickerContent,
-          footer: footerContent, // Provide the footer for the approve button
           fullHeight: true,
           onClose: () => {
             open = false
@@ -75,17 +74,20 @@
 
 {#snippet pickerContent()}
   <SearchableList
-    multiSelect
     placeholder="Type to search..."
     loading={query !== debouncedQuery.current}
     items={itemsList}
     Icon={IconTablerTag}
     bind:value={query}
-    bind:selectedItems={value} />
+    bind:selectedItems={value}
+    onResultClick={(item) => {
+      value = item
+      open = false
+    }} />
 {/snippet}
 
-{#snippet footerContent()}
-  <PrimaryButton onclick={() => (open = false)} disabled={Object.keys(value || {}).length === 0}>
-    Approve
-  </PrimaryButton>
-{/snippet}
+<!-- {#snippet footerContent()} -->
+<!--   <PrimaryButton onclick={() => (open = false)} disabled={Object.keys(value || {}).length === 0}> -->
+<!--     Approve -->
+<!--   </PrimaryButton> -->
+<!-- {/snippet} -->

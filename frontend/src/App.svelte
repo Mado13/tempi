@@ -2,6 +2,7 @@
   import '$router'
   import { navigate, route } from '$router'
   import { App } from '@capacitor/app'
+  import { Capacitor } from '@capacitor/core'
   import { StatusBar, Style } from '@capacitor/status-bar'
   import { Router } from 'sv-router'
   import { loadLocale } from 'wuchale/run-client'
@@ -13,6 +14,9 @@
   const authInit = authStore.init()
 
   $effect(() => {
+    const platform = Capacitor.getPlatform()
+    document.documentElement.className = `platform-${platform}`
+
     StatusBar.setStyle({ style: Style.Light })
     StatusBar.setOverlaysWebView({ overlay: false })
 
@@ -45,9 +49,21 @@
 <style>
   .error-screen {
     min-height: 100vh;
+    min-height: 100dvh;
     display: grid;
     place-items: center;
-    padding: 2rem;
-    color: #dc2626;
+    padding-inline: var(--spacing-l);
+    padding-block: var(--spacing-xl);
+    text-align: center;
+    background-color: var(--color-background-page);
+    h2 {
+      color: var(--color-semantic-error-fg);
+      margin-bottom: var(--spacing-m);
+    }
+    p {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-l);
+      max-width: 400px; /* Prevent text from being too wide */
+    }
   }
 </style>

@@ -93,11 +93,15 @@
 {/snippet}
 
 <style>
-  /* All of your original calendar styles go here */
+  /* Mobile Calendar Range Picker - Clean Start */
+
   [data-melt-calendar] {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xl);
+    gap: 24px;
+    background-color: var(--color-background-screen); /* Force white background */
+    padding: 16px;
+    border-radius: 12px; /* Your --radius-lg */
   }
 
   .month-section {
@@ -106,17 +110,17 @@
 
   [data-melt-calendar-heading] {
     text-align: center;
-    font-size: var(--font-size-headline-s);
-    font-weight: var(--font-weight-semibold);
+    font-size: 20px; /* Your --font-size-subhead equivalent */
+    font-weight: 600; /* Your --font-weight-semibold */
     color: var(--color-text-primary);
-    padding: var(--spacing-m) 0;
+    padding: 16px 0;
     position: sticky;
-    top: calc(var(--spacing-m) * -1);
-    background-color: var(--color-background-surface);
+    top: -16px;
+    background-color: var(--color-background-screen); /* Your white background */
     z-index: 1;
-    margin: 0 calc(var(--spacing-m) * -1);
-    padding-left: var(--spacing-m);
-    padding-right: var(--spacing-m);
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   [data-melt-calendar-grid] {
@@ -127,10 +131,10 @@
   }
 
   [data-melt-calendar-grid] thead th {
-    padding: var(--spacing-s) 0;
+    padding: 12px 0;
     text-align: center;
-    font-size: var(--font-size-label-s);
-    font-weight: var(--font-weight-medium);
+    font-size: 12px; /* Your --font-size-small */
+    font-weight: 500; /* Your --font-weight-medium */
     color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -146,62 +150,66 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--size-tap-target);
-    height: var(--size-tap-target);
-    border-radius: var(--radius-m);
-    font-size: var(--font-size-body-r);
-    font-weight: var(--font-weight-medium);
+    width: 44px; /* Your --tap-min */
+    height: 44px;
+    border-radius: 8px; /* Your --radius-md */
+    font-size: 16px; /* Your --font-size-body */
+    font-weight: 500;
     color: var(--color-text-primary);
     background-color: transparent;
-    transition: all var(--transition-fast);
+    transition: all 150ms cubic-bezier(0, 0, 0.2, 1); /* Your transition values */
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     position: relative;
     border: none;
-    &[data-disabled] {
-      color: var(--color-text-placeholder);
-    }
+  }
+
+  [data-melt-calendar-cell][data-disabled] {
+    color: var(--color-text-tertiary);
   }
 
   [data-melt-calendar-cell]:active {
     transform: scale(0.95);
   }
 
+  /* RANGE SELECTION - Using your primary color */
   [data-melt-calendar-cell][data-selected]:not([data-outside-month]) {
-    background-color: var(--color-interactive-accent-default);
-    color: var(--color-text-on-accent);
-    font-weight: var(--font-weight-semibold);
+    background-color: var(--color-primary); /* Your purple */
+    color: var(--color-text-on-primary); /* Your white text on primary */
+    font-weight: 600;
   }
 
   [data-melt-calendar-cell][data-selection-end]:not([data-outside-month]) {
-    background-color: var(--color-interactive-accent-default);
-    color: var(--color-text-on-accent);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-m) 0 0 var(--radius-m);
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+    font-weight: 600;
+    border-radius: 8px 0 0 8px;
   }
 
   [data-melt-calendar-cell][data-selection-start]:not([data-outside-month]) {
-    background-color: var(--color-interactive-accent-default);
-    color: var(--color-text-on-accent);
-    font-weight: var(--font-weight-semibold);
-    border-radius: 0 var(--radius-m) var(--radius-m) 0;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+    font-weight: 600;
+    border-radius: 0 8px 8px 0;
   }
 
   [data-melt-calendar-cell][data-selection-start][data-selection-end]:not([data-outside-month]) {
-    border-radius: var(--radius-m);
+    border-radius: 8px;
   }
 
+  /* In-between dates - lighter background */
   [data-melt-calendar-cell][data-selected]:not([data-selection-start]):not(
       [data-selection-end]
     ):not([data-outside-month]) {
-    background-color: var(--color-background-surface-active);
-    color: var(--color-interactive-accent-default);
+    background-color: #ede9fe; /* Light purple background */
+    color: var(--color-primary);
     border-radius: 0;
   }
 
+  /* Today indicator */
   [data-melt-calendar-cell][data-today]:not([data-selected]):not([data-outside-month]) {
-    font-weight: var(--font-weight-semibold);
+    font-weight: 600;
   }
 
   [data-melt-calendar-cell][data-today]:not([data-selected]):not([data-outside-month])::after {
@@ -212,12 +220,12 @@
     transform: translateX(-50%);
     width: 4px;
     height: 4px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-interactive-accent-default);
+    border-radius: 50%;
+    background-color: var(--color-primary);
   }
 
   [data-melt-calendar-cell][data-outside-month] {
-    color: var(--color-text-placeholder);
+    color: var(--color-text-tertiary);
     opacity: 0.5;
   }
 </style>

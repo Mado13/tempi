@@ -3,9 +3,10 @@
   import LogoUploader from '$lib/components/LogoUploader.svelte'
   import { createForm } from '$lib/forms'
   import { companyCreateSchema } from '$lib/schemas/company.schema.svelte'
+  import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import { useCompaniesStore } from '$lib/stores/resources/companies.store.svelte'
 
-  const companiesStore = useCompaniesStore()
+  const companies = useCompaniesStore()
 
   const form = createForm({
     schema: companyCreateSchema,
@@ -15,12 +16,8 @@
       logoKey: '',
     },
     async onSubmit(formData) {
-      const result = await companiesStore.create(formData, { snackbar: false })
-      if (result.success) {
-        console.log('Company created:', result.data)
-      } else {
-        console.error('Failed to create company:', result.error)
-      }
+      await companies.create(formData)
+      bottomSheet.close()
     },
   })
 </script>

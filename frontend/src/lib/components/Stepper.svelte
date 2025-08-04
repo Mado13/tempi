@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { value = $bindable(), label, error, min = 1, step = 1 } = $props()
+  let { value = $bindable(), label, error, min = 1, step = 1, required = false } = $props()
 
   const isMinDisabled = $derived(value <= min)
 
@@ -21,12 +21,12 @@
   }
 </script>
 
-<div>
-  <fieldset class:has-error={!!error}>
-    <legend>{label}</legend>
+<div class="input-wrapper">
+  <fieldset class:error={!!error}>
+    <legend class:required>{label}</legend>
 
     <div class="stepper-content-wrapper">
-      <button type="button" onclick={decrement} disabled={isMinDisabled} aria-label="dec">
+      <button type="button" onclick={decrement} disabled={isMinDisabled} aria-label="Decrease">
         −
       </button>
 
@@ -41,124 +41,184 @@
         aria-valuemin={min}
         aria-valuenow={value} />
 
-      <button type="button" onclick={increment} aria-label="Increment"> + </button>
+      <button type="button" onclick={increment} aria-label="Increase"> + </button>
     </div>
   </fieldset>
 
-  <div class="error-message" aria-live="polite">
+  <div class="error-message" aria-live="polite" class:visible={!!error}>
     {error || '\u00a0'}
   </div>
 </div>
 
 <style>
-  div {
+  .input-wrapper {
     width: 100%;
+  }
 
-    > fieldset {
-      position: relative;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: var(--size-tap-target);
-      padding: 0;
-      margin: 0;
-      border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-m);
-      background-color: var(--color-background-surface);
-      transition:
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
+  fieldset {
+    min-height: var(--tap-min);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    padding-inline-start: var(--space-2);
+    margin: 0;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    background-color: var(--color-background-screen);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
 
-      &:focus-within {
-        border-color: var(--color-border-focused);
-        box-shadow: var(--ring-accent);
-      }
+  fieldset:focus-within {
+    border-color: var(--color-border-focused);
+    box-shadow: var(--ring);
+  }
 
-      &.has-error {
-        border-color: var(--color-semantic-error-fg);
-        &:focus-within {
-          box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-semantic-error-fg) 25%, transparent);
-        }
-      }
+  fieldset.error {
+    border-color: var(--color-error);
+  }
 
-      > legend {
-        position: absolute;
-        top: 0;
-        right: var(--spacing-s);
-        transform: translateY(-50%);
-        padding: 0 var(--spacing-s);
-        font-size: var(--font-size-label-s);
-        font-weight: var(--font-weight-medium);
-        color: var(--color-text-secondary);
-        background-image: linear-gradient(
-          to bottom,
-          var(--color-background-page) 0%,
-          var(--color-background-page) 50%,
-          var(--color-background-surface) 50%,
-          var(--color-background-surface) 100%
-        );
-      }
-    }
+  fieldset.error:focus-within {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
+  }
+
+  legend {
+    position: absolute;
+    right: var(--space-4);
+    top: 0;
+    transform: translateY(-50%);
+    padding: 0 var(--space-2);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    pointer-events: none;
+    background: var(--color-background-screen);
+  }
+
+  legend.required::after {
+    content: ' *';
+    color: var(--color-error);
+  }
+
+  fieldset:focus-within legend {
+    color: var(--color-primary);
+  }
+
+  fieldset.error legend {
+    color: var(--color-error);
   }
 
   .error-message {
-    font-size: var(--font-size-label-s);
-    color: var(--color-semantic-error-fg);
-    font-weight: var(--font-weight-medium);
-    min-height: calc(var(--spacing-s) + var(--font-size-label-s));
-    padding-top: var(--spacing-xs);
+    margin-top: var(--space-2);
+    font-size: var(--font-size-caption);
+    color: var(--color-error);
+    line-height: var(--line-height-normal);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
   }
 
-  /* --- Stepper-Specific Styles (Inside the fieldset) --- */
+  .error-message.visible {
+    opacity: 1;
+  }
 
+  /* === Stepper-Specific Content === */
   .stepper-content-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    padding: 0 var(--spacing-s);
+    padding: 0 var(--space-2);
+  }
 
-    > button {
-      all: unset;
-      box-sizing: border-box;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-full); /* Make them circular */
-      font-size: var(--font-size-headline-m);
-      color: var(--color-interactive-accent-default);
-      cursor: pointer;
-      transition: background-color var(--transition-fast);
-      &:active {
-        background-color: var(--color-background-surface-active);
-      }
-      &:disabled {
-        color: var(--color-text-placeholder);
-        cursor: not-allowed;
-        background-color: transparent;
-      }
-    }
+  .stepper-content-wrapper > button {
+    all: unset;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
 
-    > input {
-      border: none;
-      outline: none;
-      box-shadow: none;
-      background-color: transparent;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      margin: 0;
-      text-align: center;
-      color: var(--color-text-primary);
-      font-family: var(--font-family-base);
-      font-weight: var(--font-weight-semibold);
-      font-size: 16px !important; /* Prevents iOS zoom */
-      -webkit-user-select: text;
-      user-select: text;
+  .stepper-content-wrapper > button:active {
+    background-color: rgba(var(--primary-rgb), 0.12);
+    transform: scale(0.95);
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .stepper-content-wrapper > button:disabled {
+    color: var(--color-text-tertiary);
+    cursor: not-allowed;
+    background-color: transparent;
+  }
+
+  .stepper-content-wrapper > input {
+    width: 100%;
+    height: 100%;
+    padding: 0 var(--space-3);
+    font-size: 16px !important; /* Prevent iOS zoom */
+    font-family: var(--font-family-app);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    text-align: center;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  .stepper-content-wrapper > input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .stepper-content-wrapper > input::placeholder {
+    color: var(--color-text-tertiary);
+    opacity: 1;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    fieldset {
+      border-width: 2px;
     }
+    fieldset:focus-within {
+      box-shadow: 0 0 0 3px #000000;
+    }
+    .stepper-content-wrapper > button {
+      border: 1px solid currentColor;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    fieldset,
+    .stepper-content-wrapper > button {
+      transition: none;
+    }
+  }
+
+  /* Mobile touch targets */
+  .stepper-content-wrapper > button {
+    min-width: var(--tap-min);
+    min-height: var(--tap-min);
   }
 </style>

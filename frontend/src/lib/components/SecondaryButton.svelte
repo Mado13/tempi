@@ -8,11 +8,12 @@
   {loading}
   {...restProps}
   --bg-color="transparent"
-  --color="var(--color-interactive-accent-default)"
-  --border="1px solid var(--color-interactive-accent-default)"
-  --active-bg-color="var(--color-interactive-accent-default)"
-  --active-color="var(--color-text-on-accent)"
+  --color="var(--color-primary)"
+  --border="1px solid var(--color-primary)"
+  --active-bg-color="var(--color-primary)"
+  --active-color="var(--color-text-on-primary)"
   --disabled-bg-color="transparent"
-  --disabled-border-color="var(--color-border-default)">
+  --disabled-border-color="var(--color-border-default)"
+  --disabled-color="var(--color-text-tertiary)">
   {@render children()}
 </Button>

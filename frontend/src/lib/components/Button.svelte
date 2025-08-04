@@ -57,11 +57,11 @@
     width: 100%;
     color: var(--color);
     border: var(--border);
-    min-height: var(--size-tap-target);
-    padding: var(--padding, 0 var(--spacing-l));
-    border-radius: var(--radius-m);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size, var(--font-size-label-l));
+    min-height: var(--min-height, var(--tap-min));
+    padding: var(--padding, 0 var(--space-6));
+    border-radius: var(--border-radius, var(--radius-xl));
+    font-family: var(--font-family-app);
+    font-size: var(--font-size, var(--font-size-body));
     font-weight: var(--font-weight, var(--font-weight-medium));
     text-align: var(--text-align, center);
     cursor: pointer;
@@ -69,27 +69,31 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
+    -webkit-touch-callout: none;
     white-space: nowrap;
     transition:
-      background-color var(--transition-fast),
-      color var(--transition-fast),
-      transform 0.1s,
-      opacity 0.1s;
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-instant) var(--ease-out),
+      opacity var(--duration-instant) var(--ease-out);
   }
-  button:active {
-    background-color: var(--active-bg-color);
+
+  button:active:not(:disabled) {
+    background: var(--active-bg-color, var(--color-primary-active));
     color: var(--active-color);
-    transform: scale(0.98);
+    transform: scale(0.95);
     opacity: 0.9;
   }
+
   button:disabled {
-    background-color: var(--disabled-bg-color);
-    border-color: var(--disabled-border-color);
-    color: var(--color-text-placeholder);
+    background: var(--disabled-bg-color, var(--color-background-elevated));
+    border-color: var(--disabled-border-color, var(--color-border-default));
+    color: var(--disabled-color, var(--color-text-tertiary));
     cursor: not-allowed;
     transform: none;
     opacity: 0.7;
   }
+
   .spinner {
     display: inline-block;
     width: 20px;
@@ -99,6 +103,7 @@
     border-top-color: transparent;
     animation: spin 0.8s linear infinite;
   }
+
   @keyframes spin {
     to {
       transform: rotate(360deg);

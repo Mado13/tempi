@@ -7,10 +7,10 @@
 <Button
   {loading}
   {...restProps}
-  --bg-color="var(--color-interactive-accent-default)"
-  --color="var(--color-text-on-accent)"
+  --bg-color="var(--color-primary)"
+  --color="var(--color-text-on-primary)"
   --border="none"
-  --active-bg-color="var(--color-interactive-accent-active)"
-  --disabled-bg-color="var(--color-border-default)">
+  --active-bg-color="var(--color-primary-active)"
+  --disabled-bg-color="var(--color-background-elevated)">
   {@render children()}
 </Button>

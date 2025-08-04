@@ -125,32 +125,35 @@
 </div>
 
 <style>
+  /* Searchable List - Fixed for Design System */
+
   .search-container {
-    padding: 0 0 var(--spacing-m);
+    padding: 0 0 var(--space-4); /* Changed from --spacing-m */
     position: sticky;
     top: 0;
-    background: var(--color-background-surface);
+    background: var(--color-background-screen);
     z-index: 1;
-    > input {
-      width: 100%;
-      font-size: 16px !important; /* Prevent zoom */
-      padding: 0 var(--spacing-m);
-      min-height: var(--size-tap-target);
-      font-family: var(--font-family-base);
-      color: var(--color-text-primary);
-      background: var(--color-background-page);
-      border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-m);
-      transition:
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
+  }
 
-      &:focus {
-        outline: none;
-        border-color: var(--color-border-focused);
-        box-shadow: var(--ring-accent);
-      }
-    }
+  .search-container > .search-input {
+    width: 100%;
+    font-size: 16px !important; /* Prevent zoom */
+    padding: 0 var(--space-4); /* Changed from --spacing-m */
+    min-height: var(--tap-min); /* Changed from --size-tap-target */
+    font-family: var(--font-family-app); /* Changed from --font-family-base */
+    color: var(--color-text-primary);
+    background: var(--color-background-app);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md); /* Changed from --radius-m */
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      /* Changed from --transition-fast */ box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .search-container > .search-input:focus {
+    outline: none;
+    border-color: var(--color-border-focused);
+    box-shadow: var(--ring); /* Changed from --ring-accent */
   }
 
   .results {
@@ -159,111 +162,148 @@
     -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: var(--space-2); /* Changed from --spacing-xs */
+    background: var(--color-background-app);
+    padding: var(--space-4);
+    margin: 0 calc(var(--space-4) * -1);
+  }
 
-    .group-header {
-      padding: var(--spacing-s) var(--spacing-m);
-      font-size: var(--font-size-label-m);
-      font-weight: var(--font-weight-medium);
-      color: var(--color-text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+  .results .group-header {
+    padding: var(--space-3) var(--space-4); /* Changed from --spacing-s --spacing-m */
+    font-size: var(--font-size-caption); /* Changed from --font-size-label-m */
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .results > button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4); /* Changed from --spacing-m */
+    width: 100%;
+    min-height: var(--tap-min); /* Changed from --size-tap-target */
+    padding: var(--space-4); /* Changed from --spacing-m */
+    background: var(--color-background-screen); /* Fixed: White background for buttons */
+    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md); /* Changed from --radius-m */
+    text-align: end; /* RTL support */
+    font-family: var(--font-family-app); /* Changed from --font-family-base */
+    font-size: var(--font-size-body); /* Changed from --font-size-body-r */
+    color: var(--color-text-primary);
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: all var(--duration-fast) var(--ease-out); /* Changed from --transition-fast */
+
+    /* RTL layout - icon on right for RTL languages */
+    direction: rtl;
+  }
+
+  .results > button.selected {
+    background: var(
+      --color-background-elevated
+    ); /* Using elevated instead of missing active token */
+    border-color: var(--color-primary); /* Changed from --color-interactive-accent-default */
+  }
+
+  .results > button.selected span {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .results > button:active {
+    background: var(--color-background-elevated);
+    border-color: var(--color-primary); /* Changed from --color-interactive-accent-default */
+    transform: scale(0.98);
+  }
+
+  .results > button:focus-visible {
+    outline: none;
+    border-color: var(--color-border-focused);
+    box-shadow: var(--ring); /* Changed from --ring-accent */
+  }
+
+  /* Checkmark on far left (last child in RTL) */
+  .results > button > :global(svg:last-child) {
+    flex-shrink: 0;
+    color: var(--color-primary); /* Changed from --color-interactive-accent-default */
+  }
+
+  .results > button > :global(svg.result-icon) {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary); /* Changed from --color-interactive-accent-default */
+  }
+
+  .results > button span {
+    flex: 1;
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-normal); /* Changed from 1.4 */
+    /* Reset direction for text content */
+    direction: ltr;
+    text-align: end;
+  }
+
+  .results .loading-state,
+  .results .no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-8); /* Changed from --spacing-xl */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body); /* Changed from --font-size-body-r */
+    gap: var(--space-4); /* Changed from --spacing-m */
+  }
+
+  .results .spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--color-border-default);
+    border-top: 2px solid var(--color-primary); /* Changed from --color-interactive-accent-default */
+    border-radius: var(--radius-full); /* Changed from 50% */
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Enhanced mobile interactions */
+  @media (hover: hover) {
+    .results > button:hover:not(.selected) {
+      background: var(--color-background-app);
+      border-color: var(--color-border-strong);
+    }
+  }
+
+  /* High contrast support */
+  @media (prefers-contrast: high) {
+    .results > button.selected {
+      border-width: 2px;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .results .spinner {
+      animation: none;
+      border-top-color: var(--color-primary);
     }
 
-    > button {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-m);
-      width: 100%;
-      min-height: var(--size-tap-target);
-      padding: var(--spacing-m);
-      background: var(--color-background-surface);
-      border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-m);
-      text-align: end; /* RTL support */
-      font-family: var(--font-family-base);
-      font-size: var(--font-size-body-r);
-      color: var(--color-text-primary);
-      cursor: pointer;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-      transition: all var(--transition-fast);
-
-      /* RTL layout - icon on right for RTL languages */
-      direction: rtl;
-
-      &.selected {
-        background: var(--color-background-surface-active);
-        border-color: var(--color-interactive-accent-default);
-
-        span {
-          font-weight: var(--font-weight-medium);
-        }
-      }
-
-      &:active {
-        background: var(--color-background-surface-active);
-        border-color: var(--color-interactive-accent-default);
-        transform: scale(0.98);
-      }
-
-      &:focus-visible {
-        outline: none;
-        border-color: var(--color-border-focused);
-        box-shadow: var(--ring-accent);
-      }
-
-      /* Checkmark on far left (last child in RTL) */
-      > :global(svg:last-child) {
-        flex-shrink: 0;
-        color: var(--color-interactive-accent-default);
-      }
-
-      > :global(svg.result-icon) {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 1.5rem;
-        color: var(--color-interactive-accent-default);
-      }
-
-      span {
-        flex: 1;
-        font-weight: var(--font-weight-regular);
-        line-height: 1.4;
-        /* Reset direction for text content */
-        direction: ltr;
-        text-align: end;
-      }
+    .results > button {
+      transition: none;
     }
 
-    .loading-state,
-    .no-results {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: var(--spacing-xl);
-      color: var(--color-text-secondary);
-      font-size: var(--font-size-body-r);
-      gap: var(--spacing-m);
-    }
-
-    .spinner {
-      width: 2rem;
-      height: 2rem;
-      border: 2px solid var(--color-border-default);
-      border-top: 2px solid var(--color-interactive-accent-default);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+    .results > button:active {
+      transform: none;
     }
   }
 </style>
