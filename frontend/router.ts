@@ -14,6 +14,7 @@ import Login from '$routes/auth/Login.svelte'
 import Verify from '$routes/auth/Verify.svelte'
 import { createRouter } from 'sv-router'
 
+import Opportunity from '$lib/components/Opportunity.svelte'
 import * as snackbar from '$lib/snackbar/snackbar.service.svelte'
 
 export const { p, navigate, isActive, route } = createRouter({
@@ -40,14 +41,14 @@ export const { p, navigate, isActive, route } = createRouter({
       '/agenda': Agenda,
     },
     '/worker': {
-      '/opportunities': Opportunities,
+      '/opportunities': {
+        '/': Opportunities,
+        '/:opportunity': Opportunity,
+      },
     },
     '/:role': {
       '/profile': Profile,
       '/team': Team,
-      '/job': {
-        '/new': CreateProject,
-      },
     },
     '/select-role': SelectRole,
     '/profile': Profile,
