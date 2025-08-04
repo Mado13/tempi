@@ -27,6 +27,8 @@ defmodule TempiWeb.Router do
     # User & Auth Management
     get "/user/me", UserController, :show
     patch "/user/me", UserController, :update
+    get "/user/me/worker-profile", UserController, :show_worker_profile
+    patch "/user/me/worker-profile/:id", UserController, :update_worker_profile
     post "/user/profiles", UserController, :create_profile
     delete "/auth/logout", AuthController, :logout
     post "/supabase-token", SupabaseTokenController, :create

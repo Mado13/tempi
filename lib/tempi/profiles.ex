@@ -1,7 +1,7 @@
 defmodule Tempi.Profiles do
   import Ecto.Query
   alias Tempi.Repo
-  alias Tempi.Profiles.{CompanyProfile, EmployerProfile}
+  alias Tempi.Profiles.{CompanyProfile, EmployerProfile, WorkerProfile}
 
   def create_company_profile(attrs) do
     %CompanyProfile{}
@@ -54,5 +54,11 @@ defmodule Tempi.Profiles do
       nil -> {:error, :worker_profile_required}
       worker_profile -> {:ok, worker_profile}
     end
+  end
+
+  def update_worker_profile(worker_profile, attrs) do
+    worker_profile
+    |> WorkerProfile.changeset(attrs)
+    |> Repo.update()
   end
 end
