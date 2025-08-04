@@ -24,23 +24,39 @@ defmodule TempiWeb.Router do
   scope "/api", TempiWeb do
     pipe_through :api_auth
 
-    # Protected endpoints (require bearer token)
+    # User & Auth Management
     get "/user/me", UserController, :current_user
     patch "/role", UserController, :update_role
     post "/role", UserController, :create_role
-
     delete "/auth/logout", AuthController, :logout
+    post "/supabase-token", SupabaseTokenController, :create
 
-    resources "/companies", CompanyController, only: [:index, :create, :show, :update, :delete]
+    # Core Resources
+    resources "/companies", CompanyController, except: [:new, :edit]
 
-    resources "/jobs", JobController, only: [:create, :index, :show, :update, :delete] do
+    resources "/projects", ProjectController, except: [:new] do
+      resources "/positions", ProjectPositionController,
+        only: [:index, :create],
+        as: :project_positions
+    end
+
+    resources "/positions", ProjectPositionController, except: [:new] do
+      resources "/applications", PositionApplicationController,
+        only: [:index, :create, :delete],
+        as: :position_applications
+
+      # Favorites as member action
+      patch "/favorite", FavoriteController, :toggle_position, as: :favorite_position
+    end
+
+    resources "/jobs", JobController, except: [:new, :edit] do
       resources "/applications", JobApplicationController,
         only: [:index, :create, :delete],
         as: :job_applications
-    end
 
-    patch "/jobs/:job_id/favorite", FavoriteController, :toggle
-    post "/supabase-token", SupabaseTokenController, :create
+      # Favorites as member action  
+      patch "/favorite", FavoriteController, :toggle_job, as: :favorite_job
+    end
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
