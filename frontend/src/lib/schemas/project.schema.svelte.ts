@@ -2,7 +2,7 @@ import * as v from 'valibot'
 
 import { googleMapsFormLocationSchema } from '$lib/utils/google-maps/schema'
 
-import { projectPositionCreateSchema } from './project_position.schema.svelte'
+import { projectPositionCreateSchema } from './project-position.schema.svelte'
 
 export const projectCreateSchema = v.object({
   companyProfileId: v.pipe(v.string(), v.uuid()),
