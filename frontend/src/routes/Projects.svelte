@@ -57,10 +57,7 @@
 
 <style>
   .projects-page {
-    background: var(--color-background-app);
     padding: var(--space-4);
-    padding-bottom: calc(var(--bottom-nav-height) + var(--space-4));
-    min-height: 100vh;
   }
 
   /* Header section */

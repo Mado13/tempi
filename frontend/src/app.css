@@ -246,9 +246,13 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
-  margin: 0;
+ margin: 0;
   padding: 0;
   height: 100%;
   overflow: hidden;
@@ -257,6 +261,12 @@ body {
   background: var(--color-background-app);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 #app {
@@ -269,6 +279,8 @@ body {
   padding-left: var(--safe-left);
   padding-right: var(--safe-right);
 }
+
+
 
 /* ====================================================================
  * MOBILE CONTAINER SYSTEM
@@ -365,14 +377,14 @@ button {
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: var(--safe-left);
+  right: var(--safe-right);
   height: var(--bottom-nav-height);
   background: var(--color-background-overlay);
   border-top: 1px solid var(--color-border-strong);
   padding-bottom: var(--safe-bottom);
   box-shadow: var(--shadow-elevated);
-  z-index: 100;
+  z-index: 1000;
   display: flex;
 }
 
@@ -462,18 +474,26 @@ button {
 
 .scroll-area {
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
 
-.hide-scrollbar {
+.hide-scrollbar,
+.scroll-area,
+.screen,
+.main-content {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
+.hide-scrollbar::-webkit-scrollbar,
+.scroll-area::-webkit-scrollbar,
+.screen::-webkit-scrollbar,
+.main-content::-webkit-scrollbar {
   display: none;
 }
+
 
 /* ====================================================================
  * MOBILE TYPOGRAPHY CLASSES

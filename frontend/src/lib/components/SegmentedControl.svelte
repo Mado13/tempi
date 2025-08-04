@@ -92,11 +92,12 @@
     line-height: var(--line-height-normal);
   }
   .segment-content {
-    background: var(--color-background-screen);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-subtle);
+    /* Borderless 2025 trend */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
     &[hidden] {
       display: none;
     }
