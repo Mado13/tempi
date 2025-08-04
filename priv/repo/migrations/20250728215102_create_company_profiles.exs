@@ -6,6 +6,7 @@ defmodule Tempi.Repo.Migrations.CreateCompanyProfiles do
       add :id, :binary_id, primary_key: true
       add :name, :string, null: false
       add :business_number, :string, null: false
+      add :logo_key, :string
 
       add :address_id, references(:addresses, type: :binary_id, on_delete: :nothing)
 

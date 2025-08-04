@@ -29,6 +29,16 @@ defmodule Tempi.Profiles do
     |> Repo.one()
   end
 
+  def update_company_profile(company_profile, attrs) do
+    company_profile
+    |> CompanyProfile.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_company_profile(company_profile) do
+    Repo.delete(company_profile)
+  end
+
   def user_owns_company_profile?(company_profile_id, user_id) do
     from(cp in CompanyProfile,
       join: ep in EmployerProfile,

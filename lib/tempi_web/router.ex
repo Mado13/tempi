@@ -40,6 +40,7 @@ defmodule TempiWeb.Router do
     end
 
     patch "/jobs/:job_id/favorite", FavoriteController, :toggle
+    post "/supabase-token", SupabaseTokenController, :create
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

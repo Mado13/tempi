@@ -11,6 +11,10 @@ defmodule TempiWeb.JobJSON do
     %{
       id: job.id,
       status: job.status,
+      company: %{
+        name: job.company_profile.name,
+        logo_key: job.company_profile.logo_key
+      },
       address: %{
         formatted_address: job.address.formatted_address,
         locality: job.address.locality,

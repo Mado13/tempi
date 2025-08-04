@@ -8,6 +8,7 @@ defmodule Tempi.Profiles.CompanyProfile do
   schema "company_profiles" do
     field :name, :string
     field :business_number, :string
+    field :logo_key, :string
 
     belongs_to :address, Tempi.Address
     belongs_to :employer_profile, Tempi.Profiles.EmployerProfile
@@ -23,7 +24,7 @@ defmodule Tempi.Profiles.CompanyProfile do
   """
   def changeset(company_profile, attrs) do
     company_profile
-    |> cast(attrs, [:name, :business_number, :address_id, :employer_profile_id])
+    |> cast(attrs, [:name, :business_number, :logo_key, :address_id, :employer_profile_id])
     |> validate_required([:name, :employer_profile_id, :business_number])
     |> validate_length(:name, min: 2, max: 255)
     |> unique_constraint(:business_number)

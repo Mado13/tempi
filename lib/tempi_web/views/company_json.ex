@@ -11,7 +11,8 @@ defmodule TempiWeb.CompanyJSON do
     %{
       id: company.id,
       name: company.name,
-      business_number: company.business_number
+      business_number: company.business_number,
+      logo_key: company.logo_key
     }
   end
 end

@@ -10,14 +10,13 @@ defmodule TempiWeb.CompanyController do
     |> render(:index, company_profiles: company_profiles)
   end
 
-  def create(conn, %{"name" => name, "business_number" => business_number}) do
+  def create(conn, params) do
     current_user = current_user(conn)
 
-    attrs = %{
-      "name" => name,
-      "business_number" => business_number,
-      "employer_profile_id" => current_user.employer_profile.id
-    }
+    attrs =
+      params
+      |> Map.take(["name", "business_number", "logo_key"])
+      |> Map.put("employer_profile_id", current_user.employer_profile.id)
 
     with {:ok, company_profile} <- Profiles.create_company_profile(attrs) do
       conn
