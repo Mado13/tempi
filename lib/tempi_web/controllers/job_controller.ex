@@ -11,7 +11,15 @@ defmodule TempiWeb.JobController do
   end
 
   def index(conn, _params) do
-    jobs = Jobs.jobs_for_user(current_user(conn))
+    user = current_user(conn)
+    IO.inspect(user, label: "amido")
+
+    jobs =
+      if user.current_role == :employer do
+        Jobs.jobs_for_user(user)
+      else
+        Jobs.list_jobs()
+      end
 
     render(conn, :index, jobs: jobs)
   end

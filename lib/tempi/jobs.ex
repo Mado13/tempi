@@ -6,6 +6,17 @@ defmodule Tempi.Jobs do
   alias Tempi.{Job, Address, JobClassification, Profiles}
 
   @doc """
+  Lists all jobs, sorted by most recent.
+  """
+  def list_jobs do
+    from(j in Job,
+      order_by: [desc: j.inserted_at],
+      preload: [:address, :job_classifications, :company_profile]
+    )
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single job by its ID.
   Returns nil if the job is not found.
   """
@@ -71,7 +82,7 @@ defmodule Tempi.Jobs do
   # Find jobs for specific user
   def jobs_for_user(user) do
     user
-    |> Repo.preload(employer_profile: [jobs: [:address, :job_classifications]])
+    |> Repo.preload(employer_profile: [jobs: [:address, :job_classifications, :company_profile]])
     |> then(fn user ->
       case user.employer_profile do
         nil -> []
