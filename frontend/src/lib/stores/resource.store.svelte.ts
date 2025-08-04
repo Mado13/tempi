@@ -1,6 +1,10 @@
 // src/lib/stores/resource.store.svelte.ts
 import { SvelteMap } from 'svelte/reactivity'
 
+import { notificationDispatcher } from '$lib/services/notification-dispatcher.service.svelte'
+
+import { authStore } from './auth.store.svelte'
+
 type Id = string
 type State = 'idle' | 'loading' | 'ready' | 'syncing' | 'error'
 
@@ -15,9 +19,10 @@ export type CreateFn<T> = (data: Partial<T>, opts?: unknown) => Promise<T>
 export type UpdateFn<T> = (id: Id, patch: Partial<T>, opts?: unknown) => Promise<T>
 export type RemoveFn = (id: Id, opts?: unknown) => Promise<void>
 
-export type ResourceStore<T extends { id: Id }> = {
+export type ResourceStore<T extends { id: Id; createdAt?: string }> = {
   // state
   get items(): T[]
+  get newItems(): T[]
   get ids(): Id[]
   get isLoading(): boolean
   get isSyncing(): boolean
@@ -34,11 +39,14 @@ export type ResourceStore<T extends { id: Id }> = {
   retryEntity(id: Id): Promise<void>
   invalidate(scope?: 'session' | 'resource'): void
 
+  // notifications
+  onNotification(type: string, handler?: () => void): () => void
+
   // infinite scroll helper
   makePrefetchObserver(node: Element): () => void
 }
 
-export function defineResource<T extends { id: Id }>(cfg: {
+export function defineResource<T extends { id: Id; createdAt?: string }>(cfg: {
   name: string
   ttlMs?: number
   fetchList: FetchList<T>
@@ -92,9 +100,6 @@ export function defineResource<T extends { id: Id }>(cfg: {
 
     // init de-dupe
     let initP: Promise<void> | null = null
-    // in src/lib/stores/resource.store.svelte.ts
-
-    // in src/lib/stores/resource.store.svelte.ts
 
     async function init() {
       if (state === 'ready' && !isStale()) return
@@ -103,7 +108,6 @@ export function defineResource<T extends { id: Id }>(cfg: {
       state = state === 'idle' ? 'loading' : 'syncing'
 
       initP = guard(async (ac) => {
-        // Declare 'res' here so it's accessible throughout the function
         let res: { items: T[]; next?: string }
 
         try {
@@ -111,11 +115,9 @@ export function defineResource<T extends { id: Id }>(cfg: {
           if (ac.signal.aborted) return
         } catch (error) {
           state = 'error'
-          // Re-throw the error to be caught by the outer .catch
           throw error
         }
 
-        // The data is now safe to process
         ids = []
         items.clear()
         merge(res.items)
@@ -125,7 +127,6 @@ export function defineResource<T extends { id: Id }>(cfg: {
         state = 'ready'
       })
         .catch(() => {
-          // This will catch errors from the fetch or other parts of the promise
           state = 'error'
         })
         .finally(() => {
@@ -133,6 +134,7 @@ export function defineResource<T extends { id: Id }>(cfg: {
         })
       return initP
     }
+
     async function refresh() {
       state = state === 'idle' ? 'loading' : 'syncing'
       return guard(async (ac) => {
@@ -236,6 +238,14 @@ export function defineResource<T extends { id: Id }>(cfg: {
       lastAt = 0
     }
 
+    function onNotification(type: string, handler?: () => void): () => void {
+      // Default handler: just refresh the store
+      const actualHandler = handler || (() => refresh())
+
+      // Register with the global dispatcher
+      return notificationDispatcher.register(type, actualHandler)
+    }
+
     function makePrefetchObserver(node: Element) {
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) if (e.isIntersecting) loadMore()
@@ -247,6 +257,11 @@ export function defineResource<T extends { id: Id }>(cfg: {
     const store: ResourceStore<T> = {
       get items() {
         return Array.from(items.values())
+      },
+      get newItems() {
+        return Array.from(items.values()).filter(
+          (item) => item.createdAt && new Date(item.createdAt).getTime() > authStore.lastSeen,
+        )
       },
       get ids() {
         return ids
@@ -270,6 +285,7 @@ export function defineResource<T extends { id: Id }>(cfg: {
       remove,
       retryEntity,
       invalidate,
+      onNotification,
       makePrefetchObserver,
     }
 

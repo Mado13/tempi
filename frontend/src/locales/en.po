@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-03T20:49:16.217Z\n"
-"PO-Revision-Date: 2025-08-10T08:26:38.482Z\n"
+"PO-Revision-Date: 2025-08-21T21:06:53.936Z\n"
 "Last-Translator: \n"
 "Language: English\n"
 "Language-Team: \n"
@@ -44,6 +44,7 @@ msgstr "Employees"
 
 #: src/routes/AddJob.svelte
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Address"
 msgstr "Address"
 
@@ -252,7 +253,6 @@ msgid "No addresses found"
 msgstr "No addresses found"
 
 #: src/lib/components/SearchableBottomSheet.svelte
-#: src/lib/components/JobClassificationPicker.svelte
 msgid "Approve"
 msgstr "Approve"
 
@@ -562,10 +562,12 @@ msgid "Create new job"
 msgstr "Create new job"
 
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Date"
 msgstr "Date"
 
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Pick address"
 msgstr "Pick address"
 
@@ -578,6 +580,7 @@ msgid "Pick address in picker"
 msgstr "Pick address in picker"
 
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Pick date placeholder"
 msgstr "Pick date placeholder"
 
@@ -596,3 +599,124 @@ msgstr "Resend code in {0}"
 #: src/routes/auth/Verify.svelte
 msgid "Hidden Submit"
 msgstr "Hidden Submit"
+
+#: src/routes/CreateProject.svelte
+msgid "Create project"
+msgstr "Create project"
+
+#: src/routes/CreateProject.svelte
+msgid "Name"
+msgstr "Name"
+
+#: src/routes/CreateProject.svelte
+msgid "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+msgstr "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+
+#: src/routes/CreateProject.svelte
+msgid "M22 21v-2a4 4 0 0 0-3-3.87"
+msgstr "M22 21v-2a4 4 0 0 0-3-3.87"
+
+#: src/routes/CreateProject.svelte
+msgid "M16 3.13a4 4 0 0 1 0 7.75"
+msgstr "M16 3.13a4 4 0 0 1 0 7.75"
+
+#: src/routes/CreateProject.svelte
+msgid "No positions added yet"
+msgstr "No positions added yet"
+
+#: src/routes/CreateProject.svelte
+msgid "Add job positions to define roles for this project"
+msgstr "Add job positions to define roles for this project"
+
+#: src/routes/CreateProject.svelte
+#: src/routes/CreateProject.svelte
+msgid "Add position"
+msgstr "Add position"
+
+#: src/routes/CreateProject.svelte
+msgid "Publish project"
+msgstr "Publish project"
+
+#: src/routes/CreateProject.svelte
+msgid "New position"
+msgstr "New position"
+
+#: src/routes/Projects.svelte
+msgid "<0/> Your projects"
+msgstr "<0/> Your projects"
+
+#: src/routes/Projects.svelte
+msgid "{0} active listings"
+msgstr "{0} active listings"
+
+#: src/routes/Projects.svelte
+msgid "No projects yet"
+msgstr "No projects yet"
+
+#: src/routes/Projects.svelte
+msgid "You haven't created any jobs yet. Tap the + button to get started."
+msgstr "You haven't created any jobs yet. Tap the + button to get started."
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "אפשרויות נוספות"
+msgstr "אפשרויות נוספות"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "נדרש:"
+msgstr "נדרש:"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "תעודות:"
+msgstr "תעודות:"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "{0} לשעה"
+msgstr "{0} לשעה"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "לפני {0} ימים"
+msgstr "לפני {0} ימים"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "פרטים נוספים"
+msgstr "פרטים נוספים"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "הגש מועמדות"
+msgstr "הגש מועמדות"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "נהג משאית"
+msgstr "נהג משאית"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "חברת הובלות דן"
+msgstr "חברת הובלות דן"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "אזור המרכז"
+msgstr "אזור המרכז"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "משמרת יום"
+msgstr "משמרת יום"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "רישיון C"
+msgstr "רישיון C"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "מלגזה"
+msgstr "מלגזה"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "ללא נסיעות לילה"
+msgstr "ללא נסיעות לילה"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "רישיון נהיגה על משאית"
+msgstr "רישיון נהיגה על משאית"
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "תעודת מלגזה"
+msgstr "תעודת מלגזה"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-03T20:49:16.220Z\n"
-"PO-Revision-Date: 2025-08-10T08:26:38.483Z\n"
+"PO-Revision-Date: 2025-08-21T21:06:53.957Z\n"
 "Last-Translator: \n"
 "Language: hebrew\n"
 "Language-Team: \n"
@@ -44,6 +44,7 @@ msgstr "כמה עובדים?"
 
 #: src/routes/AddJob.svelte
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Address"
 msgstr "כתובת"
 
@@ -242,7 +243,6 @@ msgid "No addresses found"
 msgstr ""
 
 #: src/lib/components/SearchableBottomSheet.svelte
-#: src/lib/components/JobClassificationPicker.svelte
 msgid "Approve"
 msgstr "השמך"
 
@@ -549,10 +549,12 @@ msgid "Create new job"
 msgstr "הוסף משרה חדשה"
 
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Date"
 msgstr "תאריך"
 
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Pick address"
 msgstr "לחץ לחיפוש כתובת"
 
@@ -565,6 +567,7 @@ msgid "Pick address in picker"
 msgstr "בחר תאריך לפרוייקט"
 
 #: src/routes/CreateJob.svelte
+#: src/routes/CreateProject.svelte
 msgid "Pick date placeholder"
 msgstr "לחץ לבחר תאריך לפרוייקט"
 
@@ -582,4 +585,125 @@ msgstr ""
 
 #: src/routes/auth/Verify.svelte
 msgid "Hidden Submit"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "Create project"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "Name"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "M22 21v-2a4 4 0 0 0-3-3.87"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "M16 3.13a4 4 0 0 1 0 7.75"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "No positions added yet"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "Add job positions to define roles for this project"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+#: src/routes/CreateProject.svelte
+msgid "Add position"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "Publish project"
+msgstr ""
+
+#: src/routes/CreateProject.svelte
+msgid "New position"
+msgstr ""
+
+#: src/routes/Projects.svelte
+msgid "<0/> Your projects"
+msgstr ""
+
+#: src/routes/Projects.svelte
+msgid "{0} active listings"
+msgstr ""
+
+#: src/routes/Projects.svelte
+msgid "No projects yet"
+msgstr ""
+
+#: src/routes/Projects.svelte
+msgid "You haven't created any jobs yet. Tap the + button to get started."
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "אפשרויות נוספות"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "נדרש:"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "תעודות:"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "{0} לשעה"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "לפני {0} ימים"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "פרטים נוספים"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "הגש מועמדות"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "נהג משאית"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "חברת הובלות דן"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "אזור המרכז"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "משמרת יום"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "רישיון C"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "מלגזה"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "ללא נסיעות לילה"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "רישיון נהיגה על משאית"
+msgstr ""
+
+#: src/lib/components/OpportunityCard.svelte
+msgid "תעודת מלגזה"
 msgstr ""
