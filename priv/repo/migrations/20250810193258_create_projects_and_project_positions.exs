@@ -8,8 +8,7 @@ defmodule Tempi.Repo.Migrations.CreateProjectsAndProjectPositions do
 
     execute("CREATE TYPE public.position_status AS ENUM ('open','filled','closed','canceled');")
 
-    # Uncomment next line after model restructure finishes, for now this type is being created in jobs migration
-    # execute("CREATE TYPE public.rate_type AS ENUM ('daily','hourly');") 
+    execute("CREATE TYPE public.rate_type AS ENUM ('daily','hourly');")
 
     create table(:projects, primary_key: false) do
       add :id, :binary_id, primary_key: true
