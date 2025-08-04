@@ -15,8 +15,10 @@ export default defineConfig({
   include: ['@sqlite.org/sqlite-wasm'],
   },
   server: {
+    host: '0.0.0.0',
     hmr: {
-      overlay: false
+      overlay: false,
+      port: 5173
     }
   },
   build: {

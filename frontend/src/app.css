@@ -18,7 +18,7 @@
   --primary-rgb: 139, 92, 246;
   
   /* -- Semantic Colors -- */
-  --color-succe #10B981;
+  --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
   --color-info: var(--color-primary);

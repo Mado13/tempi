@@ -5,6 +5,7 @@
   import Fab from '$lib/components/Fab.svelte'
   import JobCreationFab from '$lib/components/JobCreationFab.svelte'
   import ProjectCard from '$lib/components/ProjectCard.svelte'
+  import ProjectCreationFab from '$lib/components/ProjectCreationFab.svelte'
   import { useProjectsStore } from '$lib/stores/resources/projects.store.svelte'
 
   const projects = useProjectsStore()
@@ -45,13 +46,13 @@
       </div>
     {/if}
 
-    <JobCreationFab>
+    <ProjectCreationFab>
       {#snippet children(props)}
         <Fab {...props}>
           <IconPhPlusBold />
         </Fab>
       {/snippet}
-    </JobCreationFab>
+    </ProjectCreationFab>
   </div>
 </div>
 
