@@ -6,13 +6,13 @@
   import { Router } from 'sv-router'
   import { loadLocale } from 'wuchale/run-client'
 
-  import StoreProvider from '$lib/stores/StoreProvider.svelte'
-  import { storeRegistry } from '$lib/stores/registry.store.svelte'
+  import '$lib/services/revalidate.service'
+  import { authStore } from '$lib/stores/auth.store.svelte'
 
   let locale = $state('he')
+  const authInit = authStore.init()
 
   $effect(() => {
-    // --- Setup Logic (like onMount) ---
     StatusBar.setStyle({ style: Style.Light })
     StatusBar.setOverlaysWebView({ overlay: false })
 
@@ -22,42 +22,32 @@
       } else {
         navigate(-1)
       }
-    })
 
-    const appStateListener = App.addListener('appStateChange', ({ isActive }) => {
-      if (isActive) {
-        storeRegistry.forEach((store) => {
-          if (store.refresh && store.isInitialized) {
-            store.refresh()
-          }
-        })
+      return () => {
+        backButton.then((l) => l.remove())
       }
     })
-
-    const refreshInterval = setInterval(
-      () => {
-        storeRegistry.forEach((store) => {
-          if (store.refresh && store.isInitialized) {
-            store.refresh()
-          }
-        })
-      },
-      20 * 60 * 1000,
-    )
-
-    // --- Cleanup Logic (like onDestroy) ---
-    return () => {
-      backButton.then((listener) => listener.remove())
-      appStateListener.then((listener) => listener.remove())
-      clearInterval(refreshInterval)
-    }
   })
 </script>
 
-{#await loadLocale(locale)}
-  Loading translations...
+{#await Promise.all([loadLocale(locale), authInit])}
+  Loading…
 {:then}
-  <StoreProvider>
-    <Router />
-  </StoreProvider>
+  <Router />
+{:catch e}
+  <div class="error-screen">
+    <h2>Failed to start</h2>
+    <p>{e?.message ?? e}</p>
+    <button onclick={() => window.location.reload()}>Retry</button>
+  </div>
 {/await}
+
+<style>
+  .error-screen {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    color: #dc2626;
+  }
+</style>

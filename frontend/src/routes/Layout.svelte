@@ -6,19 +6,16 @@
   import BottomNavigation from '$lib/components/BottomNavigation.svelte'
   import BottomSheetContainer from '$lib/components/BottomSheetContainer.svelte'
   import SnackbarContainer from '$lib/components/SnackbarContainer.svelte'
-  // NEW: init storage registry here (component init)
   import { initStorageServices } from '$lib/services/storage'
   import {
     supabaseAuthContext,
     supabaseAuthService,
   } from '$lib/services/supabase-auth.service.svelte'
-  import { authStoreContext } from '$lib/stores/registry.store.svelte'
+  import { authStore } from '$lib/stores/auth.store.svelte'
 
   let { children }: { children: Snippet } = $props()
 
-  // Set context once
   supabaseAuthContext.set(supabaseAuthService)
-  const authStore = authStoreContext.get()
 
   // Initialize storage services with the auth store (safe here)
   initStorageServices(authStore)
@@ -26,6 +23,10 @@
   let supabaseReady = $state(false)
 
   onMount(async () => {
+    if (!authStore.isInitialized) {
+      await authStore.init().catch(() => {})
+    }
+
     if (!supabaseAuthService.isAuthenticated) {
       const ok = await supabaseAuthService.initialize()
       if (!ok) console.error('Supabase auth failed')
@@ -61,6 +62,7 @@
   main {
     flex: 1;
     overflow: auto;
+    padding-bottom: var(--bottom-nav-height);
     -webkit-overflow-scrolling: touch;
   }
   .loading-container {

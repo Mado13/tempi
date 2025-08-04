@@ -5,8 +5,6 @@ import { Preferences } from '@capacitor/preferences'
 import { api, setAuthInterceptor, setAuthToken } from '$lib/api'
 import { getErrorMessage } from '$lib/i18n/errors.svelte'
 
-import { destroyAllStores } from './registry.store.svelte'
-
 export type User = {
   id: string
   phoneNumber: string
@@ -130,7 +128,6 @@ export function createAuthStore() {
 
   async function logout(shouldNavigate = true) {
     setAuthToken(null)
-    destroyAllStores()
     await Preferences.remove({ key: 'auth_token' })
     currentUser = null
     isAuthenticated = false

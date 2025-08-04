@@ -1,11 +1,6 @@
 <!-- src/lib/components/RoleSwitch.svelte -->
 <script lang="ts">
-  import { navigate } from '$router'
-
-  import { invalidateAllStores } from '$lib/stores/create-crud-store.svelte'
-  import { authStoreContext } from '$lib/stores/registry.store.svelte'
-
-  const authStore = authStoreContext.get()
+  import { authStore } from '$lib/stores/auth.store.svelte'
 
   const availableSwitch = $derived.by(() => {
     if (!authStore.hasMultipleRoles || !authStore.currentUser) return null

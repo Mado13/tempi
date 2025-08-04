@@ -1,30 +1,27 @@
 <script lang="ts">
   import { navigate } from '$router'
+  import { onMount } from 'svelte'
 
-  import { authStoreContext } from '$lib/stores/registry.store.svelte'
+  import { authStore } from '$lib/stores/auth.store.svelte'
 
-  const authStore = authStoreContext.get()
-
-  $effect(() => {
-    // This effect runs after the StoreProvider has initialized the authStore.
-    // We can now safely check the authentication status.
-
-    if (authStore.isLoading) {
-      // Still waiting for the initial auth check, do nothing yet.
-      return
+  async function routeUser() {
+    if (!authStore.isInitialized) {
+      await authStore.init().catch(() => {})
     }
-
     if (!authStore.isAuthenticated) {
       navigate('/auth/login', { replace: true })
       return
     }
+    const u = authStore.currentUser
+    const entry = u?.currentRole ? `/app/${u.currentRole}/agenda` : '/app/select-role'
+    navigate(entry, { replace: true })
+  }
 
-    const currentUser = authStore.currentUser
-    const entryPoint = currentUser?.currentRole
-      ? `/app/${currentUser.currentRole}/agenda`
-      : '/app/select-role'
+  onMount(routeUser)
 
-    navigate(entryPoint, { replace: true })
+  $effect(() => {
+    // when loading finishes, decide
+    if (!authStore.isLoading) routeUser()
   })
 </script>
 

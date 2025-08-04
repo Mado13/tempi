@@ -1,19 +1,17 @@
-// src/lib/stores/resources/jobs.store.svelte.ts
-import { Context } from 'runed'
+import type { Job } from '$lib/schemas/job.scehma.svelte'
+import { authStore } from '$lib/stores/auth.store.svelte'
+import { defineRestResource } from '$lib/stores/rest-resource.store.svelte'
 
-import type { JobCreate } from '$lib/schemas/job.scehma.svelte'
-
-import type { ItemType } from '../create-crud-store.svelte'
-import { createCrudStore } from '../create-crud-store.svelte'
-import { getOrCreate, storeRegistry } from '../registry.store.svelte'
-
-export type JobsStore = ReturnType<typeof createCrudStore<JobCreate>>
-export type Job = ItemType<JobsStore>
-
-export const jobsStoreContext = new Context<JobsStore>('jobs-store')
-
-export function useJobsStore(role: 'worker' | 'employer') {
-  return getOrCreate<JobsStore>(storeRegistry, `jobs:${role}`, () =>
-    createCrudStore<JobCreate>('jobs'),
-  )
-}
+export const useJobsStore = defineRestResource<Job>('jobs', {
+  ttlMs: 90_000,
+  limit: 30,
+  sessionKey: () => {
+    const u = authStore.user()
+    return `${u?.id ?? 'anon'}:${u?.currentRole ?? 'none'}`
+  },
+  snackbar: {
+    create: 'Job created',
+    update: 'Job updated',
+    remove: 'Job deleted',
+  },
+})

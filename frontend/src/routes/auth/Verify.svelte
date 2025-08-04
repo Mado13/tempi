@@ -1,6 +1,6 @@
 <script lang="ts">
   import { navigate, route } from '$router'
-  import { watch } from 'runed'
+  import { Interval, watch } from 'runed'
   import { searchParams } from 'sv-router'
   import * as v from 'valibot'
 
@@ -9,12 +9,13 @@
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import SecondaryButton from '$lib/components/SecondaryButton.svelte'
   import { createForm } from '$lib/forms'
-  import { authStoreContext } from '$lib/stores/registry.store.svelte'
+  import { authStore } from '$lib/stores/auth.store.svelte'
 
-  const authStore = authStoreContext.get()
-
-  let seconds = $state(30)
   let submitButton: HTMLButtonElement
+
+  // simple resend timer (30s)
+  const timer = new Interval(1000)
+  let seconds = $derived(Math.max(0, 30 - timer.counter))
 
   const initialCode = $derived(searchParams.get('code') ?? '')
 
@@ -30,49 +31,33 @@
       code: '',
     },
     async onSubmit(data) {
-      const response = await api.post('/auth/verify_code', data)
-      if (response.success && response.data) {
-        const { user, token } = response.data
+      const res = await api.post('/auth/verify_code', data)
+      if (!res.success || !res.data) throw res
 
-        await authStore.login(token, user)
+      const { user, token } = res.data
+      await authStore.login(token, user)
 
-        if (!user.currentRole) {
-          navigate('/app/select-role')
-        } else {
-          navigate('/app/:role/agenda', { params: { role: user.currentRole } })
-        }
+      if (!user.currentRole) {
+        navigate('/app/select-role', { replace: true })
       } else {
-        throw response
+        navigate('/app/:role/agenda', { params: { role: user.currentRole }, replace: true })
       }
     },
   })
 
+  // auto-submit when 6 digits entered
   watch(
     () => form.code,
     () => {
-      if (form.code.length === 6) {
-        submitButton?.click()
-      }
+      if (form.code.length === 6) submitButton?.click()
     },
   )
-
-  $effect(() => {
-    const interval = setInterval(() => {
-      seconds--
-      if (seconds <= 0) {
-        clearInterval(interval)
-      }
-    }, 1000)
-
-    return () => clearInterval(interval)
-  })
 </script>
 
 <header>
-  <h1>Title</h1>
-  <p>subTitle</p>
-  <p>{form.phoneNumber}</p>
-  <p>your auth code: {initialCode}</p>
+  <h1>Verify Code</h1>
+  <p>Code was sent to: {form.phoneNumber}</p>
+  <p>Your auth code: {initialCode}</p>
 </header>
 
 <form onsubmit={form.handleSubmit}>
@@ -96,7 +81,6 @@
       <span class="resend-text">Resend code</span>
       <PrimaryButton disabled={seconds > 0}>
         {#if seconds > 0}
-          <div class="timer-container"></div>
           Resend code in {seconds}
         {:else}
           Resend Code
@@ -108,7 +92,7 @@
   </div>
 
   <button type="submit" bind:this={submitButton} style="display: none;" aria-hidden="true">
-    Hidden Submti
+    Hidden Submit
   </button>
 </form>
 
@@ -118,12 +102,11 @@
     flex-direction: column;
     gap: var(--spacing-m);
     align-items: center;
-    > div {
-      max-width: 200px;
-      text-align: center;
-    }
   }
-
+  form > div {
+    max-width: 200px;
+    text-align: center;
+  }
   .resend-container {
     display: flex;
     flex-direction: column;
@@ -131,60 +114,8 @@
     gap: var(--spacing-s);
     margin-top: var(--spacing-l);
   }
-
   .resend-text {
     font-size: var(--font-size-label-m);
     color: var(--color-text-secondary);
-  }
-
-  .resend-button {
-    background: none;
-    border: none;
-    color: var(--color-text-link);
-    font-size: var(--font-size-label-m);
-    font-weight: var(--font-weight-medium);
-    font-family: var(--font-family-base);
-    padding: var(--spacing-s) var(--spacing-m);
-    min-height: 44px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    transition: opacity var(--transition-fast);
-    cursor: pointer;
-  }
-
-  .resend-button:active {
-    opacity: 0.7;
-  }
-
-  .resend-button:disabled {
-    color: var(--color-text-placeholder);
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .resend-timer {
-    font-size: var(--font-size-label-s);
-    color: var(--color-text-secondary);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .change-number-button {
-    background: none;
-    border: none;
-    color: var(--color-text-link);
-    font-size: var(--font-size-label-s);
-    font-weight: var(--font-weight-regular);
-    font-family: var(--font-family-base);
-    padding: var(--spacing-s);
-    margin-top: var(--spacing-s);
-    min-height: 44px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    transition: opacity var(--transition-fast);
-    cursor: pointer;
-  }
-
-  .change-number-button:active {
-    opacity: 0.7;
   }
 </style>

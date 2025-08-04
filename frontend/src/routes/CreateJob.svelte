@@ -16,14 +16,14 @@
   import { useJobsStore } from '$lib/stores/resources/jobs.store.svelte'
   import { isEmpty } from '$lib/utils/utils'
 
-  const jobStore = useJobsStore()
-  const companiesStore = useCompaniesStore()
+  const jobs = useJobsStore()
+  const companies = useCompaniesStore()
 
   let addressPickerOpen = $state(false)
   let jobClassificationPickerOpen = $state(false)
   let dateRangePickerState = $state({
     open: false,
-    display: '',
+    display: 'Pick date placeholder',
   })
 
   const form = createForm({
@@ -40,24 +40,28 @@
       },
     },
     async onSubmit(formData) {
-      await jobStore.create(formData)
-
-      navigate('/app/:role/jobs', {
-        params: { role: 'employer' },
-      })
+      try {
+        const created = await jobs.create(formData)
+        navigate('/app/:role/jobs', {
+          params: { role: 'employer' },
+          search: `?highlight=${created.id}`,
+        })
+      } catch (err) {
+        console.log(form.errors._all)
+      }
     },
   })
 
   watch(
-    () => companiesStore.items,
+    () => companies.items,
     () => {
-      form.companyProfileId = companiesStore.items[0].id
+      form.companyProfileId = companies.items[0].id
     },
   )
 
   //TODO: Chnage the strucutre places.ts is returning!
   let placeHolderAddress = $derived.by(() => {
-    if (!form.address) return 'Translate me'
+    if (!form.address) return 'Pick address'
 
     if (form.address?.formattedAddress.includes(form.address?.name)) {
       return form.address?.formattedAddress
@@ -73,11 +77,11 @@
   )
 </script>
 
-<h1>Transalte Me</h1>
+<h1>Create new job</h1>
 
 <form id="add-job-form" onsubmit={form.handleSubmit}>
-  {#if companiesStore.items.length === 1}
-    {@const company = companiesStore.items[0]}
+  {#if companies.items.length === 1}
+    {@const company = companies.items[0]}
     <Input label="company" id="company" readonly placeholder={company.name} />
   {/if}
   <Stepper
@@ -86,7 +90,7 @@
     error={form.errors.numberOfEmployees}></Stepper>
   <!-- date range selection -->
   <InputButton
-    label="date"
+    label="Date"
     class={{ placeholder: isEmpty(form.date) }}
     onclick={() => (dateRangePickerState.open = true)}
     error={form.errors.date}>{dateRangePickerState.display}</InputButton>
@@ -109,7 +113,11 @@
     class={{ placeholder: isEmpty(form.jobClassifications) }}
     onclick={() => (jobClassificationPickerOpen = true)}
     error={form.errors.jobClassifications}>
-    {isEmpty(form.jobClassifications) ? 'Pick a job...' : jobClassificationDisplay}
+    {#if isEmpty(form.jobClassifications)}
+      <span>Pick a job</span>
+    {:else}
+      {jobClassificationDisplay}
+    {/if}
   </InputButton>
   <JobClassificationPicker
     bind:value={form.jobClassifications}
