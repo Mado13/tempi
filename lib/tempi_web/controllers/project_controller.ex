@@ -9,6 +9,11 @@ defmodule TempiWeb.ProjectController do
     render(conn, :index, projects: projects)
   end
 
+  def show(conn, %{"id" => project_id}) do
+    project = Projects.get_project(project_id)
+    render(conn, :show, project: project)
+  end
+
   def create(conn, params) do
     current_user = conn.assigns.current_user
 

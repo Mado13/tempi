@@ -1,5 +1,5 @@
 // src/lib/stores/rest-resource.svelte.ts
-import { api } from '$lib/api'
+import { type ApiResult, api } from '$lib/api'
 
 import {
   type CreateFn,
@@ -15,7 +15,7 @@ type ListResponse<T> =
 
 type CallOpts = { snackbar?: false | string }
 
-type RestOpts = {
+type RestOpts<T> = {
   ttlMs?: number
   limit?: number
   sessionKey: () => string
@@ -26,9 +26,11 @@ type RestOpts = {
   }
   path?: string
   usePutForUpdate?: boolean
+  createdAtField?: keyof T
+  fetchList?: (cursor?: string) => Promise<ApiResult<ListResponse<T>>>
 }
 
-export function defineRestResource<T extends { id: string }>(name: string, opts: RestOpts) {
+export function defineRestResource<T extends { id: string }>(name: string, opts: RestOpts<T>) {
   const {
     ttlMs = 90_000,
     limit = 30,
@@ -36,6 +38,7 @@ export function defineRestResource<T extends { id: string }>(name: string, opts:
     snackbar = {},
     path = `/${name}/`,
     usePutForUpdate = false,
+    createdAtField,
   } = opts
 
   function norm<TItem>(raw: ListResponse<TItem>): { items: TItem[]; next?: string } {
@@ -93,7 +96,15 @@ export function defineRestResource<T extends { id: string }>(name: string, opts:
     name,
     ttlMs,
     sessionKey,
+    createdAtField,
     async fetchList(cursor?: string) {
+      if (opts.fetchList) {
+        const res = await opts.fetchList(cursor)
+        if (!res.success || res.data == null) return { items: [], next: undefined }
+        const { items, next } = norm<T>(res.data)
+        return { items, next }
+      }
+
       const params = cursor ? { cursor, limit } : { limit }
       const res = await api.get<ListResponse<T>>(path, { params, snackbar: false })
       if (!res.success || res.data == null) return { items: [], next: undefined }

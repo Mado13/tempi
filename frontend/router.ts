@@ -7,6 +7,7 @@ import Layout from '$routes/Layout.svelte'
 import NotFound from '$routes/Notfound.svelte'
 import Opportunities from '$routes/Opportunities.svelte'
 import Profile from '$routes/Profile.svelte'
+import Project from '$routes/Project.svelte'
 import Projects from '$routes/Projects.svelte'
 import RedirectToApp from '$routes/RedirectToApp.svelte'
 import SelectRole from '$routes/SelectRole.svelte'
@@ -33,6 +34,7 @@ export const { p, navigate, isActive, route } = createRouter({
       '/projects': {
         '/': Projects,
         '/new': CreateProject,
+        '/:projectId': Project,
       },
       '/agenda': Agenda,
     },

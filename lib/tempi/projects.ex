@@ -2,7 +2,7 @@ defmodule Tempi.Projects do
   require Logger
   import Ecto.Query
   alias Tempi.Repo
-  alias Tempi.{Project, ProjectPositions, Address, Profiles}
+  alias Tempi.{Project, ProjectPositions, Address, Profiles, JobApplication, ProjectPosition}
 
   @doc """
   Lists all projects, sorted by most recent.
@@ -15,12 +15,25 @@ defmodule Tempi.Projects do
     |> Repo.all()
   end
 
+  def list_project_applicants(project_id) do
+    from(wp in Profiles.WorkerProfile,
+      join: ja in JobApplication,
+      on: ja.worker_profile_id == wp.id,
+      join: pos in ProjectPosition,
+      on: ja.position_id == pos.id,
+      where: pos.project_id == ^project_id,
+      distinct: wp.id
+    )
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single project by its ID.
   Returns nil if the project is not found.
   """
   def get_project(id) do
     Repo.get(Project, id)
+    |> Repo.preload([:address, :positions, :company_profile])
   end
 
   @doc """

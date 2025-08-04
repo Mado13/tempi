@@ -30,12 +30,14 @@ defmodule TempiWeb.Router do
     post "/user/profiles", UserController, :create_profile
     delete "/auth/logout", AuthController, :logout
     post "/supabase-token", SupabaseTokenController, :create
+    resources "/applications", JobApplicationController, only: [:index]
 
     # Core Resources
     resources "/companies", CompanyController, except: [:new, :edit]
 
     resources "/projects", ProjectController, except: [:new] do
       resources "/positions", ProjectPositionController, only: [:index, :create]
+      resources "/applicants", ProjectApplicantController, only: [:index]
     end
 
     resources "/positions", ProjectPositionController, except: [:new] do
