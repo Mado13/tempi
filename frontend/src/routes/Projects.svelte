@@ -90,13 +90,11 @@
     margin: 0;
   }
 
-  /* Content area */
   .projects-content {
     flex: 1;
     position: relative;
   }
 
-  /* Projects list */
   .projects-list {
     display: flex;
     flex-direction: column;
