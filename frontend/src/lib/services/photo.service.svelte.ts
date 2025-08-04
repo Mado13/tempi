@@ -1,5 +1,7 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'
 
+import { toLogoWebP96 } from '$lib/utils/image.util'
+
 import type { ImageTransform } from './file-storage.service.svelte'
 import type { createFileStorageService } from './file-storage.service.svelte'
 
@@ -11,6 +13,7 @@ export interface PhotoResult {
 export interface PhotoUploadResult {
   key: string
   id: string
+  previewUrl?: string
 }
 
 export interface PhotoUploadOptions {
@@ -49,8 +52,11 @@ export function createPhotoService(fileStorageService: FileStorageService) {
     file: Blob,
     options: PhotoUploadOptions & { transform?: ImageTransform } = {},
   ): Promise<PhotoUploadResult> {
-    const result = await fileStorageService.upload(file, { previewUrl: options.previewUrl })
-    return { key: result.key, id: result.id }
+    const logoBlob = await toLogoWebP96(file, { size: 96, quality: 0.86 })
+    const previewUrl = options.previewUrl ?? URL.createObjectURL(logoBlob)
+
+    const result = await fileStorageService.upload(logoBlob, { previewUrl })
+    return { key: result.key, id: result.id, previewUrl: result.previewUrl ?? previewUrl }
   }
 
   async function downloadPhoto(key: string, transform?: ImageTransform): Promise<Blob> {

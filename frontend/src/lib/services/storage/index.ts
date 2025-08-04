@@ -21,7 +21,7 @@ export function initStorageServices(authStore: AuthStore) {
     authStore,
     {
       maxSizeBytes: 2 * 1024 * 1024,
-      allowedTypes: ['image/png', 'image/jpeg', 'image/svg+xml'],
+      allowedTypes: ['image/png', 'image/jpeg', 'image/svg+xml', 'image/webp'],
       filePrefix: 'logo',
       quality: 95,
       checkDuplicates: 'content-hash',

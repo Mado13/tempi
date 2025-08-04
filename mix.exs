@@ -48,6 +48,8 @@ defmodule Tempi.MixProject do
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:postgrex, ">= 0.0.0"},
+      {:supabase_potion, "~> 0.6"},
+      {:supabase_storage, "~> 0.4.2"},
       {:swoosh, "~> 1.5"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},

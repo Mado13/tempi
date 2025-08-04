@@ -19,6 +19,7 @@ defmodule Tempi.Application do
       # Start to serve requests, typically the last entry
       TempiWeb.Endpoint,
       Tempi.AuthCodeServer,
+      Tempi.Supabase.Client,
       {Tempi.RateLimit, clean_period: :timer.minutes(10)}
     ]
 

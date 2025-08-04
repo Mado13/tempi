@@ -1,5 +1,7 @@
 # lib/tempi/supabase/client.ex
 defmodule Tempi.Supabase.Client do
+  use Supabase.Client, otp_app: :tempi
+
   @doc "Generate JWT for authenticated user"
   def generate_jwt(user_id) do
     secret = Application.get_env(:tempi, :supabase_jwt_secret)

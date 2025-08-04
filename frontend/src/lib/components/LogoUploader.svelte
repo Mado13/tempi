@@ -13,7 +13,6 @@
 
   const storage = getStorageServices()
   const photos = storage.photos.logos
-  const files = storage.files.logos
 
   async function handleSelectAndUpload() {
     state.isLoading = true
@@ -26,20 +25,12 @@
         return
       }
 
-      // create our own blob URL (avoid fileStorage re-creating one)
-      if (state.previewUrl.startsWith('blob:')) URL.revokeObjectURL(state.previewUrl)
-      state.previewUrl = URL.createObjectURL(picked.file)
+      const res = await photos.uploadLogo(picked.file)
 
-      // upload and pass the existing previewUrl to prevent a second createObjectURL inside file service
-      const res = await photos.uploadPhoto(picked.file, { previewUrl: state.previewUrl })
+      // swap preview to the transformed 96×96 blob URL
+      if (state.previewUrl.startsWith('blob:')) URL.revokeObjectURL(state.previewUrl)
+      state.previewUrl = res.previewUrl ?? ''
       value = res.key
-
-      // fetch the stored image as blob (no transform to avoid 400s on free plan)
-      const blob = await files.download(res.key)
-
-      // replace the temporary blob with the stored blob (and revoke old one)
-      if (state.previewUrl.startsWith('blob:')) URL.revokeObjectURL(state.previewUrl)
-      state.previewUrl = URL.createObjectURL(blob)
     } catch (err) {
       state.error = err instanceof Error ? err.message : 'Upload failed'
     } finally {

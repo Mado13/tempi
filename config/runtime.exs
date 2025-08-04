@@ -12,10 +12,15 @@ Dotenvy.source!([
 # === SHARED CONFIGURATION ===
 jwt_secret = env!("SUPABASE_JWT_SECRET", :string!)
 config :tempi, :supabase_jwt_secret, jwt_secret
+
+config :tempi, Tempi.Supabase.Client,
+  base_url: env!("SUPABASE_URL", :string!),
+  api_key: env!("SUPABASE_SECRET_KEY", :string!)
+
 config :tempi, env: config_env()
 
 # Always enable server in release mode
-if env!("PHX_SERVER", :boolean, false) do
+if(env!("PHX_SERVER", :boolean, false)) do
   config :tempi, TempiWeb.Endpoint, server: true
 end
 

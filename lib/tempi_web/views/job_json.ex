@@ -1,19 +1,22 @@
 defmodule TempiWeb.JobJSON do
-  def index(%{jobs: jobs}) do
-    for(job <- jobs, do: data(job))
+  def index(%{jobs: jobs, signed_urls: signed_urls}) do
+    for job <- jobs, do: data(job, signed_urls)
   end
 
-  def show(%{job: job}) do
-    data(job)
+  def show(%{job: job, signed_urls: signed_urls}) do
+    data(job, signed_urls)
   end
 
-  defp data(job) do
+  defp data(job, signed_urls) do
+    logo_key = job.company_profile.logo_key
+    logo_url = if logo_key, do: Map.get(signed_urls, logo_key)
+
     %{
       id: job.id,
       status: job.status,
       company: %{
         name: job.company_profile.name,
-        logo_key: job.company_profile.logo_key
+        logo_url: logo_url
       },
       address: %{
         formatted_address: job.address.formatted_address,
