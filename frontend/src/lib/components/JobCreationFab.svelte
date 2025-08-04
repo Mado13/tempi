@@ -2,7 +2,7 @@
   import { p } from '$router'
   import type { Snippet } from 'svelte'
 
-  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
+  import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import { useCompaniesStore } from '$lib/stores/resources/companies.store.svelte'
 
   import CreateCompanyProfile from './CreateCompanyProfile.svelte'
@@ -48,9 +48,7 @@
 {/snippet}
 
 {#snippet createCompanyFooter()}
-  <PrimaryButton type="submit" form="create-company-profile-form">
-    Save and Continue to Post Job
-  </PrimaryButton>
+  <PrimaryButton type="submit" form="create-company">Save and Continue to Post Job</PrimaryButton>
 {/snippet}
 
 {@render children(fabProps)}

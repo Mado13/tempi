@@ -3,7 +3,7 @@ import * as v from 'valibot'
 import { getErrorMessage } from '$lib/i18n/errors.svelte'
 
 import { loadGoogleMaps } from './loader'
-import { type FormLocationInput, GoogleMapsFormLocationSchema } from './schema'
+import { type FormLocationInput, googleMapsFormLocationSchema } from './schema'
 
 export interface GoogleMapsPlacesOptions {
   apiKey: string
@@ -18,7 +18,6 @@ export class GoogleMapsPlaces {
   private maps: typeof google.maps | undefined
   private autocompleteService: google.maps.places.AutocompleteSuggestion | undefined
   public sessionToken: google.maps.places.AutocompleteSessionToken | undefined
-  private isLoaded = false
   private requestedLanguage?: string
   private requestedRegion?: string
   private loadPromise?: Promise<void>
@@ -106,7 +105,7 @@ export class GoogleMapsPlaces {
     }
 
     try {
-      return v.parse(GoogleMapsFormLocationSchema, {
+      return v.parse(googleMapsFormLocationSchema, {
         ...rawData,
         googlePlaceId: placeId,
       })

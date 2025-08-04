@@ -1,13 +1,14 @@
 import * as v from 'valibot'
 
-import { GoogleMapsFormLocationSchema } from '$lib/utils/google-maps/schema'
+import { googleMapsFormLocationSchema } from '$lib/utils/google-maps/schema'
 
+import { companyCreateSchema } from './company.schema.svelte'
 import { requiredNumber } from './global.svelte'
 
 export const jobCreateSchema = v.object({
   companyProfileId: v.pipe(v.string(), v.uuid()),
   numberOfEmployees: v.number(),
-  address: GoogleMapsFormLocationSchema,
+  address: googleMapsFormLocationSchema,
   jobClassifications: v.record(v.string(), v.string()),
   date: v.object({
     start: v.pipe(v.string(), v.isoDate()),
@@ -26,6 +27,7 @@ export const jobCreateSchema = v.object({
 export const jobSchema = v.object({
   ...jobCreateSchema.entries,
   favoritesCount: v.number(),
+  company: companyCreateSchema,
 })
 
 export type JobCreate = v.InferOutput<typeof jobCreateSchema>

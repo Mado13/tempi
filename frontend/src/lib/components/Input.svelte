@@ -48,6 +48,10 @@
     font-weight: var(--font-weight-medium);
     color: var(--color-text-secondary);
     --legend-top-bg: var(--color-background-page);
+    &.required::after {
+      content: ' *';
+      color: var(--color-semantic-error-fg);
+    }
     background:
       linear-gradient(var(--legend-top-bg), var(--legend-top-bg)) top / 100% 50% no-repeat,
       linear-gradient(var(--color-background-surface), var(--color-background-surface)) bottom /
@@ -71,6 +75,4 @@
     font-size: var(--font-size-label-s);
     color: var(--color-semantic-error-fg);
   }
-
-  /* other error/focus styles as per your system */
 </style>

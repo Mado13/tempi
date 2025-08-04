@@ -6,11 +6,12 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const IconLineMdLoadingTwotoneLoop: (typeof import('~icons/line-md/loading-twotone-loop.svelte'))['default']
+  const IconLineMdUploadingLoop: typeof import('~icons/line-md/uploading-loop.svelte')['default']
   const IconMapPin: (typeof import('~icons/map/pin.svelte'))['default']
   const IconPhBriefcase: typeof import('~icons/ph/briefcase.svelte')['default']
   const IconPhCalendar: typeof import('~icons/ph/calendar.svelte')['default']
   const IconPhCalendarDots: typeof import('~icons/ph/calendar-dots.svelte')['default']
+  const IconPhCameraPlus: typeof import('~icons/ph/camera-plus.svelte')['default']
   const IconPhCaretLeft: typeof import('~icons/ph/caret-left.svelte')['default']
   const IconPhCaretLeftLight: (typeof import('~icons/ph/caret-left-light.svelte'))['default']
   const IconPhCaretRight: typeof import('~icons/ph/caret-right.svelte')['default']
@@ -28,5 +29,5 @@ declare global {
   const IconPhXCircle: (typeof import('~icons/ph/x-circle.svelte'))['default']
   const IconTablerBuildingEstate: typeof import('~icons/tabler/building-estate.svelte')['default']
   const IconTablerCheck: typeof import('~icons/tabler/check.svelte')['default']
-  const IconTablerTag: typeof import('~icons/tabler/tag.svelte')['default']
+  const IconTablerTag: (typeof import('~icons/tabler/tag.svelte'))['default']
 }

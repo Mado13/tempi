@@ -1,7 +1,7 @@
 <script lang="ts">
   import { route } from '$router'
   import { Toggle } from 'melt/builders'
-  import type { Snippet } from 'svelte'
+  import { onDestroy } from 'svelte'
 
   import { dismissable } from '$lib/actions/gestures'
   import { api } from '$lib/api'
@@ -9,19 +9,75 @@
   import EmployerCardMenu from '$lib/components/EmployerCardMenu.svelte'
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import WorkerCardMenu from '$lib/components/WorkerCardMenu.svelte'
-  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
-  import { getClassificationById } from '$lib/services/job_classification.service'
+  import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
+  import { getClassificationById } from '$lib/services/job-classification.service'
+  import { getStorageServices } from '$lib/services/storage'
   import type { Job } from '$lib/stores/resources/jobs.store.svelte'
   import { formatHebrewDateRangeFromStrings } from '$lib/utils/dates'
+
+  const storageServices = getStorageServices()
 
   interface Props {
     job: Job
   }
-
   let { job }: Props = $props()
 
   const role = $derived(route.params.role as string)
   const dateRange = formatHebrewDateRangeFromStrings(job.date.start, job.date.end)
+
+  const baseSize = 40
+  // free plan: no transform; request original and let browser scale
+
+  let logoUrl = $state('') // blob: URL
+  let blobHandle: string | null = null
+  let lastSig = ''
+  let reqId = 0
+
+  function revokeBlob() {
+    if (blobHandle) {
+      URL.revokeObjectURL(blobHandle)
+      blobHandle = null
+    }
+  }
+
+  // fetch once per (key)
+  $effect(() => {
+    if (role !== 'worker') {
+      revokeBlob()
+      logoUrl = ''
+      lastSig = ''
+      return
+    }
+    const key = job.company?.logoKey
+    if (!key) {
+      revokeBlob()
+      logoUrl = ''
+      lastSig = ''
+      return
+    }
+
+    const sig = key
+    if (sig === lastSig) return
+    lastSig = sig
+
+    const my = ++reqId
+    ;(async () => {
+      try {
+        const blob = await storageServices.files.logos.download(key) // no transform on free plan
+        if (my !== reqId) return
+        revokeBlob()
+        blobHandle = URL.createObjectURL(blob)
+        logoUrl = blobHandle
+      } catch {
+        if (my !== reqId) return
+        revokeBlob()
+        logoUrl = ''
+      }
+    })()
+  })
+
+  onDestroy(revokeBlob)
+
   const toggle = new Toggle({
     onValueChange: () => {
       api.patch(`/jobs/${job.id}/favorite`)
@@ -47,9 +103,25 @@
       <span data-status={job.status}>{job.status}</span>
     {:else if role === 'worker'}
       <a>
-        <img />
+        {#if logoUrl}
+          <img
+            src={logoUrl}
+            alt="Company logo"
+            width={baseSize}
+            height={baseSize}
+            loading="lazy"
+            decoding="async" />
+        {:else}
+          <div
+            style="
+              width: {baseSize}px;
+              height: {baseSize}px;
+              border-radius: var(--radius-m);
+              background: var(--color-background-page);
+            " />
+        {/if}
         <div>
-          <strong>Company Name</strong>
+          <strong>{job.company?.name ?? 'Company'}</strong>
           <span>{job.address}</span>
         </div>
       </a>
@@ -65,18 +137,9 @@
 
   {#if role === 'employer'}
     <ul class="details-list">
-      <li>
-        <IconPhMapPinLine />
-        {job.address.formattedAddress}
-      </li>
-      <li>
-        <IconPhCalendar />
-        {dateRange}
-      </li>
-      <li>
-        <IconPhUsers />
-        2/4
-      </li>
+      <li><IconPhMapPinLine />{job.address.formattedAddress}</li>
+      <li><IconPhCalendar />{dateRange}</li>
+      <li><IconPhUsers />2/4</li>
     </ul>
   {:else if role === 'worker'}
     <div class="job-details">
@@ -92,20 +155,12 @@
         <span>{job.favoritesCount} Saved</span>
       </div>
     {:else if role === 'worker'}
-      <div class="tags">
-        <span>Boob</span>
-      </div>
-      <div class="actions">
-        <PrimaryButton>Apply now</PrimaryButton>
-      </div>
+      <div class="tags"><span>Boob</span></div>
+      <div class="actions"><PrimaryButton>Apply now</PrimaryButton></div>
     {/if}
 
     <CardButton
-      onclick={() =>
-        bottomSheet.show({
-          id: 'job-card-sheet',
-          content: menuContent,
-        })}
+      onclick={() => bottomSheet.show({ id: 'job-card-sheet', content: menuContent })}
       aria-label="More options">
       &#x22EE;
     </CardButton>

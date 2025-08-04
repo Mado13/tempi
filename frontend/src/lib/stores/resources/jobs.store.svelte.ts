@@ -1,6 +1,6 @@
 import { Context } from 'runed'
 
-import type { JobCreate, JobSchema } from '$lib/schemas/job.scehma'
+import type { JobCreate, JobSchema } from '$lib/schemas/job.scehma.svelte'
 
 import type { ItemType } from '../create-crud-store.svelte'
 import { getOrCreateStore } from '../registry.store.svelte'
