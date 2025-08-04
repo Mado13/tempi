@@ -3,8 +3,7 @@ import { CapacitorHttp, type HttpOptions } from '@capacitor/core'
 import { Preferences } from '@capacitor/preferences'
 import { objectToCamel, objectToSnake } from 'ts-case-convert'
 
-import * as snackbar from '$lib/snackbar/snackbar.service.svelte'
-
+import { addSnack } from './components/Snackbar.svelte'
 import { formatFieldErrors, getErrorMessage } from './i18n/errors.svelte'
 
 let inMemoryToken: string | null = null
@@ -108,13 +107,25 @@ export async function apiRequest<T = any>(
     if (snackbarOption === false || method === 'GET') return
 
     if (typeof snackbarOption === 'string') {
-      snackbar.show(snackbarOption, { type: isSuccess ? 'success' : 'error' })
+      addSnack({
+        data: {
+          title: isSuccess ? 'Success' : 'Error',
+          description: snackbarOption,
+          type: isSuccess ? 'success' : 'error',
+        },
+      })
       return
     }
 
     if (!isSuccess && errorData?.errors) {
       const errorMessage = formatFieldErrors(errorData.errors)
-      snackbar.show(errorMessage, { type: 'error' })
+      addSnack({
+        data: {
+          title: 'Error',
+          description: errorMessage,
+          type: 'error',
+        },
+      })
       return
     }
 
@@ -157,8 +168,12 @@ export async function apiRequest<T = any>(
     }
   } catch (error) {
     if (snackbarOption !== false) {
-      snackbar.show(getErrorMessage('NETWORK_ERROR'), {
-        type: 'error',
+      addSnack({
+        data: {
+          title: 'Network Error',
+          description: getErrorMessage('NETWORK_ERROR'),
+          type: 'error',
+        },
       })
     }
     const httpError = error as any

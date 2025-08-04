@@ -2,11 +2,9 @@
   import { navigate } from '$router'
   import { type Snippet, onMount } from 'svelte'
 
-  import { keyboardManager } from '$lib/actions/keyboard-manager'
   import BottomNavigation from '$lib/components/BottomNavigation.svelte'
   import BottomSheetContainer from '$lib/components/BottomSheetContainer.svelte'
   import Snackbar from '$lib/components/Snackbar.svelte'
-  import SnackbarContainer from '$lib/components/SnackbarContainer.svelte'
   import { initStorageServices } from '$lib/services/storage'
   import {
     supabaseAuthContext,
@@ -133,11 +131,6 @@
     to {
       transform: rotate(360deg);
     }
-  }
-
-  /* Keyboard handling */
-  :global(.keyboard-visible) .main-content {
-    /* Content area adjusts, nav hides automatically */
   }
 
   /* Reduced motion support */

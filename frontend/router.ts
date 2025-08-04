@@ -15,7 +15,6 @@ import Verify from '$routes/auth/Verify.svelte'
 import { createRouter } from 'sv-router'
 
 import Opportunity from '$lib/components/Opportunity.svelte'
-import * as snackbar from '$lib/snackbar/snackbar.service.svelte'
 
 export const { p, navigate, isActive, route } = createRouter({
   '/': {
@@ -28,11 +27,6 @@ export const { p, navigate, isActive, route } = createRouter({
   },
   '/app': {
     layout: Layout,
-    hooks: {
-      afterLoad() {
-        snackbar.processPendingMessage()
-      },
-    },
     '/employer': {
       '/projects': {
         '/': Projects,
