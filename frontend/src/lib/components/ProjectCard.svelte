@@ -17,9 +17,7 @@
   const dateRange = formatHebrewDateRangeFromStrings(project.date.start, project.date.end)
 </script>
 
-<ActionableCard
-  href={p('/app/employer/projects/:projectId', { projectId: project.id })}
-  isHighlighted={isNewlyCreated}>
+<ActionableCard href={p('/app/employer/projects/:projectId', { projectId: project.id })}>
   <header>
     <h3>{project.name}</h3>
     <StatusBadge status={project.status} />

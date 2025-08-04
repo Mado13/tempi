@@ -2,7 +2,6 @@
   import { Debounced, watch } from 'runed'
   import IconTablerTag from '~icons/tabler/tag'
 
-  import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import {
     allClassifications,

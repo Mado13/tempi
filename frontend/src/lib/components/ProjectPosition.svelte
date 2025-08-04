@@ -1,11 +1,10 @@
 <script lang="ts">
-  import Input from '$lib/components/Input.svelte'
   import InputButton from '$lib/components/InputButton.svelte'
   import JobClassificationPicker from '$lib/components/JobClassificationPicker.svelte'
   import PayRate from '$lib/components/PayRate.svelte'
   import Stepper from '$lib/components/Stepper.svelte'
   import type { ItemFormInstance } from '$lib/forms'
-  import { projectPositionCreateSchema } from '$lib/schemas/project_position.schema.svelte'
+  import { projectPositionCreateSchema } from '$lib/schemas/project-position.schema.svelte'
   import { isEmpty } from '$lib/utils/utils'
 
   interface Props {
