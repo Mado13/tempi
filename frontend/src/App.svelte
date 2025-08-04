@@ -8,6 +8,7 @@
   import { onMount } from 'svelte'
   import { loadLocale } from 'wuchale/run-client'
 
+  import { api } from '$lib/api'
   import { initPushNotifications } from '$lib/services/push-notification.service.svelte'
   import '$lib/services/revalidate.service'
   import { authStore } from '$lib/stores/auth.store.svelte'
@@ -18,7 +19,7 @@
   onMount(async () => {
     await initPushNotifications()
     App.addListener('appStateChange', ({ isActive }) => {
-      if (!isActive) authStore.markAsSeen()
+      if (!isActive) api.patch('/user/me', { user: { touchLastActive: true } })
     })
   })
 

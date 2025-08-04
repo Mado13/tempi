@@ -7,10 +7,10 @@
 
   const navItems = {
     employer: [
-      { path: '/app/employer/projects', icon: IconPhBriefcase, label: 'Jobs' },
-      { path: '/app/employer/agenda', icon: IconPhCalendarDots, label: 'Agenda' },
-      { path: '/app/employer/profile', icon: IconPhUserCircleGear, label: 'Profile' },
+      { path: '/app/employer/dashboard', icon: IconPhCalendarDots, label: 'Dashboard' },
+      { path: '/app/employer/projects', icon: IconPhBriefcase, label: 'Projects' },
       { path: '/app/employer/team', icon: IconPhUsersFour, label: 'Team' },
+      { path: '/app/employer/profile', icon: IconPhUserCircleGear, label: 'Profile' },
     ],
     worker: [
       { path: '/app/worker/opportunities', icon: IconPhBriefcase, label: 'Opportunities' },
@@ -18,8 +18,6 @@
       { path: '/app/worker/profile', icon: IconPhUserCircleGear, label: 'Profile' },
     ],
   }
-
-  console.log('BottomNavigation: component rendered', { currentRole })
 </script>
 
 {#if currentRole}

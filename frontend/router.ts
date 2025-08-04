@@ -2,6 +2,7 @@
 import Agenda from '$routes/Agenda.svelte'
 import AuthLayout from '$routes/AuthLayout.svelte'
 import CreateProject from '$routes/CreateProject.svelte'
+import EmployerDashboard from '$routes/EmployerDashboard.svelte'
 import Layout from '$routes/Layout.svelte'
 import NotFound from '$routes/Notfound.svelte'
 import Opportunities from '$routes/Opportunities.svelte'
@@ -28,6 +29,7 @@ export const { p, navigate, isActive, route } = createRouter({
   '/app': {
     layout: Layout,
     '/employer': {
+      '/dashboard': EmployerDashboard,
       '/projects': {
         '/': Projects,
         '/new': CreateProject,
@@ -35,6 +37,7 @@ export const { p, navigate, isActive, route } = createRouter({
       '/agenda': Agenda,
     },
     '/worker': {
+      '/agenda': Agenda,
       '/opportunities': {
         '/': Opportunities,
         '/:opportunity': Opportunity,

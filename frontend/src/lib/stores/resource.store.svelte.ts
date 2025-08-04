@@ -19,10 +19,9 @@ export type CreateFn<T> = (data: Partial<T>, opts?: unknown) => Promise<T>
 export type UpdateFn<T> = (id: Id, patch: Partial<T>, opts?: unknown) => Promise<T>
 export type RemoveFn = (id: Id, opts?: unknown) => Promise<void>
 
-export type ResourceStore<T extends { id: Id; createdAt?: string }> = {
+export type ResourceStore<T extends { id: Id }> = {
   // state
   get items(): T[]
-  get newItems(): T[]
   get ids(): Id[]
   get isLoading(): boolean
   get isSyncing(): boolean
@@ -39,6 +38,11 @@ export type ResourceStore<T extends { id: Id; createdAt?: string }> = {
   retryEntity(id: Id): Promise<void>
   invalidate(scope?: 'session' | 'resource'): void
 
+  // timestamp filtering
+  getNewItemsSince(timestamp?: string | null): T[]
+  get newItemsSinceLastVisit(): T[]
+  get newItemsSinceLastActive(): T[]
+
   // notifications
   onNotification(type: string, handler?: () => void): () => void
 
@@ -54,6 +58,7 @@ export function defineResource<T extends { id: Id; createdAt?: string }>(cfg: {
   update?: UpdateFn<T>
   remove?: RemoveFn
   sessionKey: () => string
+  createdAtField?: keyof T
 }): () => ResourceStore<T> {
   // one instance per session+name
   const stores = new Map<string, ResourceStore<T>>()
@@ -255,13 +260,13 @@ export function defineResource<T extends { id: Id; createdAt?: string }>(cfg: {
     }
 
     const store: ResourceStore<T> = {
+      getNewItemsSince(timestamp?: string | null) {
+        if (!timestamp) return []
+        const field = (cfg.createdAtField || 'createdAt') as keyof T
+        return Array.from(items.values()).filter((item) => item[field] > timestamp)
+      },
       get items() {
         return Array.from(items.values())
-      },
-      get newItems() {
-        return Array.from(items.values()).filter(
-          (item) => item.createdAt && new Date(item.createdAt).getTime() > authStore.lastSeen,
-        )
       },
       get ids() {
         return ids
@@ -275,7 +280,13 @@ export function defineResource<T extends { id: Id; createdAt?: string }>(cfg: {
       get canLoadMore() {
         return !!next && state !== 'loading'
       },
+      get newItemsSinceLastVisit() {
+        return this.getNewItemsSince(authStore.currentUser?.lastDashboardVisitAt)
+      },
 
+      get newItemsSinceLastActive() {
+        return this.getNewItemsSince(authStore.currentUser?.lastActiveAt)
+      },
       init,
       refresh,
       loadMore,

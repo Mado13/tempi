@@ -13,11 +13,12 @@ export type User = {
   currentRole: UserRole
   hasEmployerProfile: boolean
   hasWorkerProfile: boolean
+  lastDashboardVisitAt: string | null
+  lastActiveAt: string | null
 }
 
 export function createAuthStore() {
   let isAuthenticated = $state(false)
-  let lastSeen = $state(Date.now())
   let currentUser = $state<User | null>(null)
   let isLoading = $state(true)
   let isInitialized = $state(false)
@@ -65,10 +66,6 @@ export function createAuthStore() {
   async function init() {
     if (isInitialized) return
 
-    const { value: lastSeenValue } = await Preferences.get({ key: 'lastSeen' })
-    if (lastSeenValue) {
-      lastSeen = parseInt(lastSeenValue)
-    }
     // Prevent race conditions by canceling previous init
     if (abortController) {
       abortController.abort()
@@ -108,11 +105,6 @@ export function createAuthStore() {
     } finally {
       isLoading = false
     }
-  }
-
-  function markAsSeen() {
-    lastSeen = Date.now()
-    Preferences.set({ key: 'lastSeen', value: lastSeen.toString() })
   }
 
   function destroy() {
@@ -176,9 +168,6 @@ export function createAuthStore() {
     get isAuthenticated() {
       return isAuthenticated
     },
-    get lastSeen() {
-      return lastSeen
-    },
     get currentUser() {
       return currentUser
     },
@@ -200,6 +189,5 @@ export function createAuthStore() {
     logout,
     switchRole,
     fetchCurrentUser,
-    markAsSeen, // <- Add this line
   }
 }
