@@ -74,8 +74,10 @@
       in:fly={{ y: 20, duration: 350, easing: quintOut }}
       out:fly={{ y: 10, duration: 250, opacity: 0 }}
       use:dismissable={{
+        lockDirection: true,
         axis: 'x',
         dismissThreshold: 0.3,
+        flickVelocity: 0.3,
         onDismiss: () => snack.close.onclick(),
       }}>
       <div class="snack-content">

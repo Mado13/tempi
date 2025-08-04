@@ -71,7 +71,7 @@ export const dismissable: Action<HTMLElement, DismissableOptions> = (node, optio
     flickVelocity = 0.5,
     lockDirection = true,
     fadeOnDrag = false, // Default to false for performance
-    ignore = 'a, button, input, textarea, select',
+    ignore = 'a,  input, textarea, select',
     enabled = true,
   } = options
 
@@ -147,7 +147,7 @@ export const dismissable: Action<HTMLElement, DismissableOptions> = (node, optio
 
         if ((isFlick || isSwipedFarEnough) && direction !== 0) {
           // Dismiss
-          const target = nodeSize * direction
+          const target = window.innerWidth * direction
           const transform = isAxisY
             ? `translate3d(0, ${target}px, 0)`
             : `translate3d(${target}px, 0, 0)`
