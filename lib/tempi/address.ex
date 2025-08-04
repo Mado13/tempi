@@ -12,7 +12,7 @@ defmodule Tempi.Address do
     field :district, :string
     field :coordinates, Geo.PostGIS.Geometry
 
-    has_many :jobs, Tempi.Job
+    has_many :projects, Tempi.Project
     timestamps()
   end
 

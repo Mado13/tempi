@@ -12,7 +12,6 @@ defmodule Tempi.Profiles.EmployerProfile do
     field :location, :string
 
     belongs_to :user, Tempi.Accounts.User
-    has_many :jobs, Tempi.Job
     has_many :projects, Tempi.Project
     has_many :company_profiles, Tempi.Profiles.CompanyProfile
 

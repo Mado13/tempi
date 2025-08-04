@@ -7,15 +7,6 @@ defmodule Tempi.Profiles.WorkerProfile do
 
   @availabilities [:full_time, :part_time, :contract]
 
-  @derive {Jason.Encoder,
-           except: [
-             :__meta__,
-             :user,
-             :job_applications,
-             :worker_favorite_jobs,
-             :favorite_jobs
-           ]}
-
   schema "worker_profiles" do
     field :full_name, :string
     field :skills, {:array, :string}, default: []
@@ -27,9 +18,10 @@ defmodule Tempi.Profiles.WorkerProfile do
     belongs_to :user, Tempi.Accounts.User
 
     has_many :job_applications, Tempi.JobApplication
-    has_many :worker_favorite_jobs, Tempi.WorkerFavoriteJob
+    has_many :worker_favorite_jobs, Tempi.WorkerFavoriteProjectPosition
 
-    many_to_many :favorite_jobs, Tempi.Job, join_through: Tempi.WorkerFavoriteJob
+    many_to_many :favorite_project_positions, Tempi.ProjectPosition,
+      join_through: Tempi.WorkerFavoriteProjectPosition
 
     timestamps(type: :utc_datetime)
   end

@@ -2,21 +2,22 @@ defmodule TempiWeb.FavoriteJSON do
   @doc """
   Renders the JSON response for the toggle action.
   """
-  def toggle(%{status: status, job: job}) do
+  def toggle(%{status: status, project_position: project_position}) do
     %{
       message: "Favorite status updated.",
       # Will be :favorited or :unfavorited
       status: status,
-      data: data(job)
+      data: data(project_position)
     }
   end
 
-  # A private helper function to format the job data,
-  # similar to the pattern in your JobsJSON example.
-  defp data(job) do
+  # A private helper function to format the project position data
+  defp data(project_position) do
     %{
-      id: job.id,
-      favorites_count: job.favorites_count
+      id: project_position.id,
+      title: project_position.title,
+      favorites_count: project_position.favorites_count,
+      project_id: project_position.project_id
     }
   end
 end
