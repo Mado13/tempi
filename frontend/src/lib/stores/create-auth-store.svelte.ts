@@ -183,6 +183,12 @@ export function createAuthStore() {
     get error() {
       return error
     },
+    get lastDashboardVisitAt() {
+      return currentUser?.lastDashboardVisitAt ?? null
+    },
+    get lastActiveAt() {
+      return currentUser?.lastActiveAt ?? null
+    },
     init,
     destroy,
     login,

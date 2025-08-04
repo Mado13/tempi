@@ -26,6 +26,7 @@ export type ResourceStore<T extends { id: Id }> = {
   get isLoading(): boolean
   get isSyncing(): boolean
   get canLoadMore(): boolean
+  get isInitialized(): boolean
 
   // ops
   init(opts?: { paginate?: boolean }): Promise<void>
@@ -283,7 +284,9 @@ export function defineResource<T extends { id: Id; createdAt?: string }>(cfg: {
       get newItemsSinceLastVisit() {
         return this.getNewItemsSince(authStore.currentUser?.lastDashboardVisitAt)
       },
-
+      get isInitialized() {
+        return state === 'ready'
+      },
       get newItemsSinceLastActive() {
         return this.getNewItemsSince(authStore.currentUser?.lastActiveAt)
       },
