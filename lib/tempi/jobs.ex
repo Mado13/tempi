@@ -37,7 +37,7 @@ defmodule Tempi.Jobs do
              create_job_with_address(params, address.id, current_user, company_profile_id),
            {:ok, _classifications} <-
              create_job_classifications(job.id, params["job_classifications"]) do
-        job |> Repo.preload([:address, :job_classifications])
+        job |> Repo.preload([:address, :job_classifications, :company_profile])
       else
         {:error, reason} when is_binary(reason) ->
           Logger.error("Job creation failed (string): #{reason}")

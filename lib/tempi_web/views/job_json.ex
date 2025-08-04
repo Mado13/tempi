@@ -27,9 +27,14 @@ defmodule TempiWeb.JobJSON do
         start: job.start_date,
         end: job.end_date
       },
+      payment: %{
+        rate: job.rate,
+        rate_type: job.rate_type
+      },
       number_of_employees: job.number_of_employees,
       job_classifications: Enum.map(job.job_classifications, & &1.classification_code),
-      favorites_count: job.favorites_count
+      favorites_count: job.favorites_count,
+      created_at: job.inserted_at
     }
   end
 end

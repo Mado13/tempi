@@ -4,16 +4,17 @@ defmodule TempiWeb.JobController do
 
   def create(conn, params) do
     with {:ok, job} <- Jobs.create_job(params, current_user(conn)) do
+      logo_key = job.company_profile && job.company_profile.logo_key
+      signed_url = Tempi.Storage.sign_many(Enum.filter([logo_key], & &1))
+
       conn
       |> put_status(:created)
-      |> render(:show, job: job)
+      |> render(:show, job: job, signed_urls: signed_url)
     end
   end
 
   def index(conn, _params) do
     user = current_user(conn)
-
-    IO.inspect(user, label: "user")
 
     jobs =
       if user.current_role == :employer do
@@ -29,8 +30,6 @@ defmodule TempiWeb.JobController do
 
     signed_urls =
       Tempi.Storage.sign_many(logo_keys)
-
-    IO.inspect(signed_urls, label: "signed")
 
     render(conn, :index, jobs: jobs, signed_urls: signed_urls)
   end

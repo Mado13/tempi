@@ -5,7 +5,7 @@ defmodule Tempi.Storage do
     {:ok, client} = Tempi.Supabase.Client.get_client()
     storage = Supabase.Storage.from(client, @bucket)
     base_url = client.base_url
-    expires_in = opts[:expires_in] || 900
+    expires_in = opts[:expires_in] || 604_800
 
     keys
     |> Enum.uniq()

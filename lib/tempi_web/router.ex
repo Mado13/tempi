@@ -34,7 +34,7 @@ defmodule TempiWeb.Router do
     resources "/companies", CompanyController, only: [:index, :create, :show, :update, :delete]
 
     resources "/jobs", JobController, only: [:create, :index, :show, :update, :delete] do
-      resources "/applications", JobApllicationController,
+      resources "/applications", JobApplicationController,
         only: [:index, :create, :delete],
         as: :job_applications
     end
