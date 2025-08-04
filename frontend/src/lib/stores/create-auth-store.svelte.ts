@@ -5,10 +5,12 @@ import { Preferences } from '@capacitor/preferences'
 import { api, setAuthInterceptor, setAuthToken } from '$lib/api'
 import { getErrorMessage } from '$lib/i18n/errors.svelte'
 
+export type UserRole = 'worker' | 'employer'
+
 export type User = {
   id: string
   phoneNumber: string
-  currentRole: 'employer' | 'worker'
+  currentRole: UserRole
   hasEmployerProfile: boolean
   hasWorkerProfile: boolean
 }
@@ -134,7 +136,7 @@ export function createAuthStore() {
     if (shouldNavigate) navigate('/auth/login')
   }
 
-  async function switchRole(newRole: 'employer' | 'worker') {
+  async function switchRole(newRole: UserRole) {
     if (!currentUser || currentUser.currentRole === newRole) return
 
     const originalRole = currentUser.currentRole
@@ -143,7 +145,7 @@ export function createAuthStore() {
     updateUser({ currentRole: newRole })
 
     // 2. API Call
-    const result = await api.patch('/role', { currentRole: newRole })
+    const result = await api.patch('/user/me', { user: { current_role: newRole } })
 
     // 3. Handle Response
     if (!result.success && result.statusCode !== 401) {
@@ -151,7 +153,11 @@ export function createAuthStore() {
       updateUser({ currentRole: originalRole })
     } else if (result.success) {
       // On success, navigate
-      navigate('/app/:role/jobs', { params: { role: newRole } })
+      if (newRole === 'worker') {
+        navigate('/app/worker/opportunities', { replace: true })
+      } else if (newRole === 'employer') {
+        navigate('/app/employer/projects', { replace: true })
+      }
     }
     // Auth errors are handled by the interceptor
   }

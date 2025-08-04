@@ -76,14 +76,24 @@ defmodule Tempi.Accounts do
   @doc """
   Finds an existing user by phone number or creates a new one.
   """
-  def find_or_create_user_by_phone(phone_number) when is_binary(phone_number) do
+  def find_or_create_user_by_phone(phone_number, attrs \\ %{}) when is_binary(phone_number) do
     case get_user_by_phone_number(phone_number) do
       nil ->
-        {:ok, user} = create_user(%{phone_number: phone_number})
+        # Create new user with FCM token
+        create_attrs = Map.put(attrs, :phone_number, phone_number)
+        {:ok, user} = create_user(create_attrs)
         user
 
       user ->
-        user
+        # Update existing user with new FCM token if provided
+        case Map.get(attrs, :fcm_token) do
+          nil ->
+            user
+
+          fcm_token ->
+            {:ok, updated_user} = update_user(user, %{fcm_token: fcm_token})
+            updated_user
+        end
     end
   end
 
@@ -142,12 +152,6 @@ defmodule Tempi.Accounts do
       |> Repo.delete_all()
 
     count
-  end
-
-  def update_user_role(user, attrs) do
-    user
-    |> User.changeset(attrs)
-    |> Repo.update()
   end
 
   def create_user_profile(user, "worker") do

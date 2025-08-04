@@ -12,6 +12,7 @@ defmodule Tempi.Accounts.User do
              :id,
              :phone_number,
              :current_role,
+             :fcm_token,
              :employer_profile,
              :worker_profile
            ]}
@@ -19,6 +20,7 @@ defmodule Tempi.Accounts.User do
   schema "users" do
     field :phone_number, :string
     field :current_role, Ecto.Enum, values: @actors, default: nil
+    field :fcm_token, :string
 
     has_one :employer_profile, Tempi.Profiles.EmployerProfile
     has_one :worker_profile, Tempi.Profiles.WorkerProfile
@@ -31,7 +33,7 @@ defmodule Tempi.Accounts.User do
   """
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:phone_number, :current_role])
+    |> cast(attrs, [:phone_number, :current_role, :fcm_token])
     |> validate_required([:phone_number])
     |> validate_inclusion(:current_role, @actors,
       message: "INVALID_ROLE",

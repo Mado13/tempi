@@ -35,15 +35,19 @@ defmodule TempiWeb.AuthController do
   Expects: %{"phone_number" => "+1234567890", "code" => "123456"}
   Returns: %{"token" => "bearer_token", "user" => %{...}} or error
   """
-  def verify_code(conn, %{"phone_number" => phone_number, "code" => code}) do
+  def verify_code(conn, %{"phone_number" => phone_number, "code" => code} = params) do
     with {:ok, normalized_phone} <- PhoneHelper.normalize_phone_number(phone_number),
          {:ok, _} <- check_rate_limit("verify_code:#{normalized_phone}", 600_000, 5),
          {:ok, :valid} <- AuthCodeServer.verify_code(normalized_phone, code) do
-      user =
-        Accounts.find_or_create_user_by_phone(phone_number)
+      user_attrs =
+        case Map.get(params, "fcm_token") do
+          nil -> %{}
+          fcm_token when is_binary(fcm_token) -> %{fcm_token: fcm_token}
+          _ -> %{}
+        end
 
+      user = Accounts.find_or_create_user_by_phone(phone_number, user_attrs)
       token = Accounts.create_user_api_token(user)
-
       render(conn, :user_with_token, user: user, token: token)
     end
   end

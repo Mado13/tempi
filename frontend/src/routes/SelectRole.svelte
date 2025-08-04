@@ -3,28 +3,34 @@
   import * as v from 'valibot'
 
   import { api } from '$lib/api'
+  import type { UserRole } from '$lib/stores/create-auth-store.svelte'
 
   import { createForm } from '../lib/forms'
 
   const selectRoleSchema = v.object({
-    currentRole: v.string(),
+    role: v.string(),
   })
 
   const form = createForm({
     schema: selectRoleSchema,
     defaultValues: {
-      currentRole: 'worker',
+      role: 'worker',
     },
     async onSubmit(data) {
-      const res = await api.post('/role', data)
+      const res = await api.post('/user/profiles', data)
       const { currentRole } = res.data.user
-      navigate('/app/:role/jobs', { params: { role: currentRole } })
+
+      if (currentRole === 'worker') {
+        navigate('/app/worker/opportunities', { replace: true })
+      } else if (currentRole === 'employer') {
+        navigate('/app/employer/projects', { replace: true })
+      }
     },
   })
 
   function selectRole(role: string) {
     return (e: Event) => {
-      form.currentRole = role
+      form.setValue('role', role)
       form.handleSubmit(e)
     }
   }

@@ -25,9 +25,9 @@ defmodule TempiWeb.Router do
     pipe_through :api_auth
 
     # User & Auth Management
-    get "/user/me", UserController, :current_user
-    patch "/role", UserController, :update_role
-    post "/role", UserController, :create_role
+    get "/user/me", UserController, :show
+    patch "/user/me", UserController, :update
+    post "/user/profiles", UserController, :create_profile
     delete "/auth/logout", AuthController, :logout
     post "/supabase-token", SupabaseTokenController, :create
 
@@ -35,27 +35,12 @@ defmodule TempiWeb.Router do
     resources "/companies", CompanyController, except: [:new, :edit]
 
     resources "/projects", ProjectController, except: [:new] do
-      resources "/positions", ProjectPositionController,
-        only: [:index, :create],
-        as: :project_positions
+      resources "/positions", ProjectPositionController, only: [:index, :create]
     end
 
     resources "/positions", ProjectPositionController, except: [:new] do
-      resources "/applications", PositionApplicationController,
-        only: [:index, :create, :delete],
-        as: :position_applications
-
-      # Favorites as member action
+      resources "/applications", JobApplicationController, only: [:index, :create, :delete]
       patch "/favorite", FavoriteController, :toggle_position, as: :favorite_position
-    end
-
-    resources "/jobs", JobController, except: [:new, :edit] do
-      resources "/applications", JobApplicationController,
-        only: [:index, :create, :delete],
-        as: :job_applications
-
-      # Favorites as member action  
-      patch "/favorite", FavoriteController, :toggle_job, as: :favorite_job
     end
   end
 

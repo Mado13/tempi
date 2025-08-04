@@ -8,6 +8,7 @@ defmodule Tempi.Repo.Migrations.CreateUsersAuthTables do
       add :id, :binary_id, primary_key: true
       add :phone_number, :string
       add :current_role, :string, default: "worker", null: false
+      add :fcm_token, :string
 
       timestamps(type: :utc_datetime)
     end

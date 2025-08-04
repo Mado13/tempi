@@ -9,6 +9,7 @@
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import SecondaryButton from '$lib/components/SecondaryButton.svelte'
   import { createForm } from '$lib/forms'
+  import { getFcmToken } from '$lib/services/push-notification.servuce.svelte'
   import { authStore } from '$lib/stores/auth.store.svelte'
 
   let submitButton: HTMLButtonElement
@@ -22,6 +23,7 @@
   const verifySchema = v.object({
     phoneNumber: v.string(),
     code: v.pipe(v.string(), v.length(6)),
+    fcmToken: v.optional(v.string()),
   })
 
   const form = createForm({
@@ -29,6 +31,7 @@
     defaultValues: {
       phoneNumber: route.state as string,
       code: '',
+      fcmToken: getFcmToken() || undefined,
     },
     async onSubmit(data) {
       const res = await api.post('/auth/verify_code', data)

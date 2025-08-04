@@ -48,4 +48,11 @@ defmodule Tempi.Profiles do
     )
     |> Repo.exists?()
   end
+
+  def get_worker_profile_for_user(user) do
+    case Repo.preload(user, :worker_profile).worker_profile do
+      nil -> {:error, :worker_profile_required}
+      worker_profile -> {:ok, worker_profile}
+    end
+  end
 end

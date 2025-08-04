@@ -41,9 +41,11 @@ defmodule Tempi.MixProject do
       {:finch, "~> 0.13"},
       {:geo, "~> 4.0"},
       {:geo_postgis, "~> 3.7"},
+      {:goth, "~> 1.3"},
       {:hammer, "~> 7.0"},
       {:jose, "~> 1.11"},
       {:jason, "~> 1.4"},
+      {:pigeon, "~> 2.0"},
       {:phoenix, "~> 1.7.20"},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
@@ -66,7 +68,7 @@ defmodule Tempi.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]

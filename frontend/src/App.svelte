@@ -5,13 +5,19 @@
   import { Capacitor } from '@capacitor/core'
   import { StatusBar, Style } from '@capacitor/status-bar'
   import { Router } from 'sv-router'
+  import { onMount } from 'svelte'
   import { loadLocale } from 'wuchale/run-client'
 
+  import { initPushNotifications } from '$lib/services/push-notification.servuce.svelte'
   import '$lib/services/revalidate.service'
   import { authStore } from '$lib/stores/auth.store.svelte'
 
   let locale = $state('he')
   const authInit = authStore.init()
+
+  onMount(async () => {
+    await initPushNotifications()
+  })
 
   $effect(() => {
     const platform = Capacitor.getPlatform()

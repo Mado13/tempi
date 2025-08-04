@@ -3,6 +3,38 @@ defmodule TempiWeb.UserController do
 
   alias Tempi.{Accounts, Repo}
 
+  @doc "GET /api/user/me"
+  def show(conn, _params) do
+    user = current_user(conn)
+    render_user_with_profiles(conn, user)
+  end
+
+  @doc "PATCH /api/user/me"
+  def update(conn, %{"user" => user_params}) do
+    user = current_user(conn)
+
+    with {:ok, updated_user} <- Accounts.update_user(user, user_params) do
+      render_user_with_profiles(conn, updated_user)
+    else
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(:changeset_errors, changeset: changeset)
+    end
+  end
+
+  @doc "POST /api/user/profiles"
+  def create_profile(conn, %{"role" => role}) do
+    with {:ok, updated_user} <- Accounts.create_user_profile(current_user(conn), role) do
+      render_user_with_profiles(conn, updated_user)
+    else
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(:changeset_errors, changeset: changeset)
+    end
+  end
+
   def create_role(conn, %{"current_role" => role}) do
     with {:ok, updated_user} <- Accounts.create_user_profile(current_user(conn), role) do
       updated_user =
