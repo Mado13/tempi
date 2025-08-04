@@ -20,7 +20,8 @@
   "include": [
     "frontend/src",
     "frontend/vite.config.ts",
-    "frontend/env.d.ts"
+    "frontend/env.d.ts",
+    "frontend/auto-imports.d.ts"
   ],
   "references": [
     { "path": "./frontend" },
