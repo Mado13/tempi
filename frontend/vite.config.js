@@ -14,12 +14,6 @@ export default defineConfig({
   optimizeDeps: {
   include: ['@sqlite.org/sqlite-wasm'],
   },
-  server: {
-    headers: {
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-      'Cross-Origin-Opener-Policy': 'same-origin',
-    },
-  },
   build: {
     minify: false,
     terserOptions: {
