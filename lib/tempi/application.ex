@@ -7,6 +7,9 @@ defmodule Tempi.Application do
 
   @impl true
   def start(_type, _args) do
+    import Dotenvy
+    source!([".env", ".#{Mix.env()}.env", System.get_env()])
+
     credentials =
       "GOOGLE_APPLICATION_CREDENTIALS_JSON"
       |> Dotenvy.env!(:string!)

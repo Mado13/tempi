@@ -1,0 +1,18 @@
+{
+  "lib/tempi/*_controller.ex": {
+    "type": "controller",
+    "related": ["lib/tempi/{}.ex", "lib/tempi/{}s.ex", "lib/tempi_web/views/{}_json.ex"]
+  },
+  "lib/tempi/*.ex": {
+    "type": "schema",
+    "related": ["lib/tempi/{}_controller.ex", "lib/tempi/{}s.ex", "lib/tempi_web/views/{}_json.ex"]
+  },
+  "lib/tempi/*s.ex": {
+    "type": "context",
+    "related": ["lib/tempi/{}.ex", "lib/tempi/{}_controller.ex", "lib/tempi_web/views/{}_json.ex"]
+  },
+  "lib/tempi_web/views/*_json.ex": {
+    "type": "json_view",
+    "related": ["lib/tempi/{}.ex", "lib/tempi/{}s.ex", "lib/tempi_web/controllers/{}_controller.ex"]
+  }
+}
