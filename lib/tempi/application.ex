@@ -7,6 +7,13 @@ defmodule Tempi.Application do
 
   @impl true
   def start(_type, _args) do
+    credentials =
+      "GOOGLE_APPLICATION_CREDENTIALS_JSON"
+      |> Dotenvy.env!(:string!)
+      |> Jason.decode!()
+
+    source = {:service_account, credentials}
+
     children = [
       TempiWeb.Telemetry,
       Tempi.Repo,
@@ -20,7 +27,9 @@ defmodule Tempi.Application do
       TempiWeb.Endpoint,
       Tempi.AuthCodeServer,
       Tempi.Supabase.Client,
-      {Tempi.RateLimit, clean_period: :timer.minutes(10)}
+      {Tempi.RateLimit, clean_period: :timer.minutes(10)},
+      {Goth, name: Tempi.Goth, source: source},
+      Tempi.FCM
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

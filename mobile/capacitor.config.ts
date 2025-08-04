@@ -20,21 +20,6 @@ const config: CapacitorConfig = {
     scheme: 'App',
   },
   plugins: {
-    CapacitorSQLite: {
-      iosDatabaseLocation: 'Library/CapacitorDatabase',
-      iosIsEncryption: false,
-      iosKeychainPrefix: 'svelte-sqlite-app-starter',
-      iosBiometric: {
-        biometricAuth: false,
-        biometricTitle: 'Biometric login for capacitor sqlite',
-      },
-      androidIsEncryption: true,
-      androidBiometric: {
-        biometricAuth: false,
-        biometricTitle: 'Biometric login for capacitor sqlite',
-        biometricSubTitle: 'Log in using your biometric',
-      },
-    },
     StatusBar: {
       style: 'Light',
       overlaysWebView: false,

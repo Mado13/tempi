@@ -1,23 +1,11 @@
 import Config
+import Dotenvy
 
-env = config_env()
-
-sources =
-  if env in [:dev, :test] do
-    import Dotenvy
-
-    [
-      ".env",
-      ".#{env}.env",
-      System.get_env()
-    ]
-  else
-    [System.get_env()]
-  end
-
-if env in [:dev, :test] do
-  Dotenvy.source!(sources)
-end
+source!([
+  ".env",
+  ".#{config_env()}.env",
+  System.get_env()
+])
 
 config :tempi, :supabase_jwt_secret, Dotenvy.env!("SUPABASE_JWT_SECRET", :string!)
 
@@ -25,7 +13,7 @@ config :tempi, Tempi.Supabase.Client,
   base_url: Dotenvy.env!("SUPABASE_URL", :string!),
   api_key: Dotenvy.env!("SUPABASE_SECRET_KEY", :string!)
 
-config :tempi, env: env
+config :tempi, env: config_env()
 
 # The function name is env!/3 for optional values
 if Dotenvy.env!("PHX_SERVER", :boolean, false) do
@@ -33,7 +21,7 @@ if Dotenvy.env!("PHX_SERVER", :boolean, false) do
 end
 
 # === PRODUCTION-SPECIFIC CONFIGURATION ===
-if env == :prod do
+if config_env() == :prod do
   # Database configuration
   database_url = Dotenvy.env!("DATABASE_URL", :string!)
   ecto_ipv6? = Dotenvy.env!("ECTO_IPV6", :boolean, false)

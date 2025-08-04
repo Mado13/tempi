@@ -35,7 +35,7 @@ defmodule Tempi.MixProject do
       {:bandit, "~> 1.5"},
       {:bcrypt_elixir, "~> 3.0"},
       {:dns_cluster, "~> 0.1.1"},
-      {:dotenvy, "~> 1.1", only: [:dev, :test]},
+      {:dotenvy, "~> 1.1"},
       {:ecto_sql, "~> 3.10"},
       {:ex_phone_number, "~> 0.4.5"},
       {:finch, "~> 0.13"},
