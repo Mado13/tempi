@@ -10,7 +10,7 @@ defmodule Tempi.JobApplication do
   schema "job_applications" do
     field :status, Ecto.Enum, values: @statuses, default: :submitted
 
-    belongs_to :job, Tempi.Job
+    belongs_to :position, Tempi.ProjectPosition
     belongs_to :worker_profile, Tempi.Profiles.WorkerProfile
 
     timestamps()
@@ -21,13 +21,13 @@ defmodule Tempi.JobApplication do
   """
   def changeset(job_application, attrs) do
     job_application
-    |> cast(attrs, [:job_id, :worker_profile_id, :status])
-    |> validate_required([:job_id, :worker_profile_id])
+    |> cast(attrs, [:position_id, :worker_profile_id, :status])
+    |> validate_required([:position_id, :worker_profile_id])
     |> validate_inclusion(:status, @statuses)
-    |> foreign_key_constraint(:job_id)
+    |> foreign_key_constraint(:position_id)
     |> foreign_key_constraint(:worker_profile_id)
-    |> unique_constraint([:job_id, :worker_profile_id],
-      name: :job_applications_job_id_worker_profile_id_index
+    |> unique_constraint([:position_id, :worker_profile_id],
+      name: :job_applications_position_id_worker_profile_id_index
     )
   end
 end
