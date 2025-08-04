@@ -9,7 +9,7 @@
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import SecondaryButton from '$lib/components/SecondaryButton.svelte'
   import { createForm } from '$lib/forms'
-  import { getFcmToken } from '$lib/services/push-notification.servuce.svelte'
+  import { getFcmToken } from '$lib/services/push-notification.service.svelte'
   import { authStore } from '$lib/stores/auth.store.svelte'
 
   let submitButton: HTMLButtonElement

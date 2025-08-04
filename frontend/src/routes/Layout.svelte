@@ -62,30 +62,25 @@
 {/if}
 
 <style>
-  /* SIMPLE FIXED LAYOUT - NO FLEX CONFUSION */
-
   .app-layout {
     position: fixed;
-    top: var(--safe-top);
-    left: var(--safe-left);
-    right: var(--safe-right);
-    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    height: 100dvh;
     background: var(--color-background-app);
     overflow: hidden;
   }
 
   .main-content {
-    position: fixed;
-    top: var(--safe-top);
-    left: var(--safe-left);
-    right: var(--safe-right);
-    bottom: var(--bottom-nav-height);
-    background: var(--color-background-app); /* Same as page background */
+    position: absolute;
+    top: env(safe-area-inset-top);
+    left: env(safe-area-inset-left);
+    right: env(safe-area-inset-right);
+    bottom: calc(5rem + env(safe-area-inset-bottom));
     overflow-y: auto;
-    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 
   .main-content::-webkit-scrollbar {
@@ -94,7 +89,6 @@
 
   .content-wrapper {
     min-height: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
   }
@@ -128,6 +122,13 @@
   @keyframes spin {
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  /* Legacy iOS Safari fallback */
+  @supports (-webkit-touch-callout: none) and (not (height: 100dvh)) {
+    .app-layout {
+      height: -webkit-fill-available;
     }
   }
 </style>

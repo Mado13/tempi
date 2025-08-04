@@ -1,9 +1,9 @@
 <script lang="ts">
   import { navigate } from '$router'
-  import { watch } from 'runed'
 
   import Accordion from '$lib/components/Accordion.svelte'
   import AddressPicker from '$lib/components/AddressPicker.svelte'
+  import EmptyState from '$lib/components/EmptyState.svelte'
   import Input from '$lib/components/Input.svelte'
   import InputButton from '$lib/components/InputButton.svelte'
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
@@ -11,8 +11,8 @@
   import RangeDatePicker from '$lib/components/RangeDatePicker.svelte'
   import SecondaryButton from '$lib/components/SecondaryButton.svelte'
   import { createForm, createNestedField } from '$lib/forms'
+  import { projectPositionCreateSchema } from '$lib/schemas/project-position.schema.svelte'
   import { projectCreateSchema } from '$lib/schemas/project.schema.svelte'
-  import { projectPositionCreateSchema } from '$lib/schemas/project_position.schema.svelte'
   import { useCompaniesStore } from '$lib/stores/resources/companies.store.svelte'
   import { useProjectsStore } from '$lib/stores/resources/projects.store.svelte'
   import { isEmpty } from '$lib/utils/utils'
@@ -71,6 +71,8 @@
 
     return `${form.address?.name}, ${form.address?.formattedAddress}`
   })
+
+  $inspect(form.name)
 </script>
 
 <!-- Create Project Form with Clear Visual Hierarchy -->
@@ -110,19 +112,13 @@
       <AddressPicker bind:value={form.address} bind:open={addressPickerOpen} />
 
       {#if positions.items.length === 0}
-        <div class="empty-state">
-          <div class="empty-state-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-          </div>
-          <p class="empty-title">No positions added yet</p>
-          <p class="empty-subtitle">Add job positions to define roles for this project</p>
-        </div>
-
+        <EmptyState
+          resource="positions"
+          description="Add job positions to define roles for this project">
+          {#snippet icon()}
+            <IconTablerUsers />
+          {/snippet}
+        </EmptyState>
         <div class="positions-footer">
           <SecondaryButton onclick={positions.add}>Add position</SecondaryButton>
         </div>
@@ -143,35 +139,28 @@
   </div>
 </div>
 
-<!-- Fixed publish bar with enhanced glass effect -->
 <div class="form-actions glass">
   <PrimaryButton type="submit" form="create-project-form">Publish project</PrimaryButton>
 </div>
 
 <style>
   :root {
-    /* Enhanced action bar tokens */
-    --action-bar-height: 64px; /* Slightly taller for better proportion */
-    --action-bar-gap: var(--space-3); /* Tighter gap */
+    --action-bar-height: 64px;
+    --action-bar-gap: var(--space-3);
   }
 
-  /* Screen wrapper - now has background */
   .screen {
     background: var(--color-background-screen);
     min-height: 100vh;
   }
 
-  /* Form container with subtle background differentiation */
   .form-container {
-    background: var(--color-background-app);
     min-height: 100vh;
     padding-bottom: calc(
-      var(--bottom-nav-height) + var(--action-bar-height) + var(--action-bar-gap) +
-        var(--safe-bottom) + var(--space-4)
+      var(--bottom-nav-height) + var(--tap-comfortable) + var(--space-8) + var(--safe-bottom)
     );
   }
 
-  /* Title with better spacing */
   h1 {
     font-size: var(--font-size-title);
     font-weight: var(--font-weight-semibold);
@@ -185,7 +174,6 @@
     z-index: 10;
   }
 
-  /* Form content area */
   form {
     padding: var(--space-5) var(--space-4);
     display: flex;
@@ -193,97 +181,45 @@
     gap: var(--space-5);
   }
 
-  /* Enhanced empty state */
-  .empty-state {
-    text-align: center;
-    padding: var(--space-8) var(--space-6);
-    background: var(--color-background-elevated);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--color-border-elevated);
-    margin: var(--space-4) 0;
-    box-shadow: var(--shadow-subtle);
-  }
-
-  .empty-state-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    background: var(--color-background-screen);
-    border-radius: var(--radius-full);
-    margin-bottom: var(--space-5);
-    box-shadow: var(--shadow-subtle);
-  }
-
-  .empty-state-icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--color-text-tertiary);
-  }
-
-  .empty-title {
-    font-size: var(--font-size-subhead);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
-    margin: 0 0 var(--space-2) 0;
-  }
-
-  .empty-subtitle {
-    font-size: var(--font-size-caption);
-    color: var(--color-text-secondary);
-    margin: 0;
-    line-height: var(--line-height-loose);
-  }
-
-  /* Positions footer spacing */
   .positions-footer {
     padding-block: var(--space-5);
     margin-top: var(--space-3);
   }
 
-  /* Enhanced fixed publish bar */
   .form-actions {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: calc(var(--bottom-nav-height) + var(--safe-bottom));
-
-    height: var(--action-bar-height);
-    display: grid;
-    place-items: center;
-    padding: 0 var(--space-4);
-
-    /* Enhanced glass effect */
-    background: var(--glass-bg-heavy);
-    backdrop-filter: blur(var(--glass-blur));
-    border-top: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-overlay);
-
+    bottom: calc(var(--bottom-nav-height) + var(--space-4));
+    left: var(--space-4);
+    right: var(--space-4);
     z-index: 900;
-  }
 
-  /* Better glass fallback for older devices */
-  .form-actions:not(.glass) {
-    background: var(--color-background-overlay);
-    border-top: 1px solid var(--color-border-strong);
-    box-shadow: var(--shadow-elevated);
-  }
-
-  /* Platform-specific optimizations */
-  .platform-android .form-actions.glass {
+    background: none;
+    border: none;
+    box-shadow: none;
     backdrop-filter: none;
-    background: var(--color-background-overlay);
-    border-top: 1px solid var(--color-border-strong);
-    box-shadow: var(--shadow-elevated);
+
+    display: block;
+    padding: 0;
+    height: auto;
+
+    :global(button) {
+      width: 100%;
+      height: var(--tap-comfortable);
+      box-shadow:
+        0 2px 8px rgba(139, 92, 246, 0.24),
+        0 1px 3px rgba(15, 23, 42, 0.08);
+      transition: all var(--duration-fast) var(--ease-out);
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
   }
 
-  /* Ensure nav stays above everything */
   :global(.bottom-nav) {
     z-index: 1000;
   }
 
-  /* Enhanced responsive behavior */
   @media (max-height: 640px) {
     .form-container {
       padding-bottom: calc(
@@ -301,7 +237,6 @@
     }
   }
 
-  /* Accessibility improvements */
   @media (prefers-reduced-motion: reduce) {
     .form-actions {
       transition: none;
@@ -328,7 +263,6 @@
     }
   }
 
-  /* RTL support */
   :global([dir='rtl']) .form-container,
   :global([dir='rtl']) .form-actions,
   :global([dir='rtl']) .empty-state {

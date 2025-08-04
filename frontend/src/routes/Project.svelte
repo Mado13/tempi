@@ -3,17 +3,18 @@
   import { onMount } from 'svelte'
 
   import { api } from '$lib/api'
+  import ApplicantCard from '$lib/components/ApplicantCard.svelte'
   import SegmentedControl from '$lib/components/SegmentedControl.svelte'
   import StatusBadge from '$lib/components/StatusBadge.svelte'
   import type { Project } from '$lib/schemas/project.schema.svelte'
-  import { useProjectApplicantsStore } from '$lib/stores/resources/project-applicants.store.svelte'
   import { useProjectsStore } from '$lib/stores/resources/projects.store.svelte'
+  import { useWorkerProfileStore } from '$lib/stores/resources/worker-profiles.store.svelte'
   import { formatHebrewDateRangeFromStrings } from '$lib/utils/dates'
 
   const projectsStore = useProjectsStore()
   const { projectId } = route.getParams('/app/employer/projects/:projectId')
   let project = $state<Project | undefined>(undefined)
-  const projectApplicants = useProjectApplicantsStore(projectId)()
+  const projectApplicants = useWorkerProfileStore(projectId)()
 
   onMount(async () => {
     projectApplicants.init()
@@ -30,8 +31,6 @@
     { id: 'applications', label: 'Applications', content: applicationsContent },
     { id: 'updates', label: 'Updates', content: updatesContent },
   ])
-
-  $inspect(project)
 </script>
 
 {#snippet rosterContent()}
@@ -40,7 +39,7 @@
 
 {#snippet applicationsContent()}
   {#each projectApplicants.items as applicant}
-    <span>{applicant.id}</span>
+    <ApplicantCard applicantName={applicant.fullName} />
   {/each}
 {/snippet}
 
