@@ -49,4 +49,5 @@ node_modules/
 bun.lockb
 
 .env
+.dev.env
 /supabase/
