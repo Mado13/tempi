@@ -8,7 +8,6 @@
 
   let { value = $bindable(), open = $bindable(false), display = $bindable('') } = $props()
 
-  // All your Melt UI logic for creating the calendar remains unchanged.
   const {
     elements: { calendar, cell, grid, heading },
     states: { months, weekdays },
@@ -16,6 +15,11 @@
     fixedWeeks: true,
     numberOfMonths: 12,
     locale: 'he',
+    isDateDisabled: (date) => {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      return date.toDate('UTC') < today
+    },
     onValueChange: ({ next }) => {
       display = formatHebrewDateRange(next)
       value = serializeDateRange(next)
@@ -29,7 +33,7 @@
       if (isOpen) {
         bottomSheet.show({
           id: 'range-date-picker',
-          title: 'Pick Address',
+          title: 'Pick address in picker',
           content: pickerContent,
           footer: footerContent,
           fullHeight: true,
@@ -155,6 +159,9 @@
     -webkit-tap-highlight-color: transparent;
     position: relative;
     border: none;
+    &[data-disabled] {
+      color: var(--color-text-placeholder);
+    }
   }
 
   [data-melt-calendar-cell]:active {

@@ -1,6 +1,6 @@
-<!-- src/routes/(app)/[role]/jobs/+page.svelte -->
 <script lang="ts">
   import { route } from '$router'
+  import { searchParams } from 'sv-router'
   import { onMount } from 'svelte'
 
   import Fab from '$lib/components/Fab.svelte'
@@ -10,29 +10,27 @@
   import { useJobsStore } from '$lib/stores/resources/jobs.store.svelte'
 
   const role = $derived(route.params.role as 'worker' | 'employer')
+  const highlightId = $derived(searchParams.get('highlight'))
 
-  // role-keyed store instance
-  const jobsStore = $derived.by(() => useJobsStore(role))
-  const companyStore = useCompaniesStore()
+  const jobs = useJobsStore()
+  const companies = useCompaniesStore()
 
-  // init each instance once (no reactive dependency on store internals)
   onMount(async () => {
-    await Promise.all([companyStore.init(), jobsStore.init()])
+    companies.init()
+    jobs.init({ paginate: true })
   })
-
-  $inspect(jobsStore)
 </script>
 
 <div>
   <header><h1>Jobs</h1></header>
   <div>
-    {#if jobsStore.isLoading}
+    {#if jobs.isLoading}
       <p>Loading jobs...</p>
-    {:else if jobsStore.items.length === 0}
+    {:else if jobs.items.length === 0}
       <p>You haven't created any jobs yet.</p>
     {:else}
-      {#each jobsStore.items as job (job.id)}
-        <JobCard {job} />
+      {#each jobs.items as job (job.id)}
+        <JobCard {job} isNewlyCreated={job.id === highlightId} />
       {/each}
     {/if}
 

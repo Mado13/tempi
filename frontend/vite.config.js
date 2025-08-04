@@ -14,6 +14,11 @@ export default defineConfig({
   optimizeDeps: {
   include: ['@sqlite.org/sqlite-wasm'],
   },
+  server: {
+    hmr: {
+      overlay: false
+    }
+  },
   build: {
     minify: false,
     terserOptions: {

@@ -65,6 +65,7 @@
     font-size: 16px !important;
     font-family: var(--font-family-base);
     color: var(--color-text-primary);
+    text-align: var(--text-align, 'right');
     background: transparent;
     border: none;
     outline: none;

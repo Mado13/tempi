@@ -3,8 +3,10 @@
   import { Toggle } from 'melt/builders'
 
   import { dismissable } from '$lib/actions/gestures'
+  import { highlightCard } from '$lib/actions/highlight-card.svelte'
   import { api } from '$lib/api'
   import CardButton from '$lib/components/CardButton.svelte'
+  import CardCompanyLogo from '$lib/components/CardCompanyLogo.svelte'
   import EmployerCardMenu from '$lib/components/EmployerCardMenu.svelte'
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
   import WorkerCardMenu from '$lib/components/WorkerCardMenu.svelte'
@@ -15,8 +17,9 @@
 
   interface Props {
     job: Job
+    isNewlyCreated?: boolean
   }
-  let { job }: Props = $props()
+  let { job, isNewlyCreated = false }: Props = $props()
 
   const role = $derived(route.params.role as string)
   const dateRange = formatHebrewDateRangeFromStrings(job.date.start, job.date.end)
@@ -29,11 +32,18 @@
       api.patch(`/jobs/${job.id}/favorite`)
     },
   })
+
+  $inspect(job)
 </script>
 
 <article
   class="card"
   data-role={role}
+  use:highlightCard={{
+    isHighlighted: isNewlyCreated,
+    duration: 1400,
+    shimmerDuration: 800,
+  }}
   use:dismissable={{
     enabled: role === 'worker',
     axis: 'x',
@@ -48,32 +58,15 @@
       {/each}
       <span data-status={job.status}>{job.status}</span>
     {:else if role === 'worker'}
-      <a>
-        {#if logoUrl}
-          <img
-            src={logoUrl}
-            alt="Company logo"
-            width={baseSize}
-            height={baseSize}
-            loading="lazy"
-            decoding="async" />
-        {:else}
-          <div
-            style="
-              width: {baseSize}px;
-              height: {baseSize}px;
-              border-radius: var(--radius-m);
-              background: var(--color-background-page);
-            " />
-        {/if}
+      <a href="#">
+        <CardCompanyLogo {logoUrl} companyName={job.company?.name} size={baseSize} />
         <div>
-          <strong>{job.company?.name ?? 'Company'}</strong>
-          <span>{job.address}</span>
+          <strong>{job.company?.name}</strong>
         </div>
       </a>
       <CardButton {...toggle.trigger} aria-label="toggle favourite">
         {#if toggle.value}
-          <IconPhHeartFill />
+          <IconPhHeartFill color="var(--color-semantic-error-fg)" />
         {:else}
           <IconPhHeart />
         {/if}
@@ -89,8 +82,20 @@
     </ul>
   {:else if role === 'worker'}
     <div class="job-details">
-      <h3>Role or Skill</h3>
-      <p>Salary</p>
+      <h3>
+        {#each Object.values(job.jobClassifications) as classification}
+          {@const jobClass = getClassificationById(classification)}
+          {jobClass?.label}
+        {/each}
+      </h3>
+      <div>
+        <span>{job.payment.rate}</span>
+        {#if job.payment.rateType === 'daily'}
+          <div>Daily</div>
+        {:else}
+          <span>Hourly</span>
+        {/if}
+      </div>
     </div>
   {/if}
 
@@ -129,6 +134,8 @@
     min-height: 150px;
     touch-action: pan-y;
     will-change: transform;
+    transform-origin: center;
+    backface-visibility: hidden;
 
     header,
     footer {
@@ -209,13 +216,6 @@
         gap: var(--spacing-m);
         text-decoration: none;
         color: var(--color-text-primary);
-
-        img {
-          width: 40px;
-          height: 40px;
-          border-radius: var(--radius-m);
-          background-color: var(--color-background-page);
-        }
 
         div {
           text-align: right; /* RTL */

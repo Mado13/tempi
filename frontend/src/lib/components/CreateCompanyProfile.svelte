@@ -23,8 +23,6 @@
       }
     },
   })
-
-  $inspect({ form })
 </script>
 
 <form id="create-company" onsubmit={form.handleSubmit}>
@@ -40,5 +38,5 @@
     required
     bind:value={form.businessNumber}
     error={form.errors.businessNumber} />
-  <LogoUploader bind:value={form.logoKey} error={form.errors.logoKey} />
+  <LogoUploader bind:value={form.logoKey} />
 </form>

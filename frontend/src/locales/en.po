@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-03T20:49:16.217Z\n"
-"PO-Revision-Date: 2025-08-04T20:09:44.840Z\n"
+"PO-Revision-Date: 2025-08-10T08:26:38.482Z\n"
 "Last-Translator: \n"
 "Language: English\n"
 "Language-Team: \n"
@@ -12,8 +12,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
 "MIME-Version: 1.0\n"
 
-#: src/lib/components/BottomNavigation.svelte
 #: src/routes/Jobs.svelte
+#: src/lib/components/BottomNavigation.svelte
 msgid "Jobs"
 msgstr "Jobs"
 
@@ -25,7 +25,6 @@ msgstr "Loading jobs..."
 msgid "You haven't created any jobs yet."
 msgstr "You haven't created any jobs yet."
 
-#: src/lib/components/CreateCompanyProfile.svelte
 #: src/lib/components/JobCreationFab.svelte
 msgid "First, Let's Set Up Your Company"
 msgstr "First, Let's Set Up Your Company"
@@ -35,7 +34,6 @@ msgid "Save and Continue to Post Job"
 msgstr "Save and Continue to Post Job"
 
 #: src/routes/AddJob.svelte
-#: src/routes/CreateJob.svelte
 msgid "Transalte Me"
 msgstr "Transalte Me"
 
@@ -60,17 +58,14 @@ msgid "Create Job"
 msgstr "Create Job"
 
 #: src/routes/AddJob.svelte
-#: src/routes/CreateJob.svelte
 msgid "Translate me"
 msgstr "Translate me"
 
-#: src/routes/Agenda.svelte
-msgid "Worker cards"
-msgstr "Worker cards"
+#~ msgid "Worker cards"
+#~ msgstr "Worker cards"
 
-#: src/routes/Agenda.svelte
-msgid "Employer cards"
-msgstr "Employer cards"
+#~ msgid "Employer cards"
+#~ msgstr "Employer cards"
 
 #: src/routes/Notfound.svelte
 msgid "Not Found"
@@ -100,8 +95,8 @@ msgstr "Both"
 msgid "Employer"
 msgstr "Employer"
 
-#: src/lib/components/BottomNavigation.svelte
 #: src/routes/Team.svelte
+#: src/lib/components/BottomNavigation.svelte
 msgid "Team"
 msgstr "Team"
 
@@ -155,25 +150,24 @@ msgstr "Close bottom sheet"
 msgid "Pay Rate"
 msgstr "Pay Rate"
 
+#: src/lib/components/JobCard.svelte
 #: src/lib/components/PayRate.svelte
 msgid "Daily"
 msgstr "Daily"
 
+#: src/lib/components/JobCard.svelte
 #: src/lib/components/PayRate.svelte
 msgid "Hourly"
 msgstr "Hourly"
 
-#: src/lib/components/JobCard.svelte
-msgid "Company Name"
-msgstr "Company Name"
+#~ msgid "Company Name"
+#~ msgstr "Company Name"
 
-#: src/lib/components/JobCard.svelte
-msgid "Role or Skill"
-msgstr "Role or Skill"
+#~ msgid "Role or Skill"
+#~ msgstr "Role or Skill"
 
-#: src/lib/components/JobCard.svelte
-msgid "Salary"
-msgstr "Salary"
+#~ msgid "Salary"
+#~ msgstr "Salary"
 
 #: src/lib/components/JobCard.svelte
 msgid "5 applications"
@@ -230,6 +224,7 @@ msgstr "סגור"
 #~ msgid "Blat"
 #~ msgstr "Blat"
 
+#: src/lib/components/RangeDatePicker.svelte
 #: src/lib/components/RangeDatePicker.svelte
 msgid "UTC"
 msgstr "UTC"
@@ -340,28 +335,25 @@ msgid "Failed to start application"
 msgstr "Failed to start application"
 
 #: src/lib/stores/StoreProvider.svelte
+#: src/App.svelte
 msgid "Retry"
 msgstr "Retry"
 
-#: src/routes/auth/Verify.svelte
-msgid "Title"
-msgstr "Title"
+#~ msgid "Title"
+#~ msgstr "Title"
 
-#: src/routes/auth/Verify.svelte
-msgid "subTitle"
-msgstr "subTitle"
+#~ msgid "subTitle"
+#~ msgstr "subTitle"
 
-#: src/routes/auth/Verify.svelte
-msgid "your auth code: {0}"
-msgstr "your auth code: {0}"
+#~ msgid "your auth code: {0}"
+#~ msgstr "your auth code: {0}"
 
 #: src/routes/auth/Verify.svelte
 msgid "Resend code"
 msgstr "Resend code"
 
-#: src/routes/auth/Verify.svelte
-msgid "<0/> Resend code in {0}"
-msgstr "<0/> Resend code in {0}"
+#~ msgid "<0/> Resend code in {0}"
+#~ msgstr "<0/> Resend code in {0}"
 
 #: src/routes/auth/Verify.svelte
 msgid "Resend Code"
@@ -371,9 +363,8 @@ msgstr "Resend Code"
 msgid "Change phone number"
 msgstr "Change phone number"
 
-#: src/routes/auth/Verify.svelte
-msgid "Hidden Submti"
-msgstr "Hidden Submti"
+#~ msgid "Hidden Submti"
+#~ msgstr "Hidden Submti"
 
 #: src/routes/auth/Login.svelte
 msgid "Welcome to Tempi!"
@@ -443,9 +434,8 @@ msgstr "Cannot load more"
 msgid "Google Maps not loaded"
 msgstr "Google Maps not loaded"
 
-#: src/lib/components/CreateCompanyProfile.svelte
-msgid "Choose Photo"
-msgstr "Choose Photo"
+#~ msgid "Choose Photo"
+#~ msgstr "Choose Photo"
 
 #~ msgid "M18 6L6 18M6 6l12 12"
 #~ msgstr "M18 6L6 18M6 6l12 12"
@@ -459,13 +449,150 @@ msgstr "Choose Photo"
 #~ msgid "Job Card"
 #~ msgstr "Job Card"
 
-#: src/lib/components/CreateCompanyProfile.svelte
-msgid "Save and Continue"
-msgstr "Save and Continue"
+#~ msgid "Save and Continue"
+#~ msgstr "Save and Continue"
 
 #~ msgid "Select Date Range"
 #~ msgstr "Select Date Range"
 
+#~ msgid "Pick Address"
+#~ msgstr "Pick Address"
+
+#~ msgid "Uploading... {0}"
+#~ msgstr "Uploading... {0}"
+
+#~ msgid "Choose Logo"
+#~ msgstr "Choose Logo"
+
+#~ msgid "Company logo preview"
+#~ msgstr "Company logo preview"
+
+#~ msgid "Remove"
+#~ msgstr "Remove"
+
+#~ msgid "Uploading... {0}%"
+#~ msgstr "Uploading... {0}%"
+
+#~ msgid "Company Logo"
+#~ msgstr "Company Logo"
+
+#: src/lib/components/LogoUploader.svelte
+msgid "Remove logo"
+msgstr "Remove logo"
+
+#~ msgid "M12 16.5V7.5M7.5 12H16.5"
+#~ msgstr "M12 16.5V7.5M7.5 12H16.5"
+
+#~ msgid "M21.2498 12C21.2498 17.108 17.1088 21.25 11.9998 21.25C6.89079 21.25 2.74976 17.108 2.74976 12C2.74976 6.892 6.89079 2.75 11.9998 2.75C17.1088 2.75 21.2498 6.892 21.2498 12Z"
+#~ msgstr "M21.2498 12C21.2498 17.108 17.1088 21.25 11.9998 21.25C6.89079 21.25 2.74976 17.108 2.74976 12C2.74976 6.892 6.89079 2.75 11.9998 2.75C17.1088 2.75 21.2498 6.892 21.2498 12Z"
+
+#~ msgid "Add Logo"
+#~ msgstr "Add Logo"
+
+#: src/lib/components/LogoUploader.svelte
+msgid "Logo preview"
+msgstr "Logo preview"
+
+#~ msgid "Loading translations..."
+#~ msgstr "Loading translations..."
+
+#~ msgid "Company logo"
+#~ msgstr "Company logo"
+
+#~ msgid "Company"
+#~ msgstr "Company"
+
+#: src/routes/auth/Verify.svelte
+msgid "Verify Code"
+msgstr "Verify Code"
+
+#: src/routes/auth/Verify.svelte
+msgid "Code was sent to: {0}"
+msgstr "Code was sent to: {0}"
+
+#: src/routes/auth/Verify.svelte
+msgid "Your auth code: {0}"
+msgstr "Your auth code: {0}"
+
+#~ msgid "<0/>Share Job"
+#~ msgstr "<0/>Share Job"
+
+#~ msgid "<0/> Share Job"
+#~ msgstr "<0/> Share Job"
+
+#~ msgid "Share Job <0/>"
+#~ msgstr "Share Job <0/>"
+
+#~ msgid "<0/> More from The same"
+#~ msgstr "<0/> More from The same"
+
+#~ msgid "More from The same <0/>"
+#~ msgstr "More from The same <0/>"
+
+#~ msgid "<0/>Report Job"
+#~ msgstr "<0/>Report Job"
+
+#~ msgid "<0/> Report Job"
+#~ msgstr "<0/> Report Job"
+
+#~ msgid "Report Job <0/>"
+#~ msgstr "Report Job <0/>"
+
+#~ msgid "<0/> Share Job <1/>"
+#~ msgstr "<0/> Share Job <1/>"
+
+#~ msgid "<0/> More from The same <1/>"
+#~ msgstr "<0/> More from The same <1/>"
+
+#~ msgid "<0/> Report Job <1/>"
+#~ msgstr "<0/> Report Job <1/>"
+
+#~ msgid "More of the same"
+#~ msgstr "More of the same"
+
+#: src/lib/components/LogoUploader.svelte
+msgid "Add logo"
+msgstr "Add logo"
+
+#~ msgid "Create new jon"
+#~ msgstr "Create new jon"
+
+#: src/routes/CreateJob.svelte
+msgid "Create new job"
+msgstr "Create new job"
+
+#: src/routes/CreateJob.svelte
+msgid "Date"
+msgstr "Date"
+
+#: src/routes/CreateJob.svelte
+msgid "Pick address"
+msgstr "Pick address"
+
+#: src/routes/CreateJob.svelte
+msgid "Pick a job"
+msgstr "Pick a job"
+
 #: src/lib/components/RangeDatePicker.svelte
-msgid "Pick Address"
-msgstr "Pick Address"
+msgid "Pick address in picker"
+msgstr "Pick address in picker"
+
+#: src/routes/CreateJob.svelte
+msgid "Pick date placeholder"
+msgstr "Pick date placeholder"
+
+#: src/App.svelte
+msgid "Loading…"
+msgstr "Loading…"
+
+#: src/App.svelte
+msgid "Failed to start"
+msgstr "Failed to start"
+
+#: src/routes/auth/Verify.svelte
+msgid "Resend code in {0}"
+msgstr "Resend code in {0}"
+
+#: src/routes/auth/Verify.svelte
+msgid "Hidden Submit"
+msgstr "Hidden Submit"
