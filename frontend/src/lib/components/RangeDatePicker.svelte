@@ -3,7 +3,7 @@
   import { watch } from 'runed'
 
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
-  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
+  import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import { formatHebrewDateRange, serializeDateRange } from '$lib/utils/dates'
 
   let { value = $bindable(), open = $bindable(false), display = $bindable('') } = $props()

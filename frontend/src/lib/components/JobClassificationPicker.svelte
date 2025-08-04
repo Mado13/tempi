@@ -3,11 +3,11 @@
   import IconTablerTag from '~icons/tabler/tag'
 
   import PrimaryButton from '$lib/components/PrimaryButton.svelte'
-  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
+  import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import {
     allClassifications,
     searchClassifications,
-  } from '$lib/services/job_classification.service'
+  } from '$lib/services/job-classification.service'
   import type { Item, JobDocument } from '$lib/types/job'
   import { buildSearchItems } from '$lib/utils/serach_item_builder'
 

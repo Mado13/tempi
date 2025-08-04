@@ -5,7 +5,7 @@
   import { fade, fly } from 'svelte/transition'
 
   import { dismissable } from '$lib/actions/gestures'
-  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
+  import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
 
   let sheetElement = $state<HTMLElement>()
   let config = $derived(bottomSheet.bottomSheetState.current)

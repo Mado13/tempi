@@ -1,17 +1,17 @@
 <script lang="ts">
   import { Debounced, watch } from 'runed'
 
-  import SearchableBottomSheet, { type Item } from '$lib/components/SearchableBottomSheet.svelte'
+  import type { Item } from '$lib/components/SearchableList.svelte'
   import SearchableList from '$lib/components/SearchableList.svelte'
-  import * as bottomSheet from '$lib/services/bottom_sheet.service.svelte'
+  import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import { GoogleMapsPlaces } from '$lib/utils/google-maps/places'
-  import { type GoogleMapsFormLocationInput } from '$lib/utils/google-maps/schema'
+  import { type FormLocationInput } from '$lib/utils/google-maps/schema'
 
   const SEARCH_DEBOUNCE_MS = 300
   const MIN_SEARCH_LENGTH = 3
 
   interface Props {
-    value?: GoogleMapsFormLocationInput
+    value?: FormLocationInput
     open: boolean
   }
 
