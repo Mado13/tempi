@@ -1,7 +1,6 @@
 <script lang="ts">
   import { route } from '$router'
   import { Toggle } from 'melt/builders'
-  import { onDestroy } from 'svelte'
 
   import { dismissable } from '$lib/actions/gestures'
   import { api } from '$lib/api'
@@ -11,11 +10,8 @@
   import WorkerCardMenu from '$lib/components/WorkerCardMenu.svelte'
   import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import { getClassificationById } from '$lib/services/job-classification.service'
-  import { getStorageServices } from '$lib/services/storage'
   import type { Job } from '$lib/stores/resources/jobs.store.svelte'
   import { formatHebrewDateRangeFromStrings } from '$lib/utils/dates'
-
-  const storageServices = getStorageServices()
 
   interface Props {
     job: Job
@@ -26,57 +22,7 @@
   const dateRange = formatHebrewDateRangeFromStrings(job.date.start, job.date.end)
 
   const baseSize = 40
-  // free plan: no transform; request original and let browser scale
-
-  let logoUrl = $state('') // blob: URL
-  let blobHandle: string | null = null
-  let lastSig = ''
-  let reqId = 0
-
-  function revokeBlob() {
-    if (blobHandle) {
-      URL.revokeObjectURL(blobHandle)
-      blobHandle = null
-    }
-  }
-
-  // fetch once per (key)
-  $effect(() => {
-    if (role !== 'worker') {
-      revokeBlob()
-      logoUrl = ''
-      lastSig = ''
-      return
-    }
-    const key = job.company?.logoKey
-    if (!key) {
-      revokeBlob()
-      logoUrl = ''
-      lastSig = ''
-      return
-    }
-
-    const sig = key
-    if (sig === lastSig) return
-    lastSig = sig
-
-    const my = ++reqId
-    ;(async () => {
-      try {
-        const blob = await storageServices.files.logos.download(key) // no transform on free plan
-        if (my !== reqId) return
-        revokeBlob()
-        blobHandle = URL.createObjectURL(blob)
-        logoUrl = blobHandle
-      } catch {
-        if (my !== reqId) return
-        revokeBlob()
-        logoUrl = ''
-      }
-    })()
-  })
-
-  onDestroy(revokeBlob)
+  const logoUrl = $derived(job.company?.logoUrl ?? '')
 
   const toggle = new Toggle({
     onValueChange: () => {

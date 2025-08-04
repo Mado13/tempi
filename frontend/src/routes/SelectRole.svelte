@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { navigate } from '$router'
   import * as v from 'valibot'
 
   import { api } from '$lib/api'
@@ -14,8 +15,10 @@
     defaultValues: {
       currentRole: 'worker',
     },
-    onSubmit(data) {
-      api.post('/role', data)
+    async onSubmit(data) {
+      const res = await api.post('/role', data)
+      const { currentRole } = res.data.user
+      navigate('/app/:role/jobs', { params: { role: currentRole } })
     },
   })
 

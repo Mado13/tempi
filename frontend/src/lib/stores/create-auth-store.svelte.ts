@@ -154,7 +154,7 @@ export function createAuthStore() {
       updateUser({ currentRole: originalRole })
     } else if (result.success) {
       // On success, navigate
-      navigate('/app/:role/profile', { params: { role: newRole } })
+      navigate('/app/:role/jobs', { params: { role: newRole } })
     }
     // Auth errors are handled by the interceptor
   }

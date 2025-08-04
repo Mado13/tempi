@@ -1,3 +1,4 @@
+<!-- src/routes/(app)/[role]/jobs/+page.svelte -->
 <script lang="ts">
   import { route } from '$router'
   import { onMount } from 'svelte'
@@ -8,19 +9,18 @@
   import { useCompaniesStore } from '$lib/stores/resources/companies.store.svelte'
   import { useJobsStore } from '$lib/stores/resources/jobs.store.svelte'
 
-  const jobsStore = useJobsStore()
+  const role = $derived(route.params.role as 'worker' | 'employer')
+
+  // role-keyed store instance
+  const jobsStore = $derived.by(() => useJobsStore(role))
   const companyStore = useCompaniesStore()
 
-  onMount(() => {
-    companyStore.init()
-    jobsStore.init()
+  // init each instance once (no reactive dependency on store internals)
+  onMount(async () => {
+    await Promise.all([companyStore.init(), jobsStore.init()])
   })
 
-  $effect(() => {
-    jobsStore.refresh()
-  })
-
-  const role = $derived(route.params.role as string)
+  $inspect(jobsStore)
 </script>
 
 <div>
@@ -35,6 +35,7 @@
         <JobCard {job} />
       {/each}
     {/if}
+
     {#if role === 'employer'}
       <JobCreationFab {role}>
         {#snippet children(props)}
@@ -53,11 +54,10 @@
     flex-direction: column;
     padding: var(--spacing-m);
     gap: var(--spacing-l);
-
-    > div {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-m);
-    }
+  }
+  div > div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-m);
   }
 </style>

@@ -1,49 +1,42 @@
 import { Context } from 'runed'
 
 import type { createAuthStore } from './create-auth-store.svelte'
-import { createCrudStore } from './create-crud-store.svelte'
 
-// Store registry for managing multiple CRUD stores
-const storeRegistry = new Map<string, any>()
+// shared registry
+export const storeRegistry = new Map<string, unknown>()
 
-export function getOrCreateStore<TCreate extends Record<string, any>>(
-  resource: string,
-  contextKey: Context<any>,
-): ReturnType<typeof createCrudStore<TCreate>> {
-  if (!storeRegistry.has(resource)) {
-    const store = createCrudStore<TCreate>(resource)
-    storeRegistry.set(resource, store)
-    contextKey.set(store)
-  }
-  return storeRegistry.get(resource)!
+// minimal, typed helper
+export function getOrCreate<T>(registry: Map<string, unknown>, key: string, make: () => T): T {
+  const existing = registry.get(key) as T | undefined
+  if (existing) return existing
+  const created = make()
+  registry.set(key, created)
+  return created
 }
 
-export function destroyStore(resource: string) {
-  const store = storeRegistry.get(resource)
-  if (store) {
-    store.destroy()
-    storeRegistry.delete(resource)
-  }
+// optional helpers (keep if you already use them)
+export function destroyStore(key: string) {
+  const store = storeRegistry.get(key) as { destroy?: () => void } | undefined
+  if (store?.destroy) store.destroy()
+  storeRegistry.delete(key)
 }
 
 export function initializeAllStores(authStore: ReturnType<typeof createAuthStore>) {
   if (!authStore.isAuthenticated) return
-
-  for (const store of storeRegistry.values()) {
-    if (!store.isInitialized) {
-      store.init()
-    }
+  for (const s of storeRegistry.values()) {
+    const store = s as { isInitialized: boolean; init: () => void }
+    if (!store.isInitialized) store.init()
   }
 }
 
 export function destroyAllStores() {
-  for (const store of storeRegistry.values()) {
-    store.destroy()
+  for (const s of storeRegistry.values()) {
+    const store = s as { destroy?: () => void }
+    store.destroy?.()
   }
   storeRegistry.clear()
 }
 
-// Auth store context (always needed)
+// keep auth context export if other code depends on it
 export type AuthStore = ReturnType<typeof createAuthStore>
 export const authStoreContext = new Context<AuthStore>('auth-store')
-export { storeRegistry }
