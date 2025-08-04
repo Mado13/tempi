@@ -10,7 +10,7 @@
   import { workerProfileSchema } from '$lib/schemas/worker-profile.schema.svelte'
   import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
   import { useCompaniesStore } from '$lib/stores/resources/companies.store.svelte'
-  import { useMyWorkerProfileStore } from '$lib/stores/resources/my-worker-profile.store.svelte'
+  import { useMyWorkerProfileStore } from '$lib/stores/resources/my-worker-profile.svelte'
   import { usePositionApplicationsStore } from '$lib/stores/resources/position-applications-store.svelte'
   import { usePositionsStore } from '$lib/stores/resources/positions.store.svelte'
   import { useProjectsStore } from '$lib/stores/resources/projects.store.svelte'

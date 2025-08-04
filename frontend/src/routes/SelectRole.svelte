@@ -276,6 +276,7 @@
     }
   }
 
+  /* Safe area adjustments for devices with notches */
   @supports (padding: max(0px)) {
     .role-selection-container {
       padding-left: max(var(--space-4), var(--safe-left));
