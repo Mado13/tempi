@@ -51,7 +51,7 @@
   })
 
   const containerBottomPosition = $derived(
-    `calc(var(--bottom-nav-height, 0px) + var(--spacing-m) + ${formActionsHeight}px)`,
+    `calc(var(--bottom-nav-height, 0px) + var(--space-4) + ${formActionsHeight}px)`,
   )
 
   function handleActionClick(snack: any) {
@@ -76,7 +76,7 @@
       use:dismissable={{
         axis: 'x',
         dismissThreshold: 0.3,
-        onDismiss: () => snack.close,
+        onDismiss: () => snack.close.onclick(),
       }}>
       <div class="snack-content">
         <h3 {...snack.title} class="snack-title">{snack.data.title}</h3>
@@ -90,18 +90,7 @@
       {/if}
 
       <button {...snack.close} type="button" class="close-button" aria-label="Dismiss notification">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          ><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line
-          ></svg>
+        <IconPhX width={16} height={16} />
       </button>
     </div>
   {/each}
@@ -109,16 +98,14 @@
 
 <style>
   .snackbar-container {
-    /* --- KEY FIX --- */
-    /* Force LTR direction to make left/right properties behave predictably,
-       even inside an RTL application. Also resets any unwanted margins. */
+    /* Force LTR direction to make left/right properties behave predictably */
     direction: ltr;
     margin: 0;
-    padding: 0 var(--spacing-m);
+    padding: 0 var(--space-4);
     background: transparent;
     border: none;
 
-    /* Positioning (now works correctly because of direction: ltr) */
+    /* Positioning */
     position: fixed;
     bottom: var(--bottom-position);
     left: 0;
@@ -129,81 +116,97 @@
     /* Layout for the snacks inside */
     display: flex;
     flex-direction: column-reverse;
-    align-items: stretch; /* Makes snacks full-width */
-    gap: var(--spacing-s);
+    align-items: stretch;
+    gap: var(--space-3);
 
     pointer-events: none;
-    transition: bottom var(--duration-medium) var(--ease-out-quint);
+    transition: bottom var(--duration-normal) var(--ease-out);
   }
 
   .snack {
-    /* This rule is now correct and does not need changes */
     width: 100%;
     display: flex;
     align-items: center;
-    gap: var(--spacing-s);
-    padding: var(--spacing-s) var(--spacing-xs) var(--spacing-s) var(--spacing-m);
-    background-color: var(--color-background-surface);
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-3) var(--space-4) var(--space-4);
+
+    /* Modern glassmorphism styling from your design system */
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+
     color: var(--color-text-primary);
-    border-radius: var(--radius-m);
-    box-shadow: var(--shadow-lg);
-    border-left: 4px solid;
+    border-radius: var(--radius-xl);
+    border-left: 3px solid;
     pointer-events: auto;
     touch-action: pan-y;
     contain: layout paint style;
+
+    /* Add subtle transform for modern feel */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
-  /* All other styles below are correct */
+  /* Type-specific colors using your design system */
   .snack.info {
-    border-left-color: var(--color-semantic-info-fg);
+    border-left-color: var(--color-info);
   }
   .snack.success {
-    border-left-color: var(--color-semantic-success-fg);
+    border-left-color: var(--color-success);
   }
   .snack.warning {
-    border-left-color: var(--color-semantic-warning-fg);
+    border-left-color: var(--color-warning);
   }
   .snack.error {
-    border-left-color: var(--color-semantic-error-fg);
+    border-left-color: var(--color-error);
   }
+
   .snack-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding-block: var(--spacing-xs);
+    padding-block: var(--space-2);
   }
+
   .snack-title {
     margin: 0;
-    font-size: var(--font-size-label-l);
+    font-size: var(--font-size-body);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
-    line-height: 1.4;
+    line-height: var(--line-height-normal);
   }
+
   .snack-description {
     margin: 0;
-    font-size: var(--font-size-label-m);
+    font-size: var(--font-size-caption);
     font-weight: var(--font-weight-regular);
     color: var(--color-text-secondary);
+    line-height: var(--line-height-normal);
   }
+
   .action-button {
     all: unset;
     flex-shrink: 0;
     box-sizing: border-box;
     cursor: pointer;
-    padding: var(--spacing-s) var(--spacing-m);
-    border-radius: var(--radius-s);
-    color: var(--color-interactive-accent-default);
+    min-height: var(--tap-min);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
     font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-label-m);
+    font-size: var(--font-size-caption);
     transition:
-      background-color var(--transition-fast),
-      transform 0.1s ease-out;
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
     -webkit-tap-highlight-color: transparent;
   }
+
   .action-button:active {
-    background-color: rgba(var(--accent-rgb), 0.15);
+    background-color: rgba(var(--primary-rgb), 0.1);
     transform: scale(0.96);
   }
+
   .close-button {
     all: unset;
     box-sizing: border-box;
@@ -212,19 +215,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(var(--size-tap-target) * 0.8);
-    height: calc(var(--size-tap-target) * 0.8);
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-full);
     color: var(--color-text-secondary);
     transition:
-      background-color var(--transition-fast),
-      transform 0.1s ease-out;
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
     -webkit-tap-highlight-color: transparent;
   }
+
   .close-button:active {
-    background-color: var(--color-background-surface-active);
+    background-color: var(--color-background-app);
     transform: scale(0.92);
   }
+
   :global([popover]) {
     inset: unset;
   }
