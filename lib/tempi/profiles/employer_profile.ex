@@ -13,6 +13,7 @@ defmodule Tempi.Profiles.EmployerProfile do
 
     belongs_to :user, Tempi.Accounts.User
     has_many :jobs, Tempi.Job
+    has_many :projects, Tempi.Project
     has_many :company_profiles, Tempi.Profiles.CompanyProfile
 
     timestamps(type: :utc_datetime)
