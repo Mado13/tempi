@@ -21,6 +21,11 @@
     App.addListener('appStateChange', ({ isActive }) => {
       if (!isActive) api.patch('/user/me', { user: { touchLastActive: true } })
     })
+
+    App.addListener('appUrlOpen', ({ url }) => {
+      const path = new URL(url).pathname
+      navigate(path)
+    })
   })
 
   $effect(() => {

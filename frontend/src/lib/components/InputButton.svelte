@@ -1,7 +1,5 @@
 <!-- lib/components/InputButton.svelte -->
 <script lang="ts">
-  import type { Snippet } from 'svelte'
-
   import Button, { type ButtonProps } from '$lib/components/Button.svelte'
 
   interface InputButtonProps extends ButtonProps {
@@ -22,7 +20,6 @@
     ...restProps
   }: InputButtonProps = $props()
 
-  // When no children provided, show placeholder style
   const hasContent = $derived(!!children)
 </script>
 
@@ -33,7 +30,6 @@
       {...restProps}
       {disabled}
       {loading}
-      class={{ placeholder: !hasContent }}
       --bg-color="transparent"
       --color="var(--color-text-primary)"
       --border="none"
@@ -50,7 +46,7 @@
       {#if hasContent}
         {@render children()}
       {:else}
-        {placeholder}
+        <span class="placeholder">{placeholder}</span>
       {/if}
     </Button>
   </fieldset>
@@ -63,9 +59,9 @@
 <style>
   .input-button-wrapper {
     width: 100%;
+    margin-bottom: var(--space-4);
   }
 
-  /* Match Input.svelte fieldset */
   fieldset {
     min-height: var(--tap-min);
     position: relative;
@@ -76,84 +72,104 @@
     margin: 0;
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
-    background-color: var(--color-background-screen);
+
+    background-color: var(--color-background-app);
+    box-shadow: var(--shadow-border);
+
     transition:
       border-color var(--duration-fast) var(--ease-out),
-      box-shadow var(--duration-fast) var(--ease-out);
+      box-shadow var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+
+    &:focus-within {
+      border-color: var(--color-border-focused);
+      background-color: var(--color-background-screen);
+      box-shadow: var(--ring), var(--shadow-elevated);
+    }
+
+    &.error {
+      border-color: var(--color-error);
+      background-color: var(--color-background-screen);
+      box-shadow: var(--shadow-subtle);
+
+      &:focus-within {
+        border-color: var(--color-error);
+        box-shadow:
+          0 0 0 3px rgba(239, 68, 68, 0.18),
+          var(--shadow-floating);
+      }
+    }
+
+    &.disabled {
+      background-color: var(--color-background-app);
+      border-color: var(--color-border-default);
+      box-shadow: none;
+      opacity: 0.6;
+    }
+
+    legend {
+      position: absolute;
+      right: var(--space-4);
+      top: 0;
+      transform: translateY(-50%);
+      padding: 0 var(--space-2);
+      font-size: var(--font-size-caption);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-secondary);
+      pointer-events: none;
+      background:
+        linear-gradient(var(--color-background-screen), var(--color-background-screen)) top / 100%
+          50% no-repeat,
+        linear-gradient(var(--color-background-app), var(--color-background-app)) bottom / 100% 50%
+          no-repeat;
+
+      transition:
+        color var(--duration-fast) var(--ease-out),
+        background var(--duration-fast) var(--ease-out);
+
+      &.required::after {
+        content: ' *';
+        color: var(--color-error);
+      }
+    }
+
+    &:focus-within legend,
+    &.error legend {
+      background:
+        linear-gradient(var(--color-background-screen), var(--color-background-screen)) top / 100%
+          50% no-repeat,
+        linear-gradient(var(--color-background-screen), var(--color-background-screen)) bottom /
+          100% 50% no-repeat;
+    }
+
+    &:focus-within legend {
+      color: var(--color-primary);
+    }
+
+    &.error legend {
+      color: var(--color-error);
+    }
+
+    &.disabled legend {
+      color: var(--color-text-tertiary);
+    }
   }
 
-  fieldset:focus-within {
-    border-color: var(--color-border-focused);
-    box-shadow: var(--ring);
-  }
-
-  fieldset.error {
-    border-color: var(--color-error);
-  }
-
-  fieldset.error:focus-within {
-    border-color: var(--color-error);
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
-  }
-
-  fieldset.disabled {
-    background-color: var(--color-background-elevated);
-    border-color: var(--color-border-default);
-    opacity: 0.6;
-  }
-
-  /* Legend mirrors Input.svelte */
-  legend {
-    position: absolute;
-    right: var(--space-4);
-    top: 0;
-    transform: translateY(-50%);
-    padding: 0 var(--space-2);
-    font-size: var(--font-size-caption);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-secondary);
-    pointer-events: none;
-    background:
-      linear-gradient(var(--color-background-app), var(--color-background-app)) top / 100% 50%
-        no-repeat,
-      linear-gradient(var(--color-background-screen), var(--color-background-screen)) bottom / 100%
-        50% no-repeat;
-  }
-
-  legend.required::after {
-    content: ' *';
-    color: var(--color-error);
-  }
-
-  fieldset:focus-within legend {
-    color: var(--color-primary);
-  }
-
-  fieldset.error legend {
-    color: var(--color-error);
-  }
-
-  fieldset.disabled legend {
-    color: var(--color-text-tertiary);
-  }
-
-  /* Make inner button behave like the Input element */
   :global(button) {
     width: 100%;
     height: 100%;
     min-height: initial;
     border-radius: inherit;
-    color: var(--color-text-primary);
     background: transparent;
     text-align: left;
+
+    color: var(--color-text-primary);
   }
 
-  /* Placeholder look matches Input placeholder color */
   :global(button.placeholder) {
     color: var(--color-text-tertiary);
   }
 
-  /* Error text block matches Input */
   .error-message {
     margin-top: var(--space-2);
     font-size: var(--font-size-caption);
@@ -161,25 +177,32 @@
     line-height: var(--line-height-normal);
     opacity: 0;
     transition: opacity var(--duration-fast) var(--ease-out);
-    min-height: 1em; /* keep layout stable */
-  }
-  .error-message.visible {
-    opacity: 1;
+
+    &.visible {
+      opacity: 1;
+    }
   }
 
   /* High contrast & reduced motion parity */
   @media (prefers-contrast: high) {
     fieldset {
       border-width: 2px;
-    }
-    fieldset:focus-within {
-      box-shadow: 0 0 0 3px #000000;
+
+      &:focus-within {
+        box-shadow: 0 0 0 3px #000000;
+      }
     }
   }
+
   @media (prefers-reduced-motion: reduce) {
     fieldset {
       transition: none;
+
+      legend {
+        transition: none;
+      }
     }
+
     .error-message {
       transition: none;
     }

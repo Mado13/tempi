@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
 
+  import LoadingState from '$lib/components/LoadingState.svelte'
   import { getStorageServices } from '$lib/services/storage'
 
   type Props = {
@@ -30,8 +31,6 @@
       }
 
       const res = await photos.uploadLogo(picked.file)
-
-      // swap preview to the transformed 96×96 blob URL
       if (state.previewUrl.startsWith('blob:')) URL.revokeObjectURL(state.previewUrl)
       state.previewUrl = res.previewUrl ?? ''
       value = res.key
@@ -54,133 +53,123 @@
   })
 </script>
 
-<div class="logo-uploader-container">
-  <div class="logo-uploader">
-    {#if state.previewUrl}
-      <div class="logo-preview">
-        <img src={state.previewUrl} alt="Logo preview" class="logo-preview-img" />
-        <button
-          type="button"
-          class="logo-remove-btn"
-          onclick={removePhoto}
-          aria-label="Remove logo"
-          disabled={state.isLoading}>
-          &times;
-        </button>
-      </div>
-    {:else}
-      <button
-        type="button"
-        id="logo-uploader"
-        class="logo-uploader-trigger"
-        onclick={handleSelectAndUpload}
-        disabled={state.isLoading}>
-        <div class="uploader-placeholder">
-          {#if state.isLoading}
-            <IconLineMdUploadingLoop />
-          {:else}
-            <span>Add logo</span>
-          {/if}
-        </div>
+<div class="logo-uploader">
+  {#if state.previewUrl}
+    <div class="preview-container">
+      <img src={state.previewUrl} alt="Logo preview" />
+      <button type="button" class="remove-btn" onclick={removePhoto} disabled={state.isLoading}>
+        &times;
       </button>
-    {/if}
-  </div>
+    </div>
+  {:else}
+    <button
+      type="button"
+      class="upload-btn"
+      onclick={handleSelectAndUpload}
+      disabled={state.isLoading}>
+      {#if state.isLoading}
+        <LoadingState />
+      {:else}
+        <IconTablerUpload />
+        <span>Add logo</span>
+      {/if}
+    </button>
+  {/if}
 
   {#if state.error}
-    <div class="error-message">{state.error}</div>
+    <div class="error">{state.error}</div>
   {/if}
 </div>
 
 <style>
-  .logo-uploader-container {
+  .logo-uploader {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-s);
+    align-items: center;
+    gap: var(--space-3);
   }
 
-  .logo-uploader {
-    width: 104px;
-    height: 104px;
-    position: relative;
-  }
-
-  .logo-uploader-trigger {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border-radius: var(--radius-m);
-    border: 2px dashed var(--color-border-default);
-    background-color: var(--color-background-page);
+  .upload-btn {
+    width: 120px;
+    height: 120px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .logo-uploader-trigger:hover:not(:disabled) {
-    border-color: var(--color-interactive-accent-default);
-    background-color: var(--color-background-surface-active);
-  }
-
-  .logo-uploader-trigger:disabled {
-    cursor: wait;
-  }
-
-  .uploader-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-s);
+    gap: var(--space-3);
+    border: 2px dashed var(--color-border-default);
+    border-radius: var(--radius-lg);
+    background: var(--color-background-elevated);
     color: var(--color-text-secondary);
-    font-size: var(--font-size-label-m);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    :global(svg) {
+      flex-shrink: 0;
+    }
   }
 
-  .uploader-placeholder :global(svg) {
-    color: var(--color-text-placeholder);
-    width: 32px;
-    height: 32px;
+  .upload-btn:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    background: var(--color-background-screen);
+    color: var(--color-primary);
   }
 
-  .logo-preview {
-    width: 100%;
-    height: 100%;
+  .upload-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .preview-container {
     position: relative;
-    box-shadow: var(--shadow-card);
-    border-radius: var(--radius-m);
+    width: 120px;
+    height: 120px;
   }
 
-  .logo-preview-img {
-    display: block;
+  .preview-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-elevated);
   }
 
-  .logo-remove-btn {
+  .remove-btn {
     position: absolute;
-    top: -2px;
-    right: -2px;
+    top: -8px;
+    right: -8px;
     width: 28px;
     height: 28px;
-    min-height: unset;
-    padding: 0;
-    background-color: var(--color-text-primary);
-    color: var(--color-background-surface);
-    border: 2px solid var(--color-background-surface);
-    box-shadow: var(--shadow-md);
-    font-size: 1.25rem;
+    border-radius: 50%;
+    border: 2px solid var(--color-background-screen);
+    background: var(--color-error);
+    color: white;
+    font-size: 18px;
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-elevated);
   }
 
-  .error-message {
-    color: var(--color-semantic-error-fg);
-    font-size: var(--font-size-label-m);
-    margin-top: var(--spacing-xs);
+  .remove-btn:hover:not(:disabled) {
+    background: #dc2626;
+  }
+
+  .remove-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .error {
+    color: var(--color-error);
+    font-size: var(--font-size-caption);
+    text-align: center;
+    padding: var(--space-2);
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(239, 68, 68, 0.2);
   }
 </style>

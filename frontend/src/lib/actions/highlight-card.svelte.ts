@@ -14,8 +14,8 @@ export const highlightCard: Action<
   HTMLElement,
   HighlightCardOptions,
   {
-    'on:highlight-start': (e: HighlightStart) => void
-    'on:highlight-end': (e: HighlightEnd) => void
+    'onhighlight-start': (e: HighlightStart) => void
+    'onhighlight-end': (e: HighlightEnd) => void
   }
 > = (node, options = {}) => {
   let { isHighlighted = false, duration = 1400, shimmerDuration = 800 } = options

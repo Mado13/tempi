@@ -1,10 +1,10 @@
-<!-- $lib/components/BottomSheetContainer.svelte -->
 <script lang="ts">
   import { onClickOutside } from 'runed'
   import { cubicOut } from 'svelte/easing'
   import { fade, fly } from 'svelte/transition'
 
   import { dismissable } from '$lib/actions/gestures'
+  import GhostButton from '$lib/components/GhostButton.svelte'
   import * as bottomSheet from '$lib/services/bottomsheet.service.svelte'
 
   let sheetElement = $state<HTMLElement>()
