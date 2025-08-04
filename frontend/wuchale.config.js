@@ -10,7 +10,6 @@ export default defineConfig({
       svelte: svelte({
       files: ['./src/lib/i18n/*.ts', './src/lib/schemas/*.ts', './src/**/*.svelte'],
       heuristic: (txt, details) => {
-        console.log({txt, details})
         const isVObjectCall = details.topLevelCall === 'v.object';
         const startsWithCapital = /\p{L}/u.test(txt[0]) && !/[a-z]/.test(txt[0]);
         if (isVObjectCall && startsWithCapital) {

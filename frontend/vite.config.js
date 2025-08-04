@@ -49,7 +49,7 @@ export default defineConfig({
         /\.svelte$/,
         /\.svelte\?svelte/,
         /src\/lib\/components\/.*\.svelte$/,
-        './src/**/*.svelte', // Explicitly include all Svelte files
+        './src/**/*.svelte',
       ],
       resolvers: [
         IconsResolver({
