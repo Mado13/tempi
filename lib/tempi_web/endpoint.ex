@@ -37,9 +37,21 @@ defmodule TempiWeb.Endpoint do
     cookie_key: "request_logger"
 
   plug Plug.RequestId
-  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
+  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint], log: false
 
-  plug TempiWeb.RequestLogger
+  plug Corsica,
+    origins: ["https://tempi-frontend.fly.dev", "http://localhost:5173", ~r/^null$/],
+    allow_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers: [
+      "accept",
+      "accept-language",
+      "content-language",
+      "content-type",
+      "authorization",
+      "x-requested-with"
+    ],
+    expose_headers: ["content-type"],
+    max_age: 86_400
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],

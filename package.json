@@ -17,7 +17,8 @@
     "mobile:build": "cd frontend && bun run build && cd ../mobile && bunx cap sync && bunx cap build android",
     "mobile:sync:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync",
     "mobile:build:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync && bunx cap build android",
-    "mobile:build:ios:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync && bunx cap open ios"
+    "mobile:build:ios:prod": "cd frontend && bun run build --mode production && cd ../mobile && bunx cap sync && bunx cap open ios",
+    "deploy:frontend": "fly deploy --config frontend/fly.toml --build-secret VITE_BASE_URL=https://tempi.fly.dev/api --build-secret VITE_SUPABASE_URL=https://dwmjxflsgedzlazsfowu.supabase.co"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.377",
@@ -28,17 +29,6 @@
     "@capacitor/cli": "^7.4.2"
   },
   "dependencies": {
-    "@capacitor/core": "^7.4.2",
-    "@capacitor/android": "^7.4.2",
-    "@capacitor/ios": "^7.4.2",
-    "@capacitor-community/sqlite": "^7.0.1",
-    "@capacitor/app": "^7.0.2",
-    "@capacitor/camera": "^7.0.2",
-    "@capacitor/keyboard": "^7.0.2",
-    "@capacitor/network": "^7.0.2",
-    "@capacitor/preferences": "^7.0.2",
-    "@capacitor/push-notifications": "^7.0.2",
-    "@capacitor/status-bar": "^7.0.2",
     "ts-case-convert": "^2.1.0"
   }
 }

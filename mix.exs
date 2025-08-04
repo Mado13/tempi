@@ -34,6 +34,7 @@ defmodule Tempi.MixProject do
     [
       {:bandit, "~> 1.5"},
       {:bcrypt_elixir, "~> 3.0"},
+      {:corsica, "~> 2.1.3"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dns_cluster, "~> 0.1.1"},
       {:dotenvy, "~> 1.1"},

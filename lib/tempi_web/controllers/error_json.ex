@@ -15,6 +15,10 @@ defmodule TempiWeb.ErrorJSON do
     %{errors: %{_all: ["MISSING_AUTH_HEADER"]}}
   end
 
+  def render("404.json", _assigns) do
+    %{errors: %{_all: ["NOT_FOUND"]}}
+  end
+
   def render("422.json", %{error_code: error_code}) when is_binary(error_code) do
     %{errors: %{_all: [error_code]}}
   end

@@ -4,11 +4,12 @@ defmodule Tempi.Application do
   @moduledoc false
 
   use Application
+  @env Mix.env()
 
   @impl true
   def start(_type, _args) do
     import Dotenvy
-    source!([".env", ".#{Mix.env()}.env", System.get_env()])
+    source!([".env", ".#{@env}.env", System.get_env()])
 
     credentials =
       "GOOGLE_APPLICATION_CREDENTIALS_JSON"

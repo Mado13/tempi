@@ -8,11 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { wuchale } from 'wuchale'
 
-// https://vite.dev/config/
 export default defineConfig({
-  optimizeDeps: {
-    include: ['@sqlite.org/sqlite-wasm'],
-  },
   server: {
     host: '0.0.0.0',
     hmr: {
@@ -48,13 +44,10 @@ export default defineConfig({
       include: [/\.svelte$/],
       resolvers: [
         (name) => {
-          console.log('AutoImport checking:', name)
-          // Call the actual IconsResolver
           const result = IconsResolver({
             prefix: 'Icon',
             extension: 'svelte',
           })(name)
-          console.log('IconsResolver result:', result)
           return result
         },
       ],
@@ -66,24 +59,37 @@ export default defineConfig({
     tsconfigPaths({ loose: true }),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'Tempi',
         short_name: 'Tempi',
+        description: 'Job marketplace client',
         start_url: '/',
         display: 'standalone',
+        scope: '/',
         background_color: '#242424',
         theme_color: '#242424',
+        categories: ['productivity'],
+        screenshots: [
+          {
+            src: 'mobile-screenshot.png',
+            sizes: '959x1600',
+            type: 'image/png',
+            form_factor: 'narrow',
+          },
+        ],
         icons: [
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any',
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any',
           },
         ],
       },
@@ -91,11 +97,11 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/tempi.fly.dev\.com\/api\//,
+            urlPattern: /^https:\/\/tempi\.fly\.dev\/api\//,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
-              expiration: { maxEntries: 100, maxAgeSeconds: 5 * 60 }, // 5 minutes
+              expiration: { maxEntries: 100, maxAgeSeconds: 5 * 60 },
             },
           },
           {
@@ -103,7 +109,7 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'images-cache',
-              expiration: { maxEntries: 50, maxAgeSeconds: 30 * 24 * 60 * 60 }, // 30 days
+              expiration: { maxEntries: 50, maxAgeSeconds: 30 * 24 * 60 * 60 },
             },
           },
           {

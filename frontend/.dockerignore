@@ -1,0 +1,10 @@
+.git
+_build
+deps
+node_modules
+frontend/node_modules
+mobile
+supabase
+*.log
+.env
+.dev.env

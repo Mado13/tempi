@@ -30,6 +30,14 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
+    "@capacitor-community/sqlite": "^7.0.1",
+    "@capacitor/app": "^7.0.2",
+    "@capacitor/camera": "^7.0.2",
+    "@capacitor/keyboard": "^7.0.2",
+    "@capacitor/network": "^7.0.2",
+    "@capacitor/preferences": "^7.0.2",
+    "@capacitor/push-notifications": "^7.0.2",
+    "@capacitor/status-bar": "^7.0.2",
     "@supabase/supabase-js": "^2.54.0",
     "@use-gesture/vanilla": "^10.3.1",
     "@wuchale/svelte": "^0.9.4",

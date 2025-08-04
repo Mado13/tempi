@@ -27,8 +27,10 @@
     const platform = Capacitor.getPlatform()
     document.documentElement.className = `platform-${platform}`
 
-    StatusBar.setStyle({ style: Style.Light })
-    StatusBar.setOverlaysWebView({ overlay: false })
+    if (Capacitor.isNativePlatform()) {
+      StatusBar.setStyle({ style: Style.Light })
+      StatusBar.setOverlaysWebView({ overlay: false })
+    }
 
     const backButton = App.addListener('backButton', ({ canGoBack }) => {
       if (route.pathname.startsWith('/auth') || !canGoBack) {
