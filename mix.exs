@@ -35,20 +35,23 @@ defmodule Tempi.MixProject do
       {:bandit, "~> 1.5"},
       {:bcrypt_elixir, "~> 3.0"},
       {:dns_cluster, "~> 0.1.1"},
+      {:dotenvy, "~> 1.1", only: [:dev, :test]},
       {:ecto_sql, "~> 3.10"},
       {:ex_phone_number, "~> 0.4.5"},
       {:finch, "~> 0.13"},
       {:geo, "~> 4.0"},
       {:geo_postgis, "~> 3.7"},
       {:hammer, "~> 7.0"},
-      {:jason, "~> 1.2"},
+      {:jose, "~> 1.11"},
+      {:jason, "~> 1.4"},
       {:phoenix, "~> 1.7.20"},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:postgrex, ">= 0.0.0"},
       {:swoosh, "~> 1.5"},
       {:telemetry_metrics, "~> 1.0"},
-      {:telemetry_poller, "~> 1.0"}
+      {:telemetry_poller, "~> 1.0"},
+      {:uuid, "~> 1.1"}
     ]
   end
 

@@ -1,24 +1,34 @@
 import Config
+import Dotenvy
 
+# === ENVIRONMENT SETUP ===
+env_dir_prefix = System.get_env("RELEASE_ROOT") || Path.expand(".")
+
+Dotenvy.source!([
+  Path.absname(".env", env_dir_prefix),
+  System.get_env()
+])
+
+# === SHARED CONFIGURATION ===
+jwt_secret = env!("SUPABASE_JWT_SECRET", :string!)
+config :tempi, :supabase_jwt_secret, jwt_secret
 config :tempi, env: config_env()
 
 # Always enable server in release mode
-if System.get_env("PHX_SERVER") do
+if env!("PHX_SERVER", :boolean, false) do
   config :tempi, TempiWeb.Endpoint, server: true
 end
 
+# === PRODUCTION-SPECIFIC CONFIGURATION ===
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      """
+  # Database configuration
+  database_url = env!("DATABASE_URL", :string!)
 
-  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+  maybe_ipv6 = if env!("ECTO_IPV6", :boolean, false), do: [:inet6], else: []
 
   config :tempi, Tempi.Repo,
     url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    pool_size: env!("POOL_SIZE", :integer, 10),
     socket_options: maybe_ipv6,
     ssl: [
       verify: :verify_peer,
@@ -26,17 +36,10 @@ if config_env() == :prod do
       server_name_indication: ~c"db.dwmjxflsgedzlazsfowu.supabase.co"
     ]
 
-  secret_key_base =
-    System.get_env("SECRET_KEY_BASE") ||
-      raise """
-      environment variable SECRET_KEY_BASE is missing.
-      You can generate one by calling: mix phx.gen.secret
-      """
-
-  host = System.get_env("PHX_HOST") || "tempi.fly.dev"
-  port = String.to_integer(System.get_env("PORT") || "8080")
-
-  config :tempi, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
+  # Endpoint configuration
+  secret_key_base = env!("SECRET_KEY_BASE", :string!)
+  host = env!("PHX_HOST", :string, "tempi.fly.dev")
+  port = env!("PORT", :integer, 8080)
 
   config :tempi, TempiWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
@@ -47,8 +50,7 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
-  # If you're using email authentication, configure your mailer here
-  # config :tempi, Tempi.Mailer,
-  #   adapter: Swoosh.Adapters.Postmark,
-  #   api_key: System.get_env("POSTMARK_API_KEY")
+  # Additional services
+
+  config :tempi, :dns_cluster_query, env!("DNS_CLUSTER_QUERY", :string, nil)
 end
