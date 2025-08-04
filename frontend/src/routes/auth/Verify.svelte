@@ -40,7 +40,7 @@
       if (!user.currentRole) {
         navigate('/app/select-role', { replace: true })
       } else {
-        navigate('/app/:role/agenda', { params: { role: user.currentRole }, replace: true })
+        navigate('/app/employer/agenda', { replace: true })
       }
     },
   })
@@ -59,9 +59,8 @@
   <p>Code was sent to: {form.phoneNumber}</p>
   <p>Your auth code: {initialCode}</p>
 </header>
-
 <form onsubmit={form.handleSubmit}>
-  <div>
+  <div class="otp-container">
     <Input
       id="otp-code"
       label=""
@@ -75,7 +74,6 @@
       --text-align="center"
       style="letter-spacing: 0.5em;" />
   </div>
-
   <div class="auth-form-group">
     <div class="resend-container">
       <span class="resend-text">Resend code</span>
@@ -86,36 +84,110 @@
           Resend Code
         {/if}
       </PrimaryButton>
-
       <SecondaryButton onclick={() => navigate('/auth/login')}>Change phone number</SecondaryButton>
     </div>
   </div>
-
   <button type="submit" bind:this={submitButton} style="display: none;" aria-hidden="true">
     Hidden Submit
   </button>
 </form>
 
 <style>
+  header {
+    text-align: center;
+    padding: var(--space-10) var(--space-4) var(--space-8);
+    position: relative;
+  }
+
+  header h1 {
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-4) 0;
+    letter-spacing: -0.02em;
+  }
+
+  header p {
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-2) 0;
+    line-height: var(--line-height-normal);
+  }
+
+  header p:last-child {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-tertiary);
+    font-family: monospace;
+    background: var(--color-background-elevated);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-default);
+    display: inline-block;
+    margin-top: var(--space-3);
+  }
+
   form {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-m);
-    align-items: center;
+    gap: var(--space-6);
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-8);
+
+    /* Enhanced glassmorphism */
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--glass-shadow);
   }
-  form > div {
-    max-width: 200px;
-    text-align: center;
+
+  .otp-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
+
+  .auth-form-group {
+    width: 100%;
+  }
+
   .resend-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-s);
-    margin-top: var(--spacing-l);
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
   }
+
   .resend-text {
-    font-size: var(--font-size-label-m);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
     color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-height: 667px) {
+    header {
+      padding: var(--space-6) var(--space-4) var(--space-4);
+    }
+
+    header h1 {
+      font-size: var(--font-size-title);
+    }
+
+    form {
+      padding: var(--space-6);
+      gap: var(--space-4);
+    }
+
+    .resend-container {
+      gap: var(--space-3);
+      padding: var(--space-3) 0;
+    }
   }
 </style>

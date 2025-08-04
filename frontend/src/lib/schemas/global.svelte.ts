@@ -12,3 +12,6 @@ export function requiredNumber(requiredMessage = 'This field is required.') {
     v.number(requiredMessage),
   )
 }
+
+export const requiredString = (requiredMessage = 'This field is required') =>
+  v.pipe(v.string(), v.trim(), v.minLength(1, requiredMessage))

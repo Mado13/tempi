@@ -1,15 +1,22 @@
-// src/lib/stores/resource.svelte.ts
+// src/lib/stores/resource.store.svelte.ts
 import { SvelteMap } from 'svelte/reactivity'
 
 type Id = string
 type State = 'idle' | 'loading' | 'ready' | 'syncing' | 'error'
-type Meta = { state: 'stable' | 'pending' | 'error'; error?: string; lastSync?: number }
 
-type FetchList<T> = (cursor?: string) => Promise<{ items: T[]; next?: string }>
-type Mut<T> = (arg: any) => Promise<T>
+type Meta = {
+  state: 'stable' | 'pending' | 'error'
+  error?: string
+  lastSync?: number
+}
+
+export type FetchList<T> = (cursor?: string) => Promise<{ items: T[]; next?: string }>
+export type CreateFn<T> = (data: Partial<T>, opts?: unknown) => Promise<T>
+export type UpdateFn<T> = (id: Id, patch: Partial<T>, opts?: unknown) => Promise<T>
+export type RemoveFn = (id: Id, opts?: unknown) => Promise<void>
 
 export type ResourceStore<T extends { id: Id }> = {
-  // state (getters keep component usage simple)
+  // state
   get items(): T[]
   get ids(): Id[]
   get isLoading(): boolean
@@ -21,13 +28,13 @@ export type ResourceStore<T extends { id: Id }> = {
   refresh(): Promise<void>
   loadMore(): Promise<void>
   getById(id: Id): T | undefined
-  create(data: Partial<T>): Promise<T>
-  update(id: Id, patch: Partial<T>): Promise<T>
-  remove(id: Id): Promise<void>
+  create(data: Partial<T>, opts?: unknown): Promise<T>
+  update(id: Id, patch: Partial<T>, opts?: unknown): Promise<T>
+  remove(id: Id, opts?: unknown): Promise<void>
   retryEntity(id: Id): Promise<void>
   invalidate(scope?: 'session' | 'resource'): void
 
-  // optional: hook to wire an infinite-scroll sentinel
+  // infinite scroll helper
   makePrefetchObserver(node: Element): () => void
 }
 
@@ -35,19 +42,17 @@ export function defineResource<T extends { id: Id }>(cfg: {
   name: string
   ttlMs?: number
   fetchList: FetchList<T>
-  create?: Mut<T>
-  update?: (id: Id, patch: Partial<T>) => Promise<T>
-  remove?: (id: Id) => Promise<void>
-  sessionKey: () => string // must reflect user + role
-}): (key?: string) => ResourceStore<T> {
-  const instances = new Map<string, string>() // sessionKey -> instanceKey
+  create?: CreateFn<T>
+  update?: UpdateFn<T>
+  remove?: RemoveFn
+  sessionKey: () => string
+}): () => ResourceStore<T> {
+  // one instance per session+name
   const stores = new Map<string, ResourceStore<T>>()
 
-  return function useResource(key?: string) {
-    const session = cfg.sessionKey()
-    const instanceKey = key ?? `${cfg.name}:${session}`
-
-    const existing = stores.get(instanceKey)
+  return function useResource() {
+    const key = `${cfg.name}:${cfg.sessionKey()}`
+    const existing = stores.get(key)
     if (existing) return existing
 
     // cache
@@ -57,7 +62,6 @@ export function defineResource<T extends { id: Id }>(cfg: {
     let next: string | undefined
     let state: State = 'idle'
     let lastAt = 0
-    let paging = false
 
     // concurrency
     const inflight = new Set<AbortController>()
@@ -73,7 +77,7 @@ export function defineResource<T extends { id: Id }>(cfg: {
 
     // helpers
     const ttl = cfg.ttlMs ?? 120_000
-    const stale = () => Date.now() - lastAt > ttl
+    const isStale = () => Date.now() - lastAt > ttl
     const setMeta = (id: Id, m: Partial<Meta>) => {
       const prev = meta.get(id) ?? { state: 'stable' as const }
       meta.set(id, { ...prev, ...m })
@@ -88,22 +92,40 @@ export function defineResource<T extends { id: Id }>(cfg: {
 
     // init de-dupe
     let initP: Promise<void> | null = null
-    async function init(opts?: { paginate?: boolean }) {
-      if (state === 'ready' && !stale()) return
+    // in src/lib/stores/resource.store.svelte.ts
+
+    // in src/lib/stores/resource.store.svelte.ts
+
+    async function init() {
+      if (state === 'ready' && !isStale()) return
       if (initP) return initP
-      paging = !!opts?.paginate
+
       state = state === 'idle' ? 'loading' : 'syncing'
+
       initP = guard(async (ac) => {
-        const res = await cfg.fetchList(undefined)
-        if (ac.signal.aborted) return
+        // Declare 'res' here so it's accessible throughout the function
+        let res: { items: T[]; next?: string }
+
+        try {
+          res = await cfg.fetchList(undefined)
+          if (ac.signal.aborted) return
+        } catch (error) {
+          state = 'error'
+          // Re-throw the error to be caught by the outer .catch
+          throw error
+        }
+
+        // The data is now safe to process
         ids = []
         items.clear()
         merge(res.items)
+
         next = res.next
         lastAt = Date.now()
         state = 'ready'
       })
         .catch(() => {
+          // This will catch errors from the fetch or other parts of the promise
           state = 'error'
         })
         .finally(() => {
@@ -111,13 +133,11 @@ export function defineResource<T extends { id: Id }>(cfg: {
         })
       return initP
     }
-
     async function refresh() {
       state = state === 'idle' ? 'loading' : 'syncing'
       return guard(async (ac) => {
         const res = await cfg.fetchList(undefined)
         if (ac.signal.aborted) return
-        // merge (no flash)
         ids = []
         items.clear()
         merge(res.items)
@@ -144,7 +164,7 @@ export function defineResource<T extends { id: Id }>(cfg: {
       return items.get(id)
     }
 
-    async function create(data: Partial<T>) {
+    async function create(data: Partial<T>, opts?: unknown) {
       if (!cfg.create) throw new Error('create not supported')
       const tempId = crypto.randomUUID()
       const draft = { ...(data as any), id: tempId } as T
@@ -152,20 +172,21 @@ export function defineResource<T extends { id: Id }>(cfg: {
       ids.unshift(tempId)
       setMeta(tempId, { state: 'pending' })
       try {
-        const saved = await cfg.create(data)
+        const saved = await cfg.create(data, opts)
         items.delete(tempId)
         items.set(saved.id, saved)
         ids = [saved.id, ...ids.filter((x) => x !== tempId)]
         setMeta(saved.id, { state: 'stable', lastSync: Date.now(), error: undefined })
         return saved
-      } catch (e: any) {
+      } catch (e) {
         items.delete(tempId)
         ids = ids.filter((x) => x !== tempId)
-        return Promise.reject(e)
+        setMeta(tempId, { state: 'error', error: String(e) })
+        throw e
       }
     }
 
-    async function update(id: Id, patch: Partial<T>) {
+    async function update(id: Id, patch: Partial<T>, opts?: unknown) {
       if (!cfg.update) throw new Error('update not supported')
       const prev = items.get(id)
       if (prev) {
@@ -173,25 +194,25 @@ export function defineResource<T extends { id: Id }>(cfg: {
         setMeta(id, { state: 'pending' })
       }
       try {
-        const saved = await cfg.update(id, patch)
+        const saved = await cfg.update(id, patch, opts)
         items.set(id, saved)
         setMeta(id, { state: 'stable', lastSync: Date.now(), error: undefined })
         return saved
-      } catch (e: any) {
+      } catch (e) {
         if (prev) items.set(id, prev)
         setMeta(id, { state: 'error', error: String(e) })
-        return Promise.reject(e)
+        throw e
       }
     }
 
-    async function remove(id: Id) {
+    async function remove(id: Id, opts?: unknown) {
       if (!cfg.remove) throw new Error('remove not supported')
       const prev = items.get(id)
       items.delete(id)
       ids = ids.filter((x) => x !== id)
       try {
-        await cfg.remove(id)
-      } catch (e: any) {
+        await cfg.remove(id, opts)
+      } catch (e) {
         if (prev) {
           items.set(id, prev)
           ids.unshift(id)
@@ -204,14 +225,13 @@ export function defineResource<T extends { id: Id }>(cfg: {
     async function retryEntity(id: Id) {
       const m = meta.get(id)
       if (!m || m.state !== 'error') return
-      // simple: re-fetch list; keeps code small
       return refresh()
     }
 
     function invalidate(scope: 'session' | 'resource' = 'resource') {
       abortAll()
       if (scope === 'session') {
-        // soft reset; keep cache but mark stale
+        // keep cache, force stale
       }
       lastAt = 0
     }
@@ -253,8 +273,7 @@ export function defineResource<T extends { id: Id }>(cfg: {
       makePrefetchObserver,
     }
 
-    instances.set(session, instanceKey)
-    stores.set(instanceKey, store)
+    stores.set(key, store)
     return store
   }
 }
