@@ -1,7 +1,4 @@
-<<<<<<< Conflict 1 of 1
-%%%%%%% Changes from base to side #1 (removes terminating newline)
-+# tempi
-+++++++ Contents of side #2
+
 # Tempi
 
 To start your Phoenix server:
@@ -20,4 +17,3 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
->>>>>>> Conflict 1 of 1 ends
